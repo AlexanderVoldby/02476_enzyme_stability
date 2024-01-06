@@ -1,5 +1,8 @@
 docs/site/
 
+# Ignore the downloaded raw data
+data/raw
+
 # test cache
 manual_test/
 

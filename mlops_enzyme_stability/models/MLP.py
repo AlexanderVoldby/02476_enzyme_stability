@@ -1,4 +1,5 @@
 import torch
+# File containing the neural network class used as a regression tool on the encoded amino acid sequences
 
 class MyNeuralNet(torch.nn.Module):
     """ Basic neural network class. 

@@ -2,11 +2,13 @@
 
 The goal of this project is to attempt to predict the thermal stability of various enzymes given their amino acid sequence. The task was part of a competition hosted by Novozymes on Kaggle: https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/overview
 
-We intend to use the transformers frqmework from Huggingface.
+We intend to use the transformers framework from Huggingface.
 
-The dataset is taken from https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/data and consist of roughly 31 thousand samples. The samples consist of a unique sequence id, an amino acid sequence, a pH value that the amino acid was treated under, a data source (not used) and finally the prediction target, which is an unspecified continuous value where high values indicate a high thermal stability and vice versa.
+The dataset is taken from https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/data and consists of roughly 31 thousand samples. The samples consist of a unique sequence id, an amino acid sequence, a pH value that the amino acid was treated under, a data source (not used) and finally the prediction target, which is an unspecified continuous value where high values indicate a high thermal stability and vice versa.
 
-The pretrained model we apply is a BERT model trained on amino acid sequences. The model was trained to finish a sequence of amino acids given the initial sequence. This task requires predicting a continuous value, so the BERT model is extended with a ... regression layer
+The pretrained model we apply is a BERT model trained on amino acid sequences. The model was trained to finish a sequence of amino acids given the initial sequence. This task requires predicting a continuous value, so the BERT model is extended with a multi-layer perceptron.
+
+Currently inference with the BERT model is computationally expensive, so unless we find a way to optimize this we will move on with another model
 
 ## Project structure
 
