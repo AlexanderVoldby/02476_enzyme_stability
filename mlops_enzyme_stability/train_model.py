@@ -41,6 +41,7 @@ if __name__ == "__main__":
     
     trainset = TensorDataset(X, y)
     dataloader = DataLoader(trainset, shuffle=True, batch_size=batch_size)
+    train(model, dataloader, lr=lr, epochs=epochs)
 
 
 
