@@ -1,10 +1,12 @@
 import torch
+import torch.optim as optim
+import torch.nn as nn
 from torch.utils.data import TensorDataset, DataLoader
 from models.MLP import MyNeuralNet
 
 # Training hyper parameters
 lr = 0.001
-epochs = 2
+epochs = 5
 batch_size = 16
 in_features = 1024
 hidden1 = 512
@@ -24,9 +26,8 @@ def train(model, dataloader, lr, epochs):
             loss = torch.sqrt(criterion(target, output))
             loss.backward()
             optimizer.step()
-            #print(loss)
 
-    #torch.save("models/model_checkpoint.pt", model.state_dict())
+    torch.save("models/model_checkpoint.pt", model.state_dict())
 
 if __name__ == "__main__":
     # Generate dataset and dataloader
@@ -42,5 +43,8 @@ if __name__ == "__main__":
     dataloader = DataLoader(trainset, shuffle=True, batch_size=batch_size)
     train(model, dataloader, lr=lr, epochs=epochs)
 
-model = MyNeuralNet()
+
+
+
+
 

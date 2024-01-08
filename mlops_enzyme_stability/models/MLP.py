@@ -29,4 +29,4 @@ class MyNeuralNet(torch.nn.Module):
             Output tensor with shape [N,out_features]
 
         """
-        return self.l2(self.r(self.l1(x)))
+        return self.l3(self.r(self.l2(self.r(self.l1(x)))))
