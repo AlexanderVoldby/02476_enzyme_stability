@@ -9,9 +9,13 @@ class MyNeuralNet(torch.nn.Module):
         out_features: number of output features
     
     """
-    def __init__(self, in_features: int, out_features: int) -> None:
-        self.l1 = torch.nn.Linear(in_features, 500)
-        self.l2 = torch.nn.Linear(500, out_features)
+    def __init__(self, in_features: int,
+                 hidden1: int,
+                 hidden2: int,
+                 out_features: int) -> None:
+        self.l1 = torch.nn.Linear(in_features, hidden1)
+        self.l2 = torch.nn.Linear(hidden1, hidden2)
+        self.l3 = torch.nn.Linear(hidden2, out_features)
         self.r = torch.nn.ReLU()
     
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -24,4 +28,4 @@ class MyNeuralNet(torch.nn.Module):
             Output tensor with shape [N,out_features]
 
         """
-        return self.l2(self.r(self.l1(x)))
+        return self.l3(self.r(self.l2(self.r(self.l1(x)))))
