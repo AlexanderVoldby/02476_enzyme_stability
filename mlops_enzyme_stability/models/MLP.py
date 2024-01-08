@@ -13,6 +13,7 @@ class MyNeuralNet(torch.nn.Module):
                  hidden1: int,
                  hidden2: int,
                  out_features: int) -> None:
+        super().__init__()
         self.l1 = torch.nn.Linear(in_features, hidden1)
         self.l2 = torch.nn.Linear(hidden1, hidden2)
         self.l3 = torch.nn.Linear(hidden2, out_features)

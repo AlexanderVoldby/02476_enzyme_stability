@@ -16,7 +16,7 @@ out_features = 1
 def train(model, dataloader, lr, epochs):
 
     optimizer = optim.Adam(params=model.parameters(), lr=lr)
-    criterion = nn.MSELoss
+    criterion = nn.MSELoss()
 
     for e in range(epochs):
         for tensors, target in dataloader:
@@ -31,8 +31,8 @@ def train(model, dataloader, lr, epochs):
 
 if __name__ == "__main__":
     # Generate dataset and dataloader
-    X = torch.load("data/processed/train_tensors.pt")
-    y = torch.load("data/processed/train_target.pt")
+    X = torch.load("mlops_enzyme_stability/data/processed/train_tensors.pt")
+    y = torch.load("mlops_enzyme_stability/data/processed/train_target.pt")
 
     model = MyNeuralNet(in_features=in_features,
                     hidden1=hidden1,
