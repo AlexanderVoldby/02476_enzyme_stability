@@ -14,9 +14,9 @@ class MyNeuralNet(LightningModule):
     """
     def __init__(self, config) -> None:
         super().__init__()
-        self.l1 = torch.nn.Linear(config.in_features, config.hidden1)
-        self.l2 = torch.nn.Linear(config.hidden1, config.hidden2)
-        self.l3 = torch.nn.Linear(config.hidden2, config.out_features)
+        self.l1 = torch.nn.Linear(1024, 512)
+        self.l2 = torch.nn.Linear(512, 256)
+        self.l3 = torch.nn.Linear(256, 1)
         self.r = torch.nn.ReLU()
         self.criterion = torch.nn.MSELoss()
     
