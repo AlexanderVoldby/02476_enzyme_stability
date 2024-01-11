@@ -1,7 +1,6 @@
 docs/site/
 
 # Ignore the downloaded raw data
-<<<<<<< HEAD
 data/raw
 mlops_enzymes_stability/data/raw
 mlops_enzymes_stability/data/processed
