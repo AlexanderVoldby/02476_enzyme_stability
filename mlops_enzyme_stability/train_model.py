@@ -3,23 +3,18 @@ import torch.optim as optim
 import torch.nn as nn
 from torch.utils.data import TensorDataset, DataLoader
 from models.MLP import MyNeuralNet
+import hydra
 
 # Training hyper parameters
-lr = 0.001
-epochs = 5
-batch_size = 16
-in_features = 1024
-hidden1 = 512
-hidden2 = 256
-out_features = 1
+@hydra.train(config_name="basic_config.yaml")
+def train(model, dataset, cfg):
 
-def train(model, dataloader, lr, epochs):
-
-    optimizer = optim.Adam(params=model.parameters(), lr=lr)
+    dataloader = DataLoader(dataset, shuffle=True, batch_size=cfg.hyperparameters.batch_size)
+    optimizer = optim.Adam(params=model.parameters(), lr=cfg.hyperparameters.lr)
     criterion = nn.MSELoss()
-
-    for e in range(epochs):
-        print(f"Epoch {e+1}/{epochs}")
+    eps = cfg.hyperparameters.epochs
+    for e in range(eps):
+        print(f"Epoch {e+1}/{eps}")
         for tensors, target in dataloader:
             optimizer.zero_grad()
             output = torch.flatten(model(tensors))
@@ -35,14 +30,10 @@ if __name__ == "__main__":
     X = torch.load("data/processed/train_tensors.pt")
     y = torch.load("data/processed/train_target.pt")
 
-    model = MyNeuralNet(in_features=in_features,
-                    hidden1=hidden1,
-                    hidden2=hidden2,
-                    out_features=out_features)
-    
+    model = MyNeuralNet()
     trainset = TensorDataset(X, y)
-    dataloader = DataLoader(trainset, shuffle=True, batch_size=batch_size)
-    train(model, dataloader, lr=lr, epochs=epochs)
+    
+    train(model, trainset)
 
 
 
