@@ -19,6 +19,7 @@ def train(model, dataloader, lr, epochs):
     criterion = nn.MSELoss()
 
     for e in range(epochs):
+        print(f"Epoch {e+1}/{epochs}")
         for tensors, target in dataloader:
             optimizer.zero_grad()
             output = model(tensors)
