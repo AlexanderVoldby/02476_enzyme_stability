@@ -55,5 +55,6 @@ if __name__ == "__main__":
     
     # Train model
     model = MyNeuralNet(config)
-    trainer = Trainer(logger=wandb_logger, callbacks=[checkpoint_callback])
+    trainer = Trainer(logger=wandb_logger, callbacks=[checkpoint_callback],
+                      max_epochs=config.hyperparameters.epochs)
     trainer.fit(model)
