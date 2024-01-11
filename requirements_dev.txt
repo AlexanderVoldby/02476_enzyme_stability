@@ -15,3 +15,6 @@ mkdocstrings[python]>=0.18
 
 # google api
 google-api-python-client >= 2.1.0
+
+# Data version control mediated by dvc
+dvc >= 3.38.1
