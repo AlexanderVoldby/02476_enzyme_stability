@@ -20,6 +20,7 @@ To retrieve the data from google_storage (mediated through dvc) please just:
 1. git clone https://github.com/AlexanderVoldby/02476_enzyme_stability.git -b dev_pau
 cd 02476_enzyme_stability
 dvc pull
+
 ```
 
 ## Models
