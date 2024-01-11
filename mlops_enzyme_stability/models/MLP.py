@@ -26,7 +26,7 @@ class MyNeuralNet(LightningModule):
             nn.Linear(config.hyperparameters.hidden2, 1)
         )
         self.criterion = self.configure_criterion()
-        self.optimizer = self.configure_optimizer()
+        self.optimizer = self.configure_optimizers()
     
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Forward pass of the model.
@@ -57,7 +57,7 @@ class MyNeuralNet(LightningModule):
         self.log('train_loss', loss)
         return loss
     
-    def configure_optimizer(self): 
+    def configure_optimizers(self): 
         """Optimizer configuration.
         
         Returns:
