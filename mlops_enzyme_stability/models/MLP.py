@@ -1,4 +1,5 @@
 import torch
+from torch import nn
 from torch.utils.data import TensorDataset, DataLoader
 from pytorch_lightning import LightningModule
 
@@ -14,11 +15,18 @@ class MyNeuralNet(LightningModule):
     """
     def __init__(self, config) -> None:
         super().__init__()
-        self.l1 = torch.nn.Linear(config.in_features, config.hidden1)
-        self.l2 = torch.nn.Linear(config.hidden1, config.hidden2)
-        self.l3 = torch.nn.Linear(config.hidden2, config.out_features)
-        self.r = torch.nn.ReLU()
-        self.criterion = torch.nn.MSELoss()
+        self.data_path = config.data_path
+        self.batch_size = config.batch_size
+        self.lr = config.lr
+        self.mlp = nn.Sequential(
+            nn.Linear(config.in_features, config.hidden1),
+            nn.ReLU(),
+            nn.Linear(config.hidden1, config.hidden2),
+            nn.ReLU(),
+            nn.Linear(config.hidden2, config.out_features)
+        )
+        self.criterion = config.criterion()
+        #self.optimizer = config.optimizer() #TODO: add optimizer to config, implement with pytorch lightning
     
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Forward pass of the model.
@@ -30,7 +38,7 @@ class MyNeuralNet(LightningModule):
             Output tensor with shape [N,out_features]
 
         """
-        return self.l3(self.r(self.l2(self.r(self.l1(x)))))
+        return self.mlp(x)
     
     def training_step(self, batch, batch_idx) -> torch.Tensor:
         """Training step of the model.
@@ -56,13 +64,19 @@ class MyNeuralNet(LightningModule):
             Optimizer
 
         """
-        return torch.optim.Adam(self.parameters(), lr=0.001)
+        return torch.optim.Adam(self.parameters(), lr=self.lr)
     
     def train_dataloader(self):
-        return DataLoader(...)
+        X = torch.load(self.data_path + "/train_tensors.pt")
+        y = torch.load(self.data_path + "/train_target.pt")
+        trainset = TensorDataset(X, y)
+        return DataLoader(trainset, shuffle=True, batch_size=self.batch_size)
 
-    def val_dataloader(self):
-        return DataLoader(...)
+    # def val_dataloader(self): #TODO: implement validation dataloader
+    #     return DataLoader(...)
 
     def test_dataloader(self):
-        return DataLoader(...)
+        X = torch.load(self.data_path + "/test_tensors.pt")
+        y = torch.load(self.data_path + "/test_target.pt")
+        testset = TensorDataset(X, y)
+        return DataLoader(testset, shuffle=False, batch_size=self.batch_size)
