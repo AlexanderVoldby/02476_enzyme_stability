@@ -15,9 +15,9 @@ if __name__ == "__main__":
         return " ".join(list(x))
 
     # Data
-    train_df = pd.read_csv(raw_path + "train_fixed.csv")
-    test_df = pd.read_csv(raw_path + "test.csv")
-    test_labels = pd.read_csv(raw_path + "test_labels.csv")
+    train_df = pd.read_csv(raw_path + "train_fixed.csv")[:3]
+    test_df = pd.read_csv(raw_path + "test.csv")[:3]
+    test_labels = pd.read_csv(raw_path + "test_labels.csv")[:3]
     dataloader_train = torch.utils.data.DataLoader(train_df["protein_sequence"], batch_size=1, shuffle=False, num_workers=0)
     dataloader_test = torch.utils.data.DataLoader(test_df["protein_sequence"], batch_size=1, shuffle=False, num_workers=0)
 
@@ -57,14 +57,3 @@ if __name__ == "__main__":
     torch.save(ytest, save_path + "test_target.pt")
 
     print("\nFinished embedding")
-
-    
-
-
-
-
-
-
-
-
-

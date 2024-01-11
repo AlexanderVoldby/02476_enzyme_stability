@@ -1,52 +1,73 @@
-if __name__ == '__main__':
-    import numpy as np
-    import pandas as pd
-    import torch
-    from tqdm import tqdm
-    from transformers import BertModel, BertTokenizer
-    import re
+import pandas as pd
+import torch
+from tqdm import tqdm
+from transformers import BertModel, BertTokenizer
 
-    raw_path = "data/raw/"
-    save_path = "data/processed/"
+# Paths to raw and processed data
+save_path = "mlops_enzyme_stability/data/processed/"
+raw_path = "mlops_enzyme_stability/data/raw/"
 
-    # Define encoder class using pretrained model
-    class BertEncoder:
-        def __init__(self):
-            
-            self.tokenizer = BertTokenizer.from_pretrained("Rostlab/prot_bert", do_lower_case=False )
-            self.model = BertModel.from_pretrained("Rostlab/prot_bert")
+def preprocessing():
+    # Load the raw data
+    df_train = pd.read_csv(f"{raw_path}train.csv", index_col="seq_id")
+    df_train_updates = pd.read_csv(f"{raw_path}train_updates_20220929.csv", index_col="seq_id")
 
-        def tokenize(self, sequence, only_encoding=True):
+    # Remove rows with all features missing
+    all_features_nan = df_train_updates.isnull().all("columns")
+    drop_indices = df_train_updates[all_features_nan].index
+    df_train = df_train.drop(index=drop_indices)
 
-            sequence_subbed = re.sub(r"[UZOB]", "X", sequence)
-            encoded_input = self.tokenizer(sequence_subbed, return_tensors='pt')
-            last_layer, pooling = self.model(**encoded_input)
-            
-            if only_encoding:
-                return pooling
+    # Correct transposed pH and tm values
+    swap_ph_tm_indices = df_train_updates[~all_features_nan].index
+    df_train.loc[swap_ph_tm_indices, ["pH", "tm"]] = df_train_updates.loc[swap_ph_tm_indices, ["pH", "tm"]]
 
-            return pooling, last_layer
+    # Save the updated training data
+    df_train.to_csv(f"{raw_path}train_fixed.csv")
 
-    # Load in data preprocess it and apply the BERT encoder to make a dataset of encoded amino acid sequences.
-    
-    train_df = pd.read_csv(raw_path + "train.csv")
-    test_df = pd.read_csv(raw_path + "test.csv")
-    test_labels = pd.read_csv(raw_path + "test_labels.csv")
-
-    def add_spaces(x):
+def add_spaces(x):
         return " ".join(list(x))
 
-    encoder = BertEncoder()
+def tokenize_and_encode_sequence(tokenizer, model, device, sequence):
+    tokenized = tokenizer(sequence, return_tensors='pt')
+    output = model(**tokenized.to(device))
+    return output[1].detach().cpu()
 
-    Xtrain = torch.Tensor([encoder.tokenize(add_spaces(x)) for x in tqdm(train_df["protein_sequence"], desc="Encoding training data")])
+def save_tensor(tensor_list, file_path):
+    tensor = torch.stack(tensor_list)
+    torch.save(tensor, file_path)
+    del tensor  # To free memory
+
+def main():
+    preprocessing()
+    # Data
+    train_df = pd.read_csv(raw_path + "train_fixed.csv")[:100]
+    test_df = pd.read_csv(raw_path + "test.csv")[:100]
+    test_labels = pd.read_csv(raw_path + "test_labels.csv")[:100]
+    dataloader_train = torch.utils.data.DataLoader(train_df["protein_sequence"], batch_size=1, shuffle=False, num_workers=0)
+    dataloader_test = torch.utils.data.DataLoader(test_df["protein_sequence"], batch_size=1, shuffle=False, num_workers=0)
+
+    # Model and tokenizer
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    tokenizer = BertTokenizer.from_pretrained("Rostlab/prot_bert", do_lower_case=False)
+    model = BertModel.from_pretrained("Rostlab/prot_bert")
+    model = model.to(device)
+    model.eval()
+
+    # Process and encode data
+    Xtrain = [tokenize_and_encode_sequence(tokenizer, model, device, seq) for seq in tqdm(dataloader_train, desc="Encoding training data")]
+    Xtest = [tokenize_and_encode_sequence(tokenizer, model, device, seq) for seq in tqdm(dataloader_test, desc="Encoding testing data")]
+            
+    # Save encoded data
+    save_tensor(Xtrain, save_path + "train_tensors.pt")
+    save_tensor(Xtest, save_path + "test_tensors.pt")
+
+    # Save labels
     ytrain = torch.Tensor(train_df["tm"])
-    Xtest = torch.Tensor([encoder.tokenize(add_spaces(x)) for x in tqdm(test_df["protein_sequence"], desc="Encoding test data")])
-    ytest = test_labels["tm"]
-    
-    save_path = "data/processed/"
-
-    torch.save(Xtrain, save_path + "train_tensors.pt")
+    ytest = torch.Tensor(test_labels["tm"])
     torch.save(ytrain, save_path + "train_target.pt")
-    torch.save(Xtest, save_path + "test_tensors.pt")
     torch.save(ytest, save_path + "test_target.pt")
-    
+
+    print("\nFinished embedding")
+
+if __name__ == "__main__":
+    main()
