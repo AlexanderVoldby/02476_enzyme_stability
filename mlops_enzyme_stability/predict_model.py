@@ -26,8 +26,8 @@ def predict(
 
 if __name__ == "__main__":
     # Load test data
-    test_tensors = torch.load("data/processed/...")
-    test_target = torch.load("data/processed/...")
+    test_tensors = torch.load("data/processed/test_tensors.pt")
+    test_target = torch.load("data/processed/test_target.pt")
     dataloader = DataLoader(TensorDataset(test_tensors, test_target), batch_size=batch_size, shuffle=True)
 
     # Load model
