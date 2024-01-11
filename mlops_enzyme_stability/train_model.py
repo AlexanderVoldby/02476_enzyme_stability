@@ -42,7 +42,7 @@ if __name__ == "__main__":
     # dataloader = DataLoader(trainset, shuffle=True, batch_size=batch_size)
     # train(model, dataloader, lr=lr, epochs=epochs)
     
-    config = OmegaConf.load("basic_config.yaml")
+    config = OmegaConf.load("config.yaml")
     model = MyNeuralNet(config)
     trainer = Trainer()
     trainer.fit(model)

@@ -16,17 +16,18 @@ class MyNeuralNet(LightningModule):
     def __init__(self, config) -> None:
         super().__init__()
         self.data_path = config.data_path
-        self.batch_size = config.batch_size
+        self.batch_size = config.hyperparameters.batch_size
         self.lr = config.hyperparameters.lr
+        self.num_workers =  config.hyperparameters.num_workers
         self.mlp = nn.Sequential(
-            nn.Linear(1024, config.hidden1),
+            nn.Linear(1024, config.hyperparameters.hidden1),
             nn.ReLU(),
-            nn.Linear(config.hidden1, config.hidden2),
+            nn.Linear(config.hyperparameters.hidden1, config.hyperparameters.hidden2),
             nn.ReLU(),
-            nn.Linear(config.hidden2, 1)
+            nn.Linear(config.hyperparameters.hidden2, 1)
         )
         self.criterion = self.configure_criterion()
-        self.optimizer = self.configure_optimizer()
+        self.optimizer = self.configure_optimizers()
     
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Forward pass of the model.
@@ -38,7 +39,7 @@ class MyNeuralNet(LightningModule):
             Output tensor with shape [N,out_features]
 
         """
-        return self.mlp(x)
+        return torch.flatten(self.mlp(x))
     
     def training_step(self, batch, batch_idx) -> torch.Tensor:
         """Training step of the model.
@@ -63,7 +64,7 @@ class MyNeuralNet(LightningModule):
         loss = self.criterion(pred, label)
         # self.log('test_loss', loss)
 
-    def configure_optimizer(self): 
+    def configure_optimizers(self): 
         """Optimizer configuration.
         
         Returns:
@@ -81,7 +82,8 @@ class MyNeuralNet(LightningModule):
         X = torch.load(self.data_path + "/train_tensors.pt")
         y = torch.load(self.data_path + "/train_target.pt")
         trainset = TensorDataset(X, y)
-        return DataLoader(trainset, shuffle=True, batch_size=self.batch_size)
+        return DataLoader(trainset, shuffle=True, batch_size=self.batch_size,
+                          num_workers=self.num_workers)
 
     # def val_dataloader(self): #TODO: implement validation dataloader
     #     return DataLoader(...)
