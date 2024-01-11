@@ -3,12 +3,13 @@ import torch
 from torch.utils.data import DataLoader, TensorDataset
 import pandas as pd
 from mlops_enzyme_stability.data.make_dataset import load_data, save_tensor, preprocessing
+import os
 
 def test_load_data():
     train_df, test_df, test_labels = load_data()
     for df in [train_df, test_df, test_labels]:
         assert isinstance(df, pd.DataFrame)
-        assert not df.empty
+        assert not df.empty, "Raw data could not be loaded"
 
 def test_preprocessing():
     # Mock data simulating the scenarios in your preprocessing function
@@ -36,7 +37,7 @@ def test_preprocessing():
     processed_df = preprocessing(df_train, df_train_updates)
 
     # Check that rows with all features missing are removed
-    assert processed_df.equals(df_solution)
+    assert processed_df.equals(df_solution), "Preprocessing failed"
 
 
 def test_save_tensor(tmp_path):
@@ -50,10 +51,11 @@ def test_save_tensor(tmp_path):
 
 
 def test_dataloader():
-    train_tensors = torch.load("data/processed/train_tensors.pt")
-    train_labels = torch.load("data/processed/train_target.pt")
-    test_tensors = torch.load("data/processed/test_tensors.pt")
-    test_labels = torch.load("data/processed/test_target.pt")
+    processed_dir = os.path.join(_PATH_DATA, 'processed')
+    train_tensors = torch.load(os.path.join(processed_dir, "train_tensors.pt"))
+    train_labels = torch.load(os.path.join(processed_dir, "train_target.pt"))
+    test_tensors = torch.load(os.path.join(processed_dir, "test_tensors.pt"))
+    test_labels = torch.load(os.path.join(processed_dir, "test_target.pt"))
     
     trainset = TensorDataset(train_tensors, train_labels)
     trainloader = DataLoader(trainset, batch_size=16, shuffle=True)
