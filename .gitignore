@@ -2,6 +2,7 @@ docs/site/
 
 # Ignore the downloaded raw data
 data/raw
+mlops_enzyme_stability/data/
 
 # test cache
 manual_test/
