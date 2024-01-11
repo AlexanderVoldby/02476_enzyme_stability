@@ -16,7 +16,7 @@ We intend to use the transformers framework from Huggingface.
 ## Data
 The dataset is taken from https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/data and consist of roughly 31 thousand samples. The samples consist of a unique sequence id, an amino acid sequence, a pH value that the amino acid was treated under, a data source (not used) and finally the prediction target, which is an unspecified continuous value where high values indicate a high thermal stability and vice versa.
 ```
-To retrieve the data from google_storage (mediated through dvc) please just:
+#To retrieve the data from google_storage (mediated through dvc) please just:
 git clone https://github.com/AlexanderVoldby/02476_enzyme_stability.git -b dev_pau
 cd 02476_enzyme_stability
 dvc pull
