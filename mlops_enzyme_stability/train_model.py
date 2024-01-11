@@ -6,7 +6,7 @@ from models.MLP import MyNeuralNet
 from pytorch_lightning import Trainer
 from omegaconf import OmegaConf
 
-config = OmegaConf.load("basic_config.yaml")
+config = OmegaConf.load("config.yaml")
 
 # Training hyper parameters
 # lr = 0.001

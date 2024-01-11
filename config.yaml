@@ -4,6 +4,5 @@ hyperparameters:
   epochs: 5
   hidden1: 512
   hidden2: 256
-  data_path: "data/processed"
-criterion: "MSELoss"
-optimizer: "Adam"
+data_path: "data/processed"
+

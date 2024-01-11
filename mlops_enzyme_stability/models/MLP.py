@@ -16,14 +16,14 @@ class MyNeuralNet(LightningModule):
     def __init__(self, config) -> None:
         super().__init__()
         self.data_path = config.data_path
-        self.batch_size = config.batch_size
+        self.batch_size = config.hyperparameters.batch_size
         self.lr = config.hyperparameters.lr
         self.mlp = nn.Sequential(
-            nn.Linear(1024, config.hidden1),
+            nn.Linear(1024, config.hyperparameters.hidden1),
             nn.ReLU(),
-            nn.Linear(config.hidden1, config.hidden2),
+            nn.Linear(config.hyperparameters.hidden1, config.hyperparameters.hidden2),
             nn.ReLU(),
-            nn.Linear(config.hidden2, 1)
+            nn.Linear(config.hyperparameters.hidden2, 1)
         )
         self.criterion = self.configure_criterion()
         self.optimizer = self.configure_optimizer()
