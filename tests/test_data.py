@@ -1,6 +1,6 @@
-<<<<<<< HEAD
 from tests import _PATH_DATA
 import torch
+from torch.utils.data import DataLoader, TensorDataset
 import pandas as pd
 from mlops_enzyme_stability.data.make_dataset import load_data, save_tensor, preprocessing
 
@@ -44,17 +44,17 @@ def test_save_tensor(tmp_path):
     file_path = tmp_path / "test_tensor.pt"
     save_tensor(tensor_dummy, file_path)
     assert file_path.exists()
-=======
-import torch
-from torch.utils.data import DataLoader, TensorDataset
 
-train_tensors = torch.load("data/processed/train_tensors.pt")
-train_labels = torch.load("data/processed/train_target.pt")
-test_tensors = torch.load("data/processed/test_tensors.pt")
-test_labels = torch.load("data/processed/test_target.pt")
+
+
 
 
 def test_dataloader():
+    train_tensors = torch.load("data/processed/train_tensors.pt")
+    train_labels = torch.load("data/processed/train_target.pt")
+    test_tensors = torch.load("data/processed/test_tensors.pt")
+    test_labels = torch.load("data/processed/test_target.pt")
+    
     trainset = TensorDataset(train_tensors, train_labels)
     trainloader = DataLoader(trainset, batch_size=16, shuffle=True)
     assert len(trainloader) == 1812, "Train dataloader should have 1812 batches"
@@ -63,4 +63,3 @@ def test_dataloader():
     testloader = DataLoader(testset, batch_size=16, shuffle=True)
     print(len(testloader))
     assert len(testloader) == 151, "Test dataloader should have 151 batches"
->>>>>>> master
