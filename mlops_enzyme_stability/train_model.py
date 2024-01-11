@@ -30,7 +30,7 @@ def train(model, dataloader, lr, epochs):
             epoch_loss += loss.item()
         print("Epoch: %i\tLoss: %.3f" % (e, epoch_loss / len(dataloader)))
 
-    torch.save("models/model_checkpoint.pt", model.state_dict())
+    torch.save(model.state_dict(), "models/model_checkpoint.pt")
 
 
 if __name__ == "__main__":
