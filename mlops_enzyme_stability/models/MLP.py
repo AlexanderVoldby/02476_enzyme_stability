@@ -57,6 +57,12 @@ class MyNeuralNet(LightningModule):
         self.log('train_loss', loss)
         return loss
     
+    def test_step(self, batch, batch_idx):
+        data, label = batch
+        pred = self(data)
+        loss = self.criterion(pred, label)
+        # self.log('test_loss', loss)
+
     def configure_optimizer(self): 
         """Optimizer configuration.
         

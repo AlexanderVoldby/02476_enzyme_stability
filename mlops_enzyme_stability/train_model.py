@@ -1,12 +1,7 @@
-import torch
-import torch.optim as optim
-import torch.nn as nn
 from torch.utils.data import TensorDataset, DataLoader
 from models.MLP import MyNeuralNet
 from pytorch_lightning import Trainer
 from omegaconf import OmegaConf
-
-config = OmegaConf.load("basic_config.yaml")
 
 # Training hyper parameters
 # lr = 0.001
@@ -47,8 +42,7 @@ if __name__ == "__main__":
     # dataloader = DataLoader(trainset, shuffle=True, batch_size=batch_size)
     # train(model, dataloader, lr=lr, epochs=epochs)
     
-    # TODO: Hydra here
-
+    config = OmegaConf.load("basic_config.yaml")
     model = MyNeuralNet(config)
     trainer = Trainer()
     trainer.fit(model)
