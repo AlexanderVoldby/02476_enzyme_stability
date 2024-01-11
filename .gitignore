@@ -2,6 +2,8 @@ docs/site/
 
 # Ignore the downloaded raw data
 data/raw
+mlops_enzymes_stability/data/raw
+mlops_enzymes_stability/data/processed
 
 # test cache
 manual_test/
