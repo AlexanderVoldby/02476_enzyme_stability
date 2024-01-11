@@ -5,11 +5,6 @@ docs/site/
 data/raw
 mlops_enzymes_stability/data/raw
 mlops_enzymes_stability/data/processed
-=======
-/data
-data/
-
->>>>>>> master
 
 # test cache
 manual_test/

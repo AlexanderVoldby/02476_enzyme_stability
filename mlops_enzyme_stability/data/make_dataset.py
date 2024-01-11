@@ -2,10 +2,15 @@ import pandas as pd
 import torch
 from tqdm import tqdm
 from transformers import BertModel, BertTokenizer
+import os
 
-# Paths to raw and processed data
+# define directories and create them if not existing
 save_path = "mlops_enzyme_stability/data/processed/"
+if not os.path.exists(save_path):
+        os.makedirs(save_path)
 raw_path = "mlops_enzyme_stability/data/raw/"
+if not os.path.exists(raw_path):
+        os.makedirs(raw_path)
 
 def preprocessing(df_train,df_train_updates):
     # Remove rows with all features missing
