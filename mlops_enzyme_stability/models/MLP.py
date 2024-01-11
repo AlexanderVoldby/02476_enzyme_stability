@@ -17,16 +17,16 @@ class MyNeuralNet(LightningModule):
         super().__init__()
         self.data_path = config.data_path
         self.batch_size = config.batch_size
-        self.lr = config.lr
+        self.lr = config.hyperparameters.lr
         self.mlp = nn.Sequential(
-            nn.Linear(config.in_features, config.hidden1),
+            nn.Linear(1024, config.hidden1),
             nn.ReLU(),
             nn.Linear(config.hidden1, config.hidden2),
             nn.ReLU(),
-            nn.Linear(config.hidden2, config.out_features)
+            nn.Linear(config.hidden2, 1)
         )
-        self.criterion = config.criterion()
-        #self.optimizer = config.optimizer() #TODO: add optimizer to config, implement with pytorch lightning
+        self.criterion = self.configure_criterion()
+        self.optimizer = self.configure_optimizer()
     
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Forward pass of the model.
@@ -57,7 +57,7 @@ class MyNeuralNet(LightningModule):
         self.log('train_loss', loss)
         return loss
     
-    def configure_optimizers(self): 
+    def configure_optimizer(self): 
         """Optimizer configuration.
         
         Returns:
@@ -66,6 +66,11 @@ class MyNeuralNet(LightningModule):
         """
         return torch.optim.Adam(self.parameters(), lr=self.lr)
     
+    def configure_criterion(self):
+
+        return torch.nn.MSELoss()
+    
+
     def train_dataloader(self):
         X = torch.load(self.data_path + "/train_tensors.pt")
         y = torch.load(self.data_path + "/train_target.pt")
