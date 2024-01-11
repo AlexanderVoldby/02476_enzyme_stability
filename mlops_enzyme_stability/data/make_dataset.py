@@ -7,11 +7,7 @@ from transformers import BertModel, BertTokenizer
 save_path = "mlops_enzyme_stability/data/processed/"
 raw_path = "mlops_enzyme_stability/data/raw/"
 
-def preprocessing():
-    # Load the raw data
-    df_train = pd.read_csv(f"{raw_path}train.csv", index_col="seq_id")
-    df_train_updates = pd.read_csv(f"{raw_path}train_updates_20220929.csv", index_col="seq_id")
-
+def preprocessing(df_train,df_train_updates):
     # Remove rows with all features missing
     all_features_nan = df_train_updates.isnull().all("columns")
     drop_indices = df_train_updates[all_features_nan].index
@@ -20,9 +16,15 @@ def preprocessing():
     # Correct transposed pH and tm values
     swap_ph_tm_indices = df_train_updates[~all_features_nan].index
     df_train.loc[swap_ph_tm_indices, ["pH", "tm"]] = df_train_updates.loc[swap_ph_tm_indices, ["pH", "tm"]]
+    
+    # for pytest purposes
+    return df_train
 
-    # Save the updated training data
-    df_train.to_csv(f"{raw_path}train_fixed.csv")
+def load_data():
+    train_df = pd.read_csv(raw_path + "train_fixed.csv")[:3]
+    test_df = pd.read_csv(raw_path + "test.csv")[:3]
+    test_labels = pd.read_csv(raw_path + "test_labels.csv")[:3]
+    return train_df, test_df, test_labels
 
 def add_spaces(x):
         return " ".join(list(x))
@@ -38,11 +40,16 @@ def save_tensor(tensor_list, file_path):
     del tensor  # To free memory
 
 def main():
-    preprocessing()
-    # Data
-    train_df = pd.read_csv(raw_path + "train_fixed.csv")[:100]
-    test_df = pd.read_csv(raw_path + "test.csv")[:100]
-    test_labels = pd.read_csv(raw_path + "test_labels.csv")[:100]
+    # load data for preprocessing
+    train_raw = pd.read_csv(f"{raw_path}train.csv", index_col="seq_id")
+    train_updates_raw = pd.read_csv(f"{raw_path}train_updates_20220929.csv", index_col="seq_id")
+    df_train = preprocessing(train_raw, train_updates_raw)
+    # Save the updated training data
+    df_train.to_csv(f"{raw_path}train_fixed.csv")
+
+    # load data
+    train_df, test_df, test_labels = load_data()
+
     dataloader_train = torch.utils.data.DataLoader(train_df["protein_sequence"], batch_size=1, shuffle=False, num_workers=0)
     dataloader_test = torch.utils.data.DataLoader(test_df["protein_sequence"], batch_size=1, shuffle=False, num_workers=0)
 
