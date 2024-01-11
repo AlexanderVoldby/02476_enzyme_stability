@@ -1,39 +1,52 @@
-import torch
-import torch.optim as optim
-import torch.nn as nn
 from torch.utils.data import TensorDataset, DataLoader
 from models.MLP import MyNeuralNet
-import hydra
+from pytorch_lightning import Trainer
+from omegaconf import OmegaConf
 
 # Training hyper parameters
-@hydra.train(config_name="basic_config.yaml")
-def train(model, dataset, cfg):
+# lr = 0.001
+# epochs = 5
+# batch_size = 16
+# in_features = 1024
+# hidden1 = 512
+# hidden2 = 256
+# out_features = 1
 
-    dataloader = DataLoader(dataset, shuffle=True, batch_size=cfg.hyperparameters.batch_size)
-    optimizer = optim.Adam(params=model.parameters(), lr=cfg.hyperparameters.lr)
-    criterion = nn.MSELoss()
-    eps = cfg.hyperparameters.epochs
-    for e in range(eps):
-        print(f"Epoch {e+1}/{eps}")
-        for tensors, target in dataloader:
-            optimizer.zero_grad()
-            output = torch.flatten(model(tensors))
-            # Optimize the RMSE since this is what they use in the competition
-            loss = torch.sqrt(criterion(target, output))
-            loss.backward()
-            optimizer.step()
+# def train(model, dataloader, lr, epochs):
 
-    torch.save("models/model_checkpoint.pt", model.state_dict())
+#     optimizer = optim.Adam(params=model.parameters(), lr=lr)
+#     criterion = nn.MSELoss()
+
+#     for e in range(epochs):
+#         for tensors, target in dataloader:
+#             optimizer.zero_grad()
+#             output = model(tensors)
+#             # Optimize the RMSE since this is what they use in the competition
+#             loss = torch.sqrt(criterion(target, output))
+#             loss.backward()
+#             optimizer.step()
+
+#     torch.save("models/model_checkpoint.pt", model.state_dict())
 
 if __name__ == "__main__":
     # Generate dataset and dataloader
-    X = torch.load("data/processed/train_tensors.pt")
-    y = torch.load("data/processed/train_target.pt")
+    # X = torch.load("mlops_enzyme_stability/data/processed/train_tensors.pt")
+    # y = torch.load("mlops_enzyme_stability/data/processed/train_target.pt")
 
-    model = MyNeuralNet()
-    trainset = TensorDataset(X, y)
+    # model = MyNeuralNet(in_features=in_features,
+    #                 hidden1=hidden1,
+    #                 hidden2=hidden2,
+    #                 out_features=out_features)
     
-    train(model, trainset)
+    # trainset = TensorDataset(X, y)
+    # dataloader = DataLoader(trainset, shuffle=True, batch_size=batch_size)
+    # train(model, dataloader, lr=lr, epochs=epochs)
+    
+    config = OmegaConf.load("config.yaml")
+    model = MyNeuralNet(config)
+    trainer = Trainer()
+    trainer.fit(model)
+
 
 
 

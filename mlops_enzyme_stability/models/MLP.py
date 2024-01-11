@@ -1,4 +1,5 @@
 import torch
+from torch import nn
 from torch.utils.data import TensorDataset, DataLoader
 from pytorch_lightning import LightningModule
 
@@ -14,11 +15,19 @@ class MyNeuralNet(LightningModule):
     """
     def __init__(self, config) -> None:
         super().__init__()
-        self.l1 = torch.nn.Linear(1024, 512)
-        self.l2 = torch.nn.Linear(512, 256)
-        self.l3 = torch.nn.Linear(256, 1)
-        self.r = torch.nn.ReLU()
-        self.criterion = torch.nn.MSELoss()
+        self.data_path = config.data_path
+        self.batch_size = config.hyperparameters.batch_size
+        self.lr = config.hyperparameters.lr
+        self.num_workers =  config.hyperparameters.num_workers
+        self.mlp = nn.Sequential(
+            nn.Linear(1024, config.hyperparameters.hidden1),
+            nn.ReLU(),
+            nn.Linear(config.hyperparameters.hidden1, config.hyperparameters.hidden2),
+            nn.ReLU(),
+            nn.Linear(config.hyperparameters.hidden2, 1)
+        )
+        self.criterion = self.configure_criterion()
+        self.optimizer = self.configure_optimizers()
     
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Forward pass of the model.
@@ -30,7 +39,7 @@ class MyNeuralNet(LightningModule):
             Output tensor with shape [N,out_features]
 
         """
-        return self.l3(self.r(self.l2(self.r(self.l1(x)))))
+        return torch.flatten(self.mlp(x))
     
     def training_step(self, batch, batch_idx) -> torch.Tensor:
         """Training step of the model.
@@ -49,6 +58,12 @@ class MyNeuralNet(LightningModule):
         self.log('train_loss', loss)
         return loss
     
+    def test_step(self, batch, batch_idx):
+        data, label = batch
+        pred = self(data)
+        loss = self.criterion(pred, label)
+        # self.log('test_loss', loss)
+
     def configure_optimizers(self): 
         """Optimizer configuration.
         
@@ -56,13 +71,25 @@ class MyNeuralNet(LightningModule):
             Optimizer
 
         """
-        return torch.optim.Adam(self.parameters(), lr=0.001)
+        return torch.optim.Adam(self.parameters(), lr=self.lr)
     
-    def train_dataloader(self):
-        return DataLoader(...)
+    def configure_criterion(self):
 
-    def val_dataloader(self):
-        return DataLoader(...)
+        return torch.nn.MSELoss()
+    
+
+    def train_dataloader(self):
+        X = torch.load(self.data_path + "/train_tensors.pt")
+        y = torch.load(self.data_path + "/train_target.pt")
+        trainset = TensorDataset(X, y)
+        return DataLoader(trainset, shuffle=True, batch_size=self.batch_size,
+                          num_workers=self.num_workers)
+
+    # def val_dataloader(self): #TODO: implement validation dataloader
+    #     return DataLoader(...)
 
     def test_dataloader(self):
-        return DataLoader(...)
+        X = torch.load(self.data_path + "/test_tensors.pt")
+        y = torch.load(self.data_path + "/test_target.pt")
+        testset = TensorDataset(X, y)
+        return DataLoader(testset, shuffle=False, batch_size=self.batch_size)
