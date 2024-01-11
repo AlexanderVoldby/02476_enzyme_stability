@@ -1,7 +1,10 @@
 from torch.utils.data import TensorDataset, DataLoader
 from models.MLP import MyNeuralNet
 from pytorch_lightning import Trainer
+from pytorch_lightning.loggers import WandbLogger
+from pytorch_lightning.callbacks import ModelCheckpoint
 from omegaconf import OmegaConf
+import wandb
 
 # Training hyper parameters
 # lr = 0.001
@@ -44,7 +47,13 @@ if __name__ == "__main__":
 
     # TODO: Hydra here
     config = OmegaConf.load("config.yaml")
-    print(config)
+    print(config) # TODO: Remove when done debugging
+    
+    # Wandb logger
+    wandb_logger = WandbLogger(log_model="all")
+    checkpoint_callback = ModelCheckpoint(monitor="val_accuracy", mode="max")
+    
+    # Train model
     model = MyNeuralNet(config)
-    trainer = Trainer(max_epochs=config['hyperparameters']['epochs'])
+    trainer = Trainer(logger=wandb_logger, callbacks=[checkpoint_callback] max_epochs=config['hyperparameters']['epochs'])
     trainer.fit(model)
