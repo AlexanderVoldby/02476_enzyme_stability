@@ -18,6 +18,7 @@ class MyNeuralNet(LightningModule):
         self.data_path = config.data_path
         self.batch_size = config.hyperparameters.batch_size
         self.lr = config.hyperparameters.lr
+        self.num_workers =  config.hyperparameters.num_workers
         self.mlp = nn.Sequential(
             nn.Linear(1024, config.hyperparameters.hidden1),
             nn.ReLU(),
@@ -38,7 +39,7 @@ class MyNeuralNet(LightningModule):
             Output tensor with shape [N,out_features]
 
         """
-        return self.mlp(x)
+        return torch.flatten(self.mlp(x))
     
     def training_step(self, batch, batch_idx) -> torch.Tensor:
         """Training step of the model.
@@ -57,6 +58,12 @@ class MyNeuralNet(LightningModule):
         self.log('train_loss', loss)
         return loss
     
+    def test_step(self, batch, batch_idx):
+        data, label = batch
+        pred = self(data)
+        loss = self.criterion(pred, label)
+        # self.log('test_loss', loss)
+
     def configure_optimizers(self): 
         """Optimizer configuration.
         
@@ -75,7 +82,8 @@ class MyNeuralNet(LightningModule):
         X = torch.load(self.data_path + "/train_tensors.pt")
         y = torch.load(self.data_path + "/train_target.pt")
         trainset = TensorDataset(X, y)
-        return DataLoader(trainset, shuffle=True, batch_size=self.batch_size)
+        return DataLoader(trainset, shuffle=True, batch_size=self.batch_size,
+                          num_workers=self.num_workers)
 
     # def val_dataloader(self): #TODO: implement validation dataloader
     #     return DataLoader(...)
