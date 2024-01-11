@@ -4,6 +4,7 @@ from pytorch_lightning import Trainer
 from pytorch_lightning.loggers import WandbLogger
 from pytorch_lightning.callbacks import ModelCheckpoint
 from omegaconf import OmegaConf
+import wandb
 
 # Training hyper parameters
 # lr = 0.001
