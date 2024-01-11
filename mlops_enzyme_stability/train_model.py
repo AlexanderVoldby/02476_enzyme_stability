@@ -46,5 +46,5 @@ if __name__ == "__main__":
     config = OmegaConf.load("config.yaml")
     print(config)
     model = MyNeuralNet(config)
-    trainer = Trainer()
+    trainer = Trainer(max_epochs=config['hyperparameters']['epochs'])
     trainer.fit(model)
