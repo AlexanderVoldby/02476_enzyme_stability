@@ -8,8 +8,8 @@ import os
 
 if __name__ == "__main__":
     # Paths to raw and processed data
-    raw_path = "mlops_enzyme_stability/data/raw/"
-    save_path = "mlops_enzyme_stability/data/processed/"
+    raw_path = "data/raw/"
+    save_path = "data/processed/"
 
     def add_spaces(x):
         return " ".join(list(x))

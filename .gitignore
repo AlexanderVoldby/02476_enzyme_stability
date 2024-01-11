@@ -1,9 +1,15 @@
 docs/site/
 
 # Ignore the downloaded raw data
+<<<<<<< HEAD
 data/raw
 mlops_enzymes_stability/data/raw
 mlops_enzymes_stability/data/processed
+=======
+/data
+data/
+
+>>>>>>> master
 
 # test cache
 manual_test/
@@ -186,3 +192,4 @@ cython_debug/
 *.zip
 *.pdb
 *.pt
+/data
