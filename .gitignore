@@ -1,7 +1,9 @@
 docs/site/
 
 # Ignore the downloaded raw data
-data/raw
+/data
+data/
+
 
 # test cache
 manual_test/
@@ -189,3 +191,5 @@ cython_debug/
 *lightning_logs/*
 wandb/*
 
+*.pt
+/data

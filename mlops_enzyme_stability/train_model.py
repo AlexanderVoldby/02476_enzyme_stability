@@ -40,12 +40,12 @@ if __name__ == "__main__":
     #                 hidden1=hidden1,
     #                 hidden2=hidden2,
     #                 out_features=out_features)
-    
+
     # trainset = TensorDataset(X, y)
     # dataloader = DataLoader(trainset, shuffle=True, batch_size=batch_size)
     # train(model, dataloader, lr=lr, epochs=epochs)
-    
-    # Hydra config
+
+    # TODO: Hydra here
     config = OmegaConf.load("config.yaml")
     print(config) # TODO: Remove when done debugging
     
@@ -57,10 +57,3 @@ if __name__ == "__main__":
     model = MyNeuralNet(config)
     trainer = Trainer(logger=wandb_logger, callbacks=[checkpoint_callback])
     trainer.fit(model)
-
-
-
-
-
-
-
