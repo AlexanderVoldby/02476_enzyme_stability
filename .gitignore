@@ -187,4 +187,5 @@ cython_debug/
 
 # Logs
 *lightning_logs/*
+wandb/*
 
