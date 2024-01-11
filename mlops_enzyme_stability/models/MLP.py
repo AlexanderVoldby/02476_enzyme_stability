@@ -58,11 +58,9 @@ class MyNeuralNet(LightningModule):
         self.log('train_loss', loss)
         return loss
     
-    def test_step(self, batch, batch_idx):
-        data, label = batch
-        pred = self(data)
-        loss = self.criterion(pred, label)
-        # self.log('test_loss', loss)
+    def predict_step(self, batch, batch_idx) -> torch.Tensor:
+        x, y = batch
+        return self(x)
 
     def configure_optimizers(self): 
         """Optimizer configuration.
@@ -83,7 +81,7 @@ class MyNeuralNet(LightningModule):
         y = torch.load(self.data_path + "/train_target.pt")
         trainset = TensorDataset(X, y)
         return DataLoader(trainset, shuffle=True, batch_size=self.batch_size,
-                          num_workers=self.num_workers)
+                          num_workers=self.num_workers, persistent_workers=True)
 
     # def val_dataloader(self): #TODO: implement validation dataloader
     #     return DataLoader(...)
