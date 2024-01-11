@@ -48,7 +48,7 @@ if __name__ == "__main__":
     # train(model, dataloader, lr=lr, epochs=epochs)
     
     # TODO: Hydra here
-
+    print(config)
     model = MyNeuralNet(config)
     trainer = Trainer()
     trainer.fit(model)
