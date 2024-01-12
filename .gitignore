@@ -186,7 +186,6 @@ cython_debug/
 *.zip
 *.pdb
 *.pt
-/data
 
 # Logs
 *lightning_logs/*
