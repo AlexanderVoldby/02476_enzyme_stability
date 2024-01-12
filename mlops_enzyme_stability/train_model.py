@@ -47,13 +47,17 @@ if __name__ == "__main__":
 
     # TODO: Hydra here
     config = OmegaConf.load("config.yaml")
-    print(config) # TODO: Remove when done debugging
-    
+    print(config)  # TODO: Remove when done debugging
+
     # Wandb logger
     wandb_logger = WandbLogger(log_model="all")
     checkpoint_callback = ModelCheckpoint(monitor="val_accuracy", mode="max")
-    
+
     # Train model
     model = MyNeuralNet(config)
-    trainer = Trainer(logger=wandb_logger, callbacks=[checkpoint_callback] ,max_epochs=config['hyperparameters']['epochs'])
+    trainer = Trainer(
+        logger=wandb_logger,
+        callbacks=[checkpoint_callback],
+        max_epochs=config.hyperparameters.epochs,
+    )
     trainer.fit(model)
