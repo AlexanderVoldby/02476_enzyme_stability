@@ -1,7 +1,6 @@
 docs/site/
 
-# Ignore the downloaded raw data
-/data
+# Ignore the downloaded raw and preprocessed data
 data/
 
 
@@ -192,4 +191,5 @@ cython_debug/
 wandb/*
 
 *.pt
+
 /data
