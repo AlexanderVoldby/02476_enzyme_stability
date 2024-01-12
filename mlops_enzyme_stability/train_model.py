@@ -4,7 +4,7 @@ from pytorch_lightning import Trainer
 from pytorch_lightning.loggers import WandbLogger
 from pytorch_lightning.callbacks import ModelCheckpoint
 from omegaconf import OmegaConf
-import wandb
+import torch
 
 # Training hyper parameters
 # lr = 0.001
@@ -58,3 +58,6 @@ if __name__ == "__main__":
     trainer = Trainer(logger=wandb_logger, callbacks=[checkpoint_callback],
                       max_epochs=config.hyperparameters.epochs)
     trainer.fit(model)
+    # Save state_dict for later use
+    torch.save(model.state_dict(), "models/model_checkpoint.pt")
+
