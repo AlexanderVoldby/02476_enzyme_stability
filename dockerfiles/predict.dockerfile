@@ -14,4 +14,8 @@ WORKDIR /
 RUN pip install -r requirements.txt --no-cache-dir
 RUN pip install . --no-deps --no-cache-dir
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
+WORKDIR /mlops_enzyme_stability/
+
+EXPOSE 80
+
+CMD ["uvicorn", "app.predict_api:app", "--host", "0.0.0.0", "--port", "80"]

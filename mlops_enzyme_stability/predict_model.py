@@ -20,12 +20,6 @@ def predict():
     model = MyNeuralNet(config)
     state_dict = torch.load("models/model_checkpoint.pt")
 
-    # Load config
-    config = OmegaConf.load("config.yaml")
-    # Load model
-    model = MyNeuralNet(config)
-    state_dict = torch.load("models/model_checkpoint.pt")
-
     # Load test data
     test_tensors = torch.load("data/processed/test_tensors.pt")
     test_target = torch.load("data/processed/test_target.pt")
