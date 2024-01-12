@@ -1,7 +1,8 @@
 docs/site/
 
 # Ignore the downloaded raw and preprocessed data
-data/
+data/processed
+/data/processed
 
 
 # test cache
@@ -192,4 +193,4 @@ wandb/*
 
 *.pt
 
-/data
+
