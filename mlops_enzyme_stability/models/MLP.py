@@ -9,9 +9,7 @@ class MyNeuralNet(LightningModule):
     """ Basic neural network class. 
     
     Args:
-        in_features: number of input features
-        out_features: number of output features
-    
+        config: Hydra config object
     """
     def __init__(self, config) -> None:
         super().__init__()
@@ -83,8 +81,8 @@ class MyNeuralNet(LightningModule):
 
     def train_dataloader(self):
         # print(f"CWD: {os.getcwd()}") # TODO: Remove when done debugging
-        X = torch.load("../../../data/processed/train_tensors.pt")
-        y = torch.load("../../../data/processed/train_target.pt")
+        X = torch.load("data/processed/train_tensors.pt")
+        y = torch.load("data/processed/train_target.pt")
         # TODO: UserWarning: Using a target size (torch.Size([16])) that is different to the input size (torch.Size([16, 1, 1])). 
         # This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
         trainset = TensorDataset(X, y)
@@ -95,7 +93,7 @@ class MyNeuralNet(LightningModule):
     #     return DataLoader(...)
 
     def test_dataloader(self):
-        X = torch.load("../../../data/processed/test_tensors.pt")
-        y = torch.load("../../../data/processed/test_target.pt")
+        X = torch.load("data/processed/test_tensors.pt")
+        y = torch.load("data/processed/test_target.pt")
         testset = TensorDataset(X, y)
         return DataLoader(testset, shuffle=False, batch_size=self.batch_size)
