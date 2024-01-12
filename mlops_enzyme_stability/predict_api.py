@@ -1,6 +1,5 @@
 from transformers import BertModel, BertTokenizer
-from fastapi import UploadFile, File, FastAPI
-from http import HTTPStatus
+from fastapi import File, FastAPI
 from torch.utils.data import TensorDataset, DataLoader
 from pytorch_lightning import Trainer
 from pydantic import BaseModel

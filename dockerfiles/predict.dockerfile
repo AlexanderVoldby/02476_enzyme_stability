@@ -14,4 +14,4 @@ WORKDIR /
 RUN pip install -r requirements.txt --no-cache-dir
 RUN pip install . --no-deps --no-cache-dir
 
-ENTRYPOINT ["python", "-u", "mlops_enzyme_stability/predict_model.py"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
