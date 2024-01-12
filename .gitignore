@@ -1,8 +1,8 @@
 docs/site/
 
-# Ignore the downloaded raw data
-/data
-data/
+# Ignore the downloaded raw and preprocessed data
+/data/raw/
+/data/processed/
 
 
 # test cache
@@ -185,11 +185,9 @@ cython_debug/
 *.csv
 *.zip
 *.pdb
-#*.pt
+*.pt
 
 # Logs
 *lightning_logs/*
 wandb/*
-
-*.pt
-/data
+outputs/
