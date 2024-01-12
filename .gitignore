@@ -1,7 +1,7 @@
 docs/site/
 
 # Ignore the downloaded raw and preprocessed data
-#/data/raw/
+/data/raw/
 /data/processed/
 
 
