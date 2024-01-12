@@ -1,7 +1,8 @@
 docs/site/
 
 # Ignore the downloaded raw and preprocessed data
-/data
+/data/raw
+/data/processed
 
 
 # test cache
