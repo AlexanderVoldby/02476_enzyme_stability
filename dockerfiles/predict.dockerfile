@@ -16,6 +16,6 @@ RUN pip install . --no-deps --no-cache-dir
 
 WORKDIR /mlops_enzyme_stability/
 
-EXPOSE 80
+EXPOSE 8080
 
-CMD ["uvicorn", "predict_api:app", "--host", "0.0.0.0", "--port", "80"]
+CMD ["uvicorn", "predict_api:app", "--host", "0.0.0.0", "--port", "8080"]
