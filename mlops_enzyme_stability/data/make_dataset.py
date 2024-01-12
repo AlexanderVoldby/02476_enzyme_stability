@@ -5,10 +5,10 @@ from transformers import BertModel, BertTokenizer
 import os
 
 # define directories and create them if not existing
-save_path = "mlops_enzyme_stability/data/processed/"
+save_path = "data/processed/"
 if not os.path.exists(save_path):
         os.makedirs(save_path)
-raw_path = "mlops_enzyme_stability/data/raw/"
+raw_path = "data/raw/"
 if not os.path.exists(raw_path):
         os.makedirs(raw_path)
 
