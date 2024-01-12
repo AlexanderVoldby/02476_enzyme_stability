@@ -28,6 +28,9 @@ class MyNeuralNet(LightningModule):
         )
         self.criterion = self.configure_criterion()
         self.optimizer = self.configure_optimizers()
+        
+        # Save hyperparameters to use with wandb
+        self.save_hyperparameters()
     
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Forward pass of the model.
@@ -79,6 +82,8 @@ class MyNeuralNet(LightningModule):
     def train_dataloader(self):
         X = torch.load(self.data_path + "/train_tensors.pt")
         y = torch.load(self.data_path + "/train_target.pt")
+        # TODO: UserWarning: Using a target size (torch.Size([16])) that is different to the input size (torch.Size([16, 1, 1])). 
+        # This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
         trainset = TensorDataset(X, y)
         return DataLoader(trainset, shuffle=True, batch_size=self.batch_size,
                           num_workers=self.num_workers, persistent_workers=True)

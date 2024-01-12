@@ -185,5 +185,11 @@ cython_debug/
 *.csv
 *.zip
 *.pdb
+#*.pt
+
+# Logs
+*lightning_logs/*
+wandb/*
+
 *.pt
 /data
