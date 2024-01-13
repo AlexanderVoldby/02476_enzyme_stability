@@ -1,9 +1,9 @@
 docs/site/
 
-# Ignore the downloaded raw data
-data/raw
-mlops_enzymes_stability/data/raw
-mlops_enzymes_stability/data/processed
+# Ignore the downloaded raw and preprocessed data
+/data/raw/
+/data/processed/
+
 
 # test cache
 manual_test/
@@ -186,7 +186,6 @@ cython_debug/
 *.zip
 *.pdb
 *.pt
-/data
 
 # Logs
 *lightning_logs/*

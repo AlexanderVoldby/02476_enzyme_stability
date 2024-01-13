@@ -1,10 +1,19 @@
 import torch
 from torch.utils.data import DataLoader, TensorDataset
-from mlops_enzyme_stability.models.MLP import MyNeuralNet
+from models.MLP import MyNeuralNet
 from omegaconf import OmegaConf
 from pytorch_lightning import Trainer
 
-if __name__ == "__main__":
+def predict():
+    """
+    Stuff needed for predicition:
+    - path to data
+    - path to model checkpoint
+    - Determine whether data is an AA-sequence or an embedding of an AA-sequence
+    - Embed AA-sequence if needed
+    - Make predictions
+    - Save predictions to file
+    """
     # Load config
     config = OmegaConf.load("config.yaml")
     # Load model
