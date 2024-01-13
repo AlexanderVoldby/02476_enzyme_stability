@@ -15,7 +15,7 @@ def main(config):
     
     wandb_logger = WandbLogger(log_model="all")
     checkpoint_callback = ModelCheckpoint(monitor="train_loss",
-                                          mode="max")
+                                          mode="min")
     model = MyNeuralNet(config)
     
     trainer = Trainer(logger=wandb_logger,
