@@ -1,5 +1,5 @@
 from torch.utils.data import TensorDataset, DataLoader
-from mlops_enzyme_stability.models.MLP import MyNeuralNet
+from models.MLP import MyNeuralNet
 from pytorch_lightning import Trainer
 from pytorch_lightning.loggers import WandbLogger
 from pytorch_lightning.callbacks import ModelCheckpoint
