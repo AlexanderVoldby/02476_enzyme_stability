@@ -17,7 +17,7 @@ app = FastAPI()
 
 @hydra.main(version_base="1.3", config_name="config.yaml", config_path="./")
 @app.post("/predict/")
-async def predict(cfg, data: embeddingDict, background_tasks: BackgroundTasks):
+def predict(cfg, data: embeddingDict, background_tasks: BackgroundTasks):
     # define checkpoint path and load model
     checkpoint_file = f"{data.state_dict_file}"
     checkpoint_path = os.path.join(cfg.checkpoint_path, checkpoint_file)
@@ -42,7 +42,6 @@ async def predict(cfg, data: embeddingDict, background_tasks: BackgroundTasks):
     for prediction in predictions_vector:
         background_tasks.add_task(add_to_database, now, prediction.item())
         n += 1
-
 
     return(f"{n} predictions have been saved to database {now}")
 
