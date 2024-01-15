@@ -6,7 +6,7 @@ import hydra
 import os
 import csv
 
-@hydra.main(version_base="1.3", config_name="config.yaml", config_path="../")
+@hydra.main(version_base="1.3", config_name="config.yaml", config_path="./")
 def main(cfg):
     """
     Stuff needed for predicition:

@@ -43,13 +43,14 @@ async def predict_step(data: embeddingDict):
     
     config = OmegaConf.load("config.yaml")
     model = MyNeuralNet(config)
-    dataloader = DataLoader(TensorDataset(embeddings),
+    dataloader = DataLoader(embeddings,
                             batch_size=config.hyperparameters.batch_size, shuffle=True)
     model = model.to(device)
     state_dict = torch.load(f"{data.state_dict}")
     model.load_state_dict(state_dict)
 
     trainer = Trainer()
+    
     predictions = trainer.predict(model, dataloader)
     return predictions
 
