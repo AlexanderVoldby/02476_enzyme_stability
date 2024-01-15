@@ -52,3 +52,5 @@ async def predict_step(data: embeddingDict):
     trainer = Trainer()
     predictions = trainer.predict(model, dataloader)
     return predictions
+
+# TODO: Find a better way to pass data to the prediction API
