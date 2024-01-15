@@ -4,7 +4,7 @@ import zipfile
 import os
 
 # Parameters
-raw_path = "mlops_enzyme_stability/data/raw/"
+raw_path = "data/raw/"
 
 # Authenticate with Kaggle
 try:

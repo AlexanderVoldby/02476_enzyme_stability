@@ -60,7 +60,7 @@ class MyNeuralNet(LightningModule):
         return loss
     
     def predict_step(self, batch, batch_idx) -> torch.Tensor:
-        x, y = batch
+        x= batch
         return self(x)
 
     def configure_optimizers(self): 
@@ -90,7 +90,7 @@ class MyNeuralNet(LightningModule):
     # def val_dataloader(self): #TODO: implement validation dataloader
     #     return DataLoader(...)
 
-    def test_dataloader(self):
+    def predict_dataloader(self):
         X = torch.load("data/processed/test_tensors.pt")
         y = torch.load("data/processed/test_target.pt")
         testset = TensorDataset(X, y)
