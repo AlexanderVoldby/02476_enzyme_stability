@@ -1,10 +1,10 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/enzyme-stability-02476/train_model', '.']
+    args: ['build', '-t', 'gcr.io/enzyme-stability-02476/train_model', '-f', 'dockerfiles/train_model.dockerfile', '.']
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/enzyme-stability-02476/train_model']
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/enzyme-stability-02476/predict_model', '.']
+    args: ['build', '-t', 'gcr.io/enzyme-stability-02476/predict_model', "-f", "dockerfiles/predict_model.dockerfile", '.']
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/enzyme-stability-02476/predict_model']
