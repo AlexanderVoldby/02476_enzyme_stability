@@ -8,6 +8,15 @@ import csv
 
 @hydra.main(version_base="1.3", config_name="config.yaml", config_path="../")
 def main(cfg):
+    """
+    Stuff needed for predicition:
+    - path to data
+    - path to model checkpoint
+    - Determine whether data is an AA-sequence or an embedding of an AA-sequence
+    - Embed AA-sequence if needed
+    - Make predictions
+    - Save predictions to file
+    """
     # Load config
     predictions = predict(cfg)
     save_predictions(predictions)
