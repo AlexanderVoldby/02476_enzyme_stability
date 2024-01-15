@@ -12,7 +12,6 @@ import csv
 class embeddingDict(BaseModel):
     data_file: str
     state_dict_file: str
-    type: str
 
 app = FastAPI()
 
@@ -22,7 +21,7 @@ async def predict(cfg, data: embeddingDict, background_tasks: BackgroundTasks):
     # define checkpoint path and load model
     checkpoint_file = f"{data.state_dict_file}"
     checkpoint_path = os.path.join(cfg.checkpoint_path, checkpoint_file)
-
+    print("Loading model")
     model = load_model(cfg, checkpoint_path)
 
     # Load test data
@@ -34,10 +33,12 @@ async def predict(cfg, data: embeddingDict, background_tasks: BackgroundTasks):
 
 
     trainer = Trainer()
+    print("Calculating predictions")
     predictions = trainer.predict(model, dataloader)
     predictions_vector = torch.cat(predictions, dim=0)
     now = str(datetime.now())
     n = 0
+    print("Saving predictions to database")
     for prediction in predictions_vector:
         background_tasks.add_task(add_to_database, now, prediction.item())
         n += 1
@@ -52,10 +53,7 @@ def load_model(cfg, path):
     model.eval()
     return model
 
-def add_to_database(
-    now: str,
-    thermal_stability: float,
-):
+def add_to_database(now: str, thermal_stability: float):
     """Simple function to add prediction to database."""
     with open("reports/predictions/predictions.csv", "a") as file:
         file.write(f"{now}, {thermal_stability}\n")
