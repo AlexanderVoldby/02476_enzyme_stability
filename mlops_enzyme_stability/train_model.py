@@ -1,5 +1,5 @@
 from torch.utils.data import TensorDataset, DataLoader
-from models.MLP import MyNeuralNet
+from mlops_enzyme_stability.models.MLP import MyNeuralNet
 from pytorch_lightning import Trainer
 from pytorch_lightning.loggers import WandbLogger
 from pytorch_lightning.callbacks import ModelCheckpoint
@@ -14,7 +14,10 @@ def main(config):
     print(config)
 
     wandb_logger = WandbLogger(log_model="all")
-    checkpoint_callback = ModelCheckpoint(monitor="train_loss", mode="max")
+    checkpoint_callback = ModelCheckpoint(monitor="train_loss",
+                                          mode="min",
+                                          filename=config.runname,
+                                          dirpath=config.checkpoint_path)
     model = MyNeuralNet(config)
 
     trainer = Trainer(
