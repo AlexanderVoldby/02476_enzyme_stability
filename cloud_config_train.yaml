@@ -2,7 +2,7 @@
 # gcloud ai custom-jobs create \
     # --region=europe-west1 \
     # --display-name=test-run \
-    # --config=cloud_config_cpu.yaml
+    # --config=cloud_config_train.yaml
 
 workerPoolSpecs:
     machineSpec:
