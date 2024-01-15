@@ -1,6 +1,6 @@
 import torch
 from torch.utils.data import DataLoader, TensorDataset
-from mlops_enzyme_stability.models.MLP import MyNeuralNet
+from models.MLP import MyNeuralNet
 from pytorch_lightning import Trainer
 from fastapi import BackgroundTasks, FastAPI
 from pydantic import BaseModel
