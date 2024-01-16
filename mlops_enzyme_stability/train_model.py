@@ -1,6 +1,6 @@
 from torch.utils.data import TensorDataset, DataLoader
 from models.MLP import MyNeuralNet
-from pytorch_lightning import Trainer
+from pytorch_lightning import Trainer, seed_everything
 from pytorch_lightning.loggers import WandbLogger
 from pytorch_lightning.callbacks import ModelCheckpoint
 from omegaconf import OmegaConf
@@ -19,7 +19,7 @@ except Exception:
 @hydra.main(version_base="1.3", config_name="config.yaml", config_path="./")
 def main(config):
     print(config)
-
+    seed_everything(config.seed)
     wandb_logger = WandbLogger(log_model="all")
     checkpoint_callback = ModelCheckpoint(monitor="train_loss",
                                           mode="min",
