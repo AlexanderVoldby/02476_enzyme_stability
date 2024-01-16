@@ -1,0 +1,12 @@
+# This file is used to run a Vertex AI job from the command line:
+# gcloud ai custom-jobs create \
+    # --region=europe-west1 \
+    # --display-name=test-run \
+    # --config=cloud_config_train.yaml
+
+workerPoolSpecs:
+    machineSpec:
+        machineType: n1-highmem-2
+    replicaCount: 1
+    containerSpec:
+        imageUri: gcr.io/enzyme-stability-02476/train_model

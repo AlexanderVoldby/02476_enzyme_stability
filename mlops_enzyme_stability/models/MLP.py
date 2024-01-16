@@ -59,11 +59,9 @@ class MyNeuralNet(LightningModule):
         self.log('train_loss', loss)
         return loss
     
-    def test_step(self, batch, batch_idx):
-        data, label = batch
-        pred = self(data)
-        loss = self.criterion(pred, label)
-        # self.log('test_loss', loss)
+    def predict_step(self, batch, batch_idx) -> torch.Tensor:
+        x= batch
+        return self(x)
 
     def configure_optimizers(self): 
         """Optimizer configuration.
@@ -81,19 +79,19 @@ class MyNeuralNet(LightningModule):
 
     def train_dataloader(self):
         # print(f"CWD: {os.getcwd()}") # TODO: Remove when done debugging
-        X = torch.load("data/processed/train_tensors.pt")
-        y = torch.load("data/processed/train_target.pt")
+        X = torch.load(self.data_path + "/train_tensors.pt")
+        y = torch.load(self.data_path + "/train_target.pt")
         # TODO: UserWarning: Using a target size (torch.Size([16])) that is different to the input size (torch.Size([16, 1, 1])). 
         # This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
         trainset = TensorDataset(X, y)
         return DataLoader(trainset, shuffle=True, batch_size=self.batch_size,
-                          num_workers=self.num_workers)
+                          num_workers=self.num_workers, persistent_workers=True)
 
     # def val_dataloader(self): #TODO: implement validation dataloader
     #     return DataLoader(...)
 
-    def test_dataloader(self):
-        X = torch.load("data/processed/test_tensors.pt")
-        y = torch.load("data/processed/test_target.pt")
+    def predict_dataloader(self):
+        X = torch.load(self.data_path + "/test_tensors.pt")
+        y = torch.load(self.data_path + "/test_target.pt")
         testset = TensorDataset(X, y)
         return DataLoader(testset, shuffle=False, batch_size=self.batch_size)
