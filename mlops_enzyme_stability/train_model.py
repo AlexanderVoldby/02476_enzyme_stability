@@ -1,5 +1,5 @@
 from torch.utils.data import TensorDataset, DataLoader
-from mlops_enzyme_stability.models.MLP import MyNeuralNet
+from models.MLP import MyNeuralNet
 from pytorch_lightning import Trainer
 from pytorch_lightning.loggers import WandbLogger
 from pytorch_lightning.callbacks import ModelCheckpoint
@@ -8,8 +8,16 @@ import wandb
 import hydra
 import os
 
+# Wandb login YOLO
+try:
+    wandb.login(anonymous="allow",
+                key="8d8198f8b41c68eed39ef9021f8bea9633eb2f6e",
+                host="http://172.17.0.1:8080",
+                verify=True)
+except Exception:
+    print("Wandb login failed")
 
-@hydra.main(version_base="1.3", config_name="config.yaml", config_path="../")
+@hydra.main(version_base="1.3", config_name="config.yaml", config_path="./")
 def main(config):
     print(config)
 

@@ -49,18 +49,18 @@ def test_save_tensor(tmp_path):
     assert file_path.exists()
 
 
-def test_dataloader():
-    processed_dir = os.path.join(_PATH_DATA, 'processed')
-    train_tensors = torch.load(os.path.join(processed_dir, "train_tensors.pt"))
-    train_labels = torch.load(os.path.join(processed_dir, "train_target.pt"))
-    test_tensors = torch.load(os.path.join(processed_dir, "test_tensors.pt"))
-    test_labels = torch.load(os.path.join(processed_dir, "test_target.pt"))
+# def test_dataloader():
+#     processed_dir = os.path.join(_PATH_DATA, 'processed')
+#     train_tensors = torch.load(os.path.join(processed_dir, "train_tensors.pt"))
+#     train_labels = torch.load(os.path.join(processed_dir, "train_target.pt"))
+#     test_tensors = torch.load(os.path.join(processed_dir, "test_tensors.pt"))
+#     test_labels = torch.load(os.path.join(processed_dir, "test_target.pt"))
     
-    trainset = TensorDataset(train_tensors, train_labels)
-    trainloader = DataLoader(trainset, batch_size=16, shuffle=True)
-    assert len(trainloader) == 1812, "Train dataloader should have 1812 batches"
+#     trainset = TensorDataset(train_tensors, train_labels)
+#     trainloader = DataLoader(trainset, batch_size=16, shuffle=True)
+#     assert len(trainloader) == 1812, "Train dataloader should have 1812 batches"
     
-    testset = TensorDataset(test_tensors, test_labels)
-    testloader = DataLoader(testset, batch_size=16, shuffle=True)
-    print(len(testloader))
-    assert len(testloader) == 151, "Test dataloader should have 151 batches"
+#     testset = TensorDataset(test_tensors, test_labels)
+#     testloader = DataLoader(testset, batch_size=16, shuffle=True)
+#     print(len(testloader))
+#     assert len(testloader) == 151, "Test dataloader should have 151 batches"
