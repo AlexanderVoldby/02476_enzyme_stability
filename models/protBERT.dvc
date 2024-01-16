@@ -1,0 +1,6 @@
+outs:
+- md5: 6f2fa46b1f7a951b2daaee0769a53922.dir
+  size: 684713269
+  nfiles: 5
+  hash: md5
+  path: protBERT
