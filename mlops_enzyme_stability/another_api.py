@@ -52,7 +52,7 @@ def save_predictions(predictions):
     output_file_path = os.path.join(output_dir, f'predictions.csv')
 
     # Write predictions to CSV
-    with open(output_file_path, mode='w', newline='') as file:
+    with open(output_file_path, mode='a', newline='') as file:
         writer = csv.writer(file)
         for i, pred in enumerate(predictions):
             writer.writerow([i, timestamp, pred])
