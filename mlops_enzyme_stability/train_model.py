@@ -8,6 +8,8 @@ import wandb
 import hydra
 import os
 
+# Wandb login YOLO
+wandb.login(key=8d8198f8b41c68eed39ef9021f8bea9633eb2f6e)
 
 @hydra.main(version_base="1.3", config_name="config.yaml", config_path="./")
 def main(config):
