@@ -14,7 +14,7 @@ app = FastAPI()
 
 class PredictionRequest(BaseModel):
     data_path: str
-    model_checkpoint_path: str
+    checkpoint_path: str
 
 class PredictionResponse(BaseModel):
     predictions: List[float]
@@ -44,34 +44,34 @@ def save_predictions(predictions):
         predictions = predictions.numpy()
 
     # Create the directory if it doesn't exist
-    output_dir = 'reports/predictions'
+    output_dir = '../reports/predictions'
     os.makedirs(output_dir, exist_ok=True)
 
     # Define the CSV file path with timestamp
-    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
-    output_file_path = os.path.join(output_dir, f'predictions_{timestamp}.csv')
+    timestamp = str(datetime.now())[:-5]
+    output_file_path = os.path.join(output_dir, f'predictions.csv')
 
     # Write predictions to CSV
     with open(output_file_path, mode='w', newline='') as file:
         writer = csv.writer(file)
-        for pred in predictions:
-            writer.writerow([pred])
+        for i, pred in enumerate(predictions):
+            writer.writerow([i, timestamp, pred])
 
     print(f"Predictions saved to {output_file_path}")
 
-def save_predictions_background(predictions):
+def save_predictions_background(predictions, background_tasks: BackgroundTasks):
     # Run the save_predictions function in the background
     background_tasks.add_task(save_predictions, predictions)
 
 
 @app.post("/predict/", response_model=PredictionResponse)
-async def make_prediction(request: PredictionRequest):
+async def make_prediction(request: PredictionRequest, background_tasks: BackgroundTasks):
     try:
         cfg = OmegaConf.load("config.yaml")
         datapath = request.data_path
-        modelpath = request.model_checkpoint_path
-        
+        modelpath = request.checkpoint_path
         predictions = predict(cfg, datapath, modelpath)
+        save_predictions_background(predictions, background_tasks)
         return {"predictions": predictions}
 
     except Exception as e:
