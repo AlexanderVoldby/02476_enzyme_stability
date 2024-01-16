@@ -69,8 +69,8 @@ def add_spaces(x):
 
 def encode_sequences(sequences):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    tokenizer = BertTokenizer.from_pretrained("Rostlab/prot_bert", do_lower_case=False)
-    model = BertModel.from_pretrained("Rostlab/prot_bert")
+    tokenizer = BertTokenizer.from_pretrained("../models/protBERT/tokenizer", do_lower_case=False)
+    model = BertModel.from_pretrained("../models/protBERT/model")
     model = model.to(device)
     model.eval()
 
