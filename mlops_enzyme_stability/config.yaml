@@ -6,7 +6,7 @@ hyperparameters:
   hidden2: 256
   num_workers: 3
 seed: 42
-data_path: "data/processed"
+data_path: "gs://protein_embeddings/data/processed"
 criterion: "MSELoss"
 optimizer: "Adam"
 runname: "test1"

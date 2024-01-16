@@ -355,7 +355,10 @@ In this example the learning rate and epochs as well as the name of the run are 
 >
 > Answer:
 
---- question 17 fill here ---
+We used the following services:
+- Cloud Storage: We defined and used a bucket to store the training data for our project as well as the model checkpoint, which is retrieved via Data Version Control operations. Cloud storage is a platform that allows to store and retrieve data in a structured way. It organizes the data into buckets, which could be interpreted as folders. Data Version Control was implemented via dvc.
+- Cloud Engine: Two virtual machines (VM) were used to run the Dcoker containers to train and host the project API. Running our application on a Docker container hosted in a Google Cloud Engine VM brings the VM benefits (high level of isolation, adjusted resources configuration) and Docker benefits (reproducibility by defining the dependencies, and scalability).
+- Vertex AI platform: TBD. #CHECK
 
 ### Question 18
 
@@ -370,7 +373,64 @@ In this example the learning rate and epochs as well as the name of the run are 
 >
 > Answer:
 
---- question 18 fill here ---
+We used the compute engine virtual machines to host the training and predicting Docker containers. 
+The training and predictions VMs had the following hardware: 
+ - Machine type: n1-highmem-2
+ - CPU platform: Intel Haswell
+ - Minimum CPU platform: None
+ - Architecture: -
+ - vCPUs to core ratio: - 
+ - Custom visible cores: - 
+ - GPUs: None
+
+The training Docker container specifications:
+```
+# Base image
+FROM python:3.11-slim
+
+RUN apt update && \
+    apt install --no-install-recommends -y build-essential gcc && \
+    apt clean && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt requirements.txt
+COPY requirements_dev.txt requirements_dev.txt
+COPY pyproject.toml pyproject.toml
+COPY mlops_enzyme_stability/ mlops_enzyme_stability/
+COPY data/ data/
+
+WORKDIR /
+RUN pip install -r requirements.txt --no-cache-dir
+RUN pip install -r requirements_dev.txt --no-cache-dir
+RUN pip install . --no-deps --no-cache-dir
+
+ENTRYPOINT ["python", "-u", "mlops_enzyme_stability/train_model.py"]
+```
+The API predictions Docker container specifications:
+```
+# Base image
+FROM python:3.11-slim
+
+RUN apt update && \
+    apt install --no-install-recommends -y build-essential gcc && \
+    apt clean && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt requirements.txt
+COPY pyproject.toml pyproject.toml
+COPY mlops_enzyme_stability/ mlops_enzyme_stability/
+COPY data/ data/
+
+WORKDIR /
+RUN pip install -r requirements.txt --no-cache-dir
+RUN pip install . --no-deps --no-cache-dir
+
+WORKDIR /mlops_enzyme_stability/
+
+EXPOSE 8080
+
+CMD ["uvicorn", "predict_api:app", "--host", "0.0.0.0", "--port", "8080"]
+```
+
+
 
 ### Question 19
 
@@ -378,8 +438,8 @@ In this example the learning rate and epochs as well as the name of the run are 
 > **You can take inspiration from [this figure](figures/bucket.png).**
 >
 > Answer:
+![Local Image](./figures/bucket_registry.png)
 
---- question 19 fill here ---
 
 ### Question 20
 
@@ -388,7 +448,8 @@ In this example the learning rate and epochs as well as the name of the run are 
 >
 > Answer:
 
---- question 20 fill here ---
+![Local Image](./figures/bucket_registry.png)
+
 
 ### Question 21
 
@@ -397,7 +458,7 @@ In this example the learning rate and epochs as well as the name of the run are 
 >
 > Answer:
 
---- question 21 fill here ---
+![Local Image](./figures/cloudbuild_screenshot.png)
 
 ### Question 22
 
@@ -413,8 +474,8 @@ In this example the learning rate and epochs as well as the name of the run are 
 >
 > Answer:
 
---- question 22 fill here ---
-
+To deploy our model, we wrapped our model into an API using FastAPI. The API allows uploading either a pytorch tensor object ´.pt´ containing the protein sequence embeddings, or the actual aminoacid sequences, and generate the protein stability predictions.  We initially deployed the model locally, which worked. Subsequently, we build a Docker container hosted by a VM in Google Cloud Engine. The implementation in the cloud .... # CHECK
+The API is invoked through the docker container.
 ### Question 23
 
 > **Did you manage to implement monitoring of your deployed model? If yes, explain how it works. If not, explain how**
@@ -442,7 +503,12 @@ In this example the learning rate and epochs as well as the name of the run are 
 >
 > Answer:
 
---- question 24 fill here ---
+Alexander Voldby used  credits.
+Jesper Dybkær Lauridsen used  credits.
+Max Klein used  credits.
+Pau Piera Lindez used  credits.
+
+CONTINUE WITH Coding environment
 
 ## Overall discussion of project
 
