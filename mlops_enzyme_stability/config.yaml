@@ -5,6 +5,7 @@ hyperparameters:
   hidden1: 512
   hidden2: 256
   num_workers: 3
+seed: 42
 data_path: "data/processed"
 criterion: "MSELoss"
 optimizer: "Adam"

@@ -223,7 +223,7 @@ end of the project.
 >
 > Answer:
 
---- question 9 fill here ---
+--- Branches were an important part of our workflow. Whenever someone worked on part of the codebase, a branch was created from the master branch. Later on when the work on this feature was done, this branch was merged again with the master branch using a pull request. Since this was done quite frequently was there no branch protection on the master branch, so we relied on everyone to go through their own pull request with care. Later on when working on the continuous integration and the automatic cloud deployment we used the main branch for deployment. In that way could the master branch be used for development, and each time we would like to deploy the current state of the codebase a pull request from the master to the main branch was created. This pull request then had to be reviewed by at least 2 people to include more safety before deployment. ---
 
 ### Question 10
 
@@ -238,7 +238,7 @@ end of the project.
 >
 > Answer:
 
---- question 10 fill here ---
+--- In our project we did use DVC for managing our data. Unlike in most other project, training our model was not the computationally most intense part of the pipeline. It was in fact the preprocessing in the form of embedding the amino acid sequences. DVC helped us to make sure, that the already pre-processed data could easily be pulled using DVC. This also ensured that everyone was working with the same state of pre-processed data. If at any point we would have changed our pre-processing pipeline the data could be updated with DVC. ---
 
 ### Question 11
 
@@ -254,7 +254,7 @@ end of the project.
 >
 > Answer:
 
---- question 11 fill here ---
+--- We relied on unittesting in the form of pytest for our  continuous integration setup. It is organized into three different test scripts, on focusing on data preprocessing, on focusing on the model itself and on focusing on making predictions using the model. As we are mostly working on Windows and Linux did the testing include the latest ubuntu and windows distribution. We utilized the caching option in GitHub to reduce the time it takes to run every workflow, since GitHub restricts the amount of time run for workflows. An example of a workflow can be found here: https://github.com/AlexanderVoldby/02476_enzyme_stability/actions/runs/7540382637 ---
 
 ## Running code and tracking experiments
 
@@ -273,7 +273,10 @@ end of the project.
 >
 > Answer:
 
---- question 12 fill here ---
+--- Our approach for configuring experiments and keeping track of past configurations was a config.yaml file with hydra. The config files contains various hyperparameters of the model, but also other options as the name of the run. In that way a the model can be run in the terminal as:
+$ python mlops_enzyme_stability/train_model.py hyperparameters.lr=0.002 hyperparameters.epochs=10 runname=”Run_1”
+In this example the learning rate and epochs as well as the name of the run are specified explicitly.
+ ---
 
 ### Question 13
 
@@ -288,7 +291,7 @@ end of the project.
 >
 > Answer:
 
---- question 13 fill here ---
+--- In addition to keeping track of config files using hydra we tracked all of our experiments using W&B. This way all team members have easy access to all of the runs and secures the configuration and experiments in an accessible cloud format. To enable actual reproducibility everything must be seeded to enable deterministic behaviour. For this we utilized the seeding function of Pytorch Lightning, as this sets the seed all the relevant random number generators we are using. To reproduce a run one could load the corresponding hydra config files, which by default are saved in the “outputs” folder. Alternatively, one could also use the logging function from Pytorch Lightning, which saves configuration in the lightning_logs folder. As the config.yaml contains the Pytorch Lightning seed, this allows for reproducible experiments. ---
 
 ### Question 14
 
