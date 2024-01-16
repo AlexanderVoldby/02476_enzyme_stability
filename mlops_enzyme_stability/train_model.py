@@ -12,7 +12,6 @@ import os
 try:
     wandb.login(anonymous="allow",
                 key="8d8198f8b41c68eed39ef9021f8bea9633eb2f6e",
-                #host="http://172.17.0.1:8080",
                 verify=True)
 except Exception:
     print("Wandb login failed")
