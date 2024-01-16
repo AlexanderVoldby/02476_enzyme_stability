@@ -188,6 +188,6 @@ cython_debug/
 *.pt
 
 # Logs
-*lightning_logs/*
+lightning_logs/*
 wandb/*
 outputs/
