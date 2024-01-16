@@ -39,7 +39,7 @@ def load_model(cfg, path):
     model.eval()
     return model
 
-def save_predictions(predictions, amino_acid_sequences):
+def save_predictions(predictions, sequences):
     # Ensure predictions is a numpy array
     if isinstance(predictions, torch.Tensor):
         predictions = predictions.numpy()
@@ -55,14 +55,14 @@ def save_predictions(predictions, amino_acid_sequences):
     # Write predictions to CSV
     with open(output_file_path, mode='a', newline='') as file:
         writer = csv.writer(file)
-        for i, (aas, pred) in enumerate(zip(amino_acid_sequences,predictions)):
+        for i, (aas, pred) in enumerate(zip(sequences, predictions)):
             writer.writerow([i, timestamp, aas, pred])
 
     print(f"Predictions saved to {output_file_path}")
 
-def save_predictions_background(predictions, background_tasks: BackgroundTasks):
+def save_predictions_background(predictions, sequences, background_tasks: BackgroundTasks):
     # Run the save_predictions function in the background
-    background_tasks.add_task(save_predictions, predictions)
+    background_tasks.add_task(save_predictions, predictions, sequences)
 
 def add_spaces(x):
     return " ".join(list(x))
@@ -94,7 +94,7 @@ async def make_prediction(request: PredictionRequest, background_tasks: Backgrou
         
         modelpath = request.checkpoint_path
         predictions = predict(cfg, encoded_sequences, modelpath)
-        save_predictions_background(predictions, background_tasks)
+        save_predictions_background(predictions, amino_acid_sequences, background_tasks)
         return {"predictions": predictions}
 
     except Exception as e:
