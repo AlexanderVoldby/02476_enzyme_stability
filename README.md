@@ -1,5 +1,7 @@
 # mlops_enzyme_stability
 
+[![Run tests](https://github.com/AlexanderVoldby/02476_enzyme_stability/actions/workflows/tests.yml/badge.svg?branch=master&event=pull_request)](https://github.com/AlexanderVoldby/02476_enzyme_stability/actions/workflows/tests.yml)
+
 ## Overal goal
 The goal of this project is to attempt to predict the thermal stability of various enzymes given their amino acid sequence. The task was part of a competition hosted by Novozymes on Kaggle: https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/overview
 
