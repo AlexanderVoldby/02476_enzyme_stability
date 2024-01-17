@@ -27,7 +27,18 @@ def main(cfg):
 
 
 def predict(cfg):
-    model = load_model(cfg)
+    # define checkpoint path and load model
+    # "gs://dtu-mlops-storage/models/MLP/checkpoints"
+    checkpoint_path = f"{cfg.checkpoint_path}/{cfg.best_model_name}.ckpt"
+
+    model = MyNeuralNet.load_from_checkpoint(checkpoint_path)
+    model.eval()
+    # Load test data
+    # test_tensors = torch.load("data/processed/test_tensors.pt")
+    # #test_target = torch.load("data/processed/test_target.pt")
+    # dataloader = DataLoader(test_tensors,
+    #                        batch_size=cfg.hyperparameters.batch_size,
+    #                        shuffle=False)
 
     trainer = Trainer()
     # predictions = trainer.predict(model, dataloader)
@@ -36,17 +47,9 @@ def predict(cfg):
     return predictions_vector
 
 
-def load_model(cfg):
-    # define checkpoint path and load model
-    storage_client = storage.Client(project=cfg.gs_project_name)
-    bucket = storage_client.bucket(cfg.gs_bucket_name)
-
-    blob = bucket.blob("models/MLP/checkpoints/%s/%s.ckpt" % (cfg.runname, cfg.runname))
-    blob_bin = blob.download_as_bytes()
-    model_state_dict = torch.load(io.BytesIO(blob_bin))["state_dict"]
-
+def load_model(cfg, path):
     model = MyNeuralNet(cfg)
-    model.load_state_dict(state_dict=model_state_dict)
+    model = MyNeuralNet.load_from_checkpoint(path)
     model.eval()
     return model
 

@@ -8,7 +8,7 @@ import wandb
 import hydra
 
 
-@hydra.main(version_base="1.3", config_name="config.yaml", config_path="../")
+@hydra.main(version_base="1.3", config_name="config.yaml", config_path=".../")
 def main(config):
     # print(config)
 
@@ -19,8 +19,9 @@ def main(config):
         print("Wandb login failed")
 
     seed_everything(config.seed)
-    wandb_logger = WandbLogger(log_model="all", project=config.project_name)
-
+    wandb_logger = WandbLogger(
+        log_model="all", project=config.project_name, name=config.runname
+    )
     checkpoint_callback = ModelCheckpoint(
         monitor="train_loss",
         mode="min",
