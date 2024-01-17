@@ -1,0 +1,17 @@
+hyperparameters:
+  lr: 0.001
+  batch_size: 50
+  epochs: 1
+  hidden1: 1024
+  hidden2: 1024
+  num_workers: 3
+seed: 42
+data_path: "gs://protein_embeddings/data/processed"
+criterion: "MSELoss"
+optimizer: "Adam"
+runname: "test3"
+checkpoint_path: "mlops_enzyme_stability/models/checkpoints/"
+BERT_path: "mlops_enzyme_stability/models/protBERT/"
+project_name: "lightning_logs"
+bucket_name: "dtu-mlops-storage"
+wandb_api_key: None
