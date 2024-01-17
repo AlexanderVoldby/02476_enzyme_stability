@@ -9,3 +9,4 @@ wandb >= 0.16.0
 pytest >= 7.4.0
 fastapi >= 0.100.0
 uvicorn[standard] >= 0.20.0
+gcloud >= 0.18.0

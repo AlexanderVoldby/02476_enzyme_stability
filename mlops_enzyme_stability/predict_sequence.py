@@ -5,7 +5,7 @@ import os
 import torch
 from transformers import BertTokenizer, BertModel 
 from torch.utils.data import DataLoader
-from models.MLP import MyNeuralNet
+from mlops_enzyme_stability.models.MLP import MyNeuralNet
 from pytorch_lightning import Trainer
 from omegaconf import OmegaConf
 from datetime import datetime
@@ -15,13 +15,20 @@ import csv
 app = FastAPI()
 
 class PredictionRequest(BaseModel):
-    data_path: str
+    data: list[str]
     checkpoint_path: str
 
 class PredictionResponse(BaseModel):
     predictions: List[float]
 
 background_tasks = BackgroundTasks()
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+tokenizer = BertTokenizer.from_pretrained("Rostlab/prot_bert", do_lower_case=False)
+model = BertModel.from_pretrained("Rostlab/prot_bert")
+model = model.to(device)
+model.eval()
+
 
 def predict(cfg, tensors, modelpath):
 
@@ -45,7 +52,7 @@ def save_predictions(predictions, sequences):
         predictions = predictions.numpy()
 
     # Create the directory if it doesn't exist
-    output_dir = '../reports/predictions'
+    output_dir = 'reports/predictions'
     os.makedirs(output_dir, exist_ok=True)
 
     # Define the CSV file path with timestamp
@@ -68,14 +75,10 @@ def add_spaces(x):
     return " ".join(list(x))
 
 def encode_sequences(sequences):
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    tokenizer = BertTokenizer.from_pretrained("Rostlab/prot_bert", do_lower_case=False)
-    model = BertModel.from_pretrained("Rostlab/prot_bert")
-    model = model.to(device)
-    model.eval()
 
     embeddings = []
     for seq in tqdm(sequences, desc="Encoding sequences", total=len(sequences)):
+        assert type(seq) is str, "Sequences must be strings"
         token = tokenizer(add_spaces(seq), return_tensors='pt')
         output = model(**token.to(device))
         embeddings.append(output[1].detach().cpu())
@@ -85,22 +88,19 @@ def encode_sequences(sequences):
 
 @app.post("/predict/", response_model=PredictionResponse)
 async def make_prediction(request: PredictionRequest, background_tasks: BackgroundTasks):
-    try:
-        cfg = OmegaConf.load("config.yaml")
-        with open(request.data_path, "r") as f:
-            amino_acid_sequences = [line.strip() for line in f]
+    # try:
+    cfg = OmegaConf.load("config.yaml")
+    amino_acid_sequences = request.data
+    encoded_sequences = encode_sequences(amino_acid_sequences)
+    
+    modelpath = request.checkpoint_path
+    predictions = predict(cfg, encoded_sequences, modelpath)
+    save_predictions_background(predictions, amino_acid_sequences, background_tasks)
+    return {"predictions": predictions}
 
-        encoded_sequences = encode_sequences(amino_acid_sequences)
-        
-        modelpath = request.checkpoint_path
-        predictions = predict(cfg, encoded_sequences, modelpath)
-        save_predictions_background(predictions, amino_acid_sequences, background_tasks)
-        return {"predictions": predictions}
-
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    # except Exception as e:
+        # raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
     import uvicorn
-
     uvicorn.run(app, host="127.0.0.1", port=8000)

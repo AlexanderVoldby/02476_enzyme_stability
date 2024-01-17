@@ -13,9 +13,10 @@ COPY data/ data/
 WORKDIR /
 RUN pip install -r requirements.txt --no-cache-dir
 RUN pip install . --no-deps --no-cache-dir
+RUN python mlops_enzyme_stability/data/download_BERT.py
 
-WORKDIR /mlops_enzyme_stability/
+# WORKDIR /mlops_enzyme_stability/
 
 EXPOSE 8080
 
-CMD ["uvicorn", "predict_sequence:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["uvicorn", "mlops_enzyme_stability.predict_sequence:app", "--host", "0.0.0.0", "--port", "8080"]
