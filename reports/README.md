@@ -223,7 +223,7 @@ end of the project.
 >
 > Answer:
 
---- question 9 fill here ---
+--- Branches were an important part of our workflow. Whenever someone worked on part of the codebase, a branch was created from the master branch. Later on when the work on this feature was done, this branch was merged again with the master branch using a pull request. Since this was done quite frequently was there no branch protection on the master branch, so we relied on everyone to go through their own pull request with care. Later on when working on the continuous integration and the automatic cloud deployment we used the main branch for deployment. In that way could the master branch be used for development, and each time we would like to deploy the current state of the codebase a pull request from the master to the main branch was created. This pull request then had to be reviewed by at least 2 people to include more safety before deployment. ---
 
 ### Question 10
 
@@ -238,7 +238,7 @@ end of the project.
 >
 > Answer:
 
---- question 10 fill here ---
+--- In our project we did use DVC for managing our data. Unlike in most other project, training our model was not the computationally most intense part of the pipeline. It was in fact the preprocessing in the form of embedding the amino acid sequences. DVC helped us to make sure, that the already pre-processed data could easily be pulled using DVC. This also ensured that everyone was working with the same state of pre-processed data. If at any point we would have changed our pre-processing pipeline the data could be updated with DVC. ---
 
 ### Question 11
 
@@ -254,7 +254,7 @@ end of the project.
 >
 > Answer:
 
---- question 11 fill here ---
+--- We relied on unittesting in the form of pytest for our  continuous integration setup. It is organized into three different test scripts, on focusing on data preprocessing, on focusing on the model itself and on focusing on making predictions using the model. As we are mostly working on Windows and Linux did the testing include the latest ubuntu and windows distribution. We utilized the caching option in GitHub to reduce the time it takes to run every workflow, since GitHub restricts the amount of time run for workflows. An example of a workflow can be found here: https://github.com/AlexanderVoldby/02476_enzyme_stability/actions/runs/7540382637 ---
 
 ## Running code and tracking experiments
 
@@ -273,7 +273,10 @@ end of the project.
 >
 > Answer:
 
---- question 12 fill here ---
+--- Our approach for configuring experiments and keeping track of past configurations was a config.yaml file with hydra. The config files contains various hyperparameters of the model, but also other options as the name of the run. In that way a the model can be run in the terminal as:
+$ python mlops_enzyme_stability/train_model.py hyperparameters.lr=0.002 hyperparameters.epochs=10 runname=”Run_1”
+In this example the learning rate and epochs as well as the name of the run are specified explicitly.
+ ---
 
 ### Question 13
 
@@ -288,7 +291,7 @@ end of the project.
 >
 > Answer:
 
---- question 13 fill here ---
+--- In addition to keeping track of config files using hydra we tracked all of our experiments using W&B. This way all team members have easy access to all of the runs and secures the configuration and experiments in an accessible cloud format. To enable actual reproducibility everything must be seeded to enable deterministic behaviour. For this we utilized the seeding function of Pytorch Lightning, as this sets the seed all the relevant random number generators we are using. To reproduce a run one could load the corresponding hydra config files, which by default are saved in the “outputs” folder. Alternatively, one could also use the logging function from Pytorch Lightning, which saves configuration in the lightning_logs folder. As the config.yaml contains the Pytorch Lightning seed, this allows for reproducible experiments. ---
 
 ### Question 14
 
@@ -320,7 +323,11 @@ end of the project.
 >
 > Answer:
 
---- question 15 fill here ---
+--- In our project we developed docker images for the training of our model and for making predictions with our model. For example, for training the model one could  run the docker image with the following command, specifying the learning rate and the path to the data.
+$ docker run --name experiment1 trainer:latest lr=0.005 data_path:="gs://protein_embeddings/data/processed"
+Later on docker images where mostly build and run in gcloud as part of our continuous integration pipeline.
+Link to docker file: 
+ ---
 
 ### Question 16
 
@@ -335,7 +342,9 @@ end of the project.
 >
 > Answer:
 
---- question 16 fill here ---
+--- For debugging, we gave each team member the freedom to choose their tools of choose. Most of the time this was the debugging functionality in VS Code. In addition to that, error were looked up with Stack Overflow. With more difficult cases, ChatGPT could also be helpful to get more ideas of what could be the underlying issue.
+Regarding profiling, our model was rather small, so training did not take much resource. In addition to that we tried to make our could lean using Pytorch Lightning. For these reasons was profiling not on of our priorities, as we thought that building a robust pipeline for training and predictions in the cloud was more important.
+ ---
 
 ## Working in the cloud
 
@@ -352,8 +361,12 @@ end of the project.
 >
 > Answer:
 
---- question 17 fill here ---
-
+--- 
+We used the following services:
+- Cloud Storage: We defined and used a bucket to store the training data for our project as well as the model checkpoint, which is retrieved via Data Version Control operations. Cloud storage is a platform that allows to store and retrieve data in a structured way. It organizes the data into buckets, which could be interpreted as folders. Data Version Control was implemented via dvc.
+- Cloud Engine: Two virtual machines (VM) were used to run the Dcoker containers to train and host the project API. Running our application on a Docker container hosted in a Google Cloud Engine VM brings the VM benefits (high level of isolation, adjusted resources configuration) and Docker benefits (reproducibility by defining the dependencies, and scalability).
+- Vertex AI platform: TBD. #CHECK
+--- 
 ### Question 18
 
 > **The backbone of GCP is the Compute engine. Explained how you made use of this service and what type of VMs**
@@ -367,7 +380,65 @@ end of the project.
 >
 > Answer:
 
---- question 18 fill here ---
+--- 
+We used the compute engine virtual machines to host the training and predicting Docker containers. 
+The training and predictions VMs had the following hardware: 
+ - Machine type: n1-highmem-2
+ - CPU platform: Intel Haswell
+ - Minimum CPU platform: None
+ - Architecture: -
+ - vCPUs to core ratio: - 
+ - Custom visible cores: - 
+ - GPUs: None
+
+The training Docker container specifications:
+```
+# Base image
+FROM python:3.11-slim
+
+RUN apt update && \
+    apt install --no-install-recommends -y build-essential gcc && \
+    apt clean && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt requirements.txt
+COPY requirements_dev.txt requirements_dev.txt
+COPY pyproject.toml pyproject.toml
+COPY mlops_enzyme_stability/ mlops_enzyme_stability/
+COPY data/ data/
+
+WORKDIR /
+RUN pip install -r requirements.txt --no-cache-dir
+RUN pip install -r requirements_dev.txt --no-cache-dir
+RUN pip install . --no-deps --no-cache-dir
+
+ENTRYPOINT ["python", "-u", "mlops_enzyme_stability/train_model.py"]
+```
+The API predictions Docker container specifications:
+```
+# Base image
+FROM python:3.11-slim
+
+RUN apt update && \
+    apt install --no-install-recommends -y build-essential gcc && \
+    apt clean && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt requirements.txt
+COPY pyproject.toml pyproject.toml
+COPY mlops_enzyme_stability/ mlops_enzyme_stability/
+COPY data/ data/
+
+WORKDIR /
+RUN pip install -r requirements.txt --no-cache-dir
+RUN pip install . --no-deps --no-cache-dir
+
+WORKDIR /mlops_enzyme_stability/
+
+EXPOSE 8080
+
+CMD ["uvicorn", "predict_api:app", "--host", "0.0.0.0", "--port", "8080"]
+```
+---
+
 
 ### Question 19
 
@@ -375,8 +446,8 @@ end of the project.
 > **You can take inspiration from [this figure](figures/bucket.png).**
 >
 > Answer:
+--- ![Local Image](figures/bucket_registry.png) --- 
 
---- question 19 fill here ---
 
 ### Question 20
 
@@ -385,7 +456,8 @@ end of the project.
 >
 > Answer:
 
---- question 20 fill here ---
+--- ![Local Image](figures/bucket_registry.png) ---
+
 
 ### Question 21
 
@@ -394,7 +466,7 @@ end of the project.
 >
 > Answer:
 
---- question 21 fill here ---
+--- ![Local Image](./figures/cloudbuild_screenshot.png) ---
 
 ### Question 22
 
@@ -409,9 +481,10 @@ end of the project.
 > *`curl -X POST -F "file=@file.json"<weburl>`*
 >
 > Answer:
-
---- question 22 fill here ---
-
+---
+To deploy our model, we wrapped our model into an API using FastAPI. The API allows uploading either a pytorch tensor object ´.pt´ containing the protein sequence embeddings, or the actual aminoacid sequences, and generate the protein stability predictions. We initially deployed the model locally, which worked. Subsequently, we build a Docker container hosted by a VM in Google Cloud Engine. The implementation in the cloud .... # CHECK
+The API is invoked through the docker container.
+---
 ### Question 23
 
 > **Did you manage to implement monitoring of your deployed model? If yes, explain how it works. If not, explain how**
@@ -425,7 +498,7 @@ end of the project.
 >
 > Answer:
 
---- question 23 fill here ---
+--- So far we have not implemented monitoring. In short, monitoring would prevent the degradation of our application. In our case, a main thread for our application's performance would be data drifting, when for example, better protBert version is released, which make our application less competitive, or if a greater amount of training sequences becomes available, which would upgrade our application generalization potential. We would like to monitor the performance of our model over the protein sequences available. ---
 
 ### Question 24
 
@@ -438,8 +511,14 @@ end of the project.
 > *costing the most was ... due to ...*
 >
 > Answer:
+---
+Alexander Voldby used __ credits.
+Jesper Dybkær Lauridsen used __ credits.
+Max Klein used __ credits.
+Pau Piera Lindez used __ credits.
+---
 
---- question 24 fill here ---
+CONTINUE WITH Coding environment
 
 ## Overall discussion of project
 

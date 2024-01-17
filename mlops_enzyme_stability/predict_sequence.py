@@ -78,6 +78,7 @@ def encode_sequences(sequences):
 
     embeddings = []
     for seq in tqdm(sequences, desc="Encoding sequences", total=len(sequences)):
+        assert type(seq) is str, "Sequences must be strings"
         token = tokenizer(add_spaces(seq), return_tensors='pt')
         output = model(**token.to(device))
         embeddings.append(output[1].detach().cpu())
@@ -102,5 +103,4 @@ async def make_prediction(request: PredictionRequest, background_tasks: Backgrou
 
 if __name__ == "__main__":
     import uvicorn
-
     uvicorn.run(app, host="127.0.0.1", port=8000)
