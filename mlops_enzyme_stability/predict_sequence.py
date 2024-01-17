@@ -15,7 +15,7 @@ import csv
 app = FastAPI()
 
 class PredictionRequest(BaseModel):
-    data_path: str
+    data: list[str]
     checkpoint_path: str
 
 class PredictionResponse(BaseModel):
@@ -89,9 +89,7 @@ def encode_sequences(sequences):
 async def make_prediction(request: PredictionRequest, background_tasks: BackgroundTasks):
     # try:
     cfg = OmegaConf.load("config.yaml")
-    with open(request.data_path, "r") as f:
-        amino_acid_sequences = [line.strip() for line in f]
-
+    amino_acid_sequences = request.data
     encoded_sequences = encode_sequences(amino_acid_sequences)
     
     modelpath = request.checkpoint_path
