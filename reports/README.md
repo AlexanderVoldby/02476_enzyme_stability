@@ -323,7 +323,11 @@ In this example the learning rate and epochs as well as the name of the run are 
 >
 > Answer:
 
---- question 15 fill here ---
+--- In our project we developed docker images for the training of our model and for making predictions with our model. For example, for training the model one could  run the docker image with the following command, specifying the learning rate and the path to the data.
+$ docker run --name experiment1 trainer:latest lr=0.005 data_path:="gs://protein_embeddings/data/processed"
+Later on docker images where mostly build and run in gcloud as part of our continuous integration pipeline.
+Link to docker file: 
+ ---
 
 ### Question 16
 
@@ -338,7 +342,9 @@ In this example the learning rate and epochs as well as the name of the run are 
 >
 > Answer:
 
---- question 16 fill here ---
+--- For debugging, we gave each team member the freedom to choose their tools of choose. Most of the time this was the debugging functionality in VS Code. In addition to that, error were looked up with Stack Overflow. With more difficult cases, ChatGPT could also be helpful to get more ideas of what could be the underlying issue.
+Regarding profiling, our model was rather small, so training did not take much resource. In addition to that we tried to make our could lean using Pytorch Lightning. For these reasons was profiling not on of our priorities, as we thought that building a robust pipeline for training and predictions in the cloud was more important.
+ ---
 
 ## Working in the cloud
 
