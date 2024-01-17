@@ -21,7 +21,7 @@ except Exception:
 def main(config):
     print(config)
     seed_everything(config.seed)
-    wandb_logger = WandbLogger(log_model="all")
+    wandb_logger = WandbLogger(log_model="all", project=config.project_name)
     checkpoint_callback = ModelCheckpoint(
         monitor="train_loss",
         mode="min",
