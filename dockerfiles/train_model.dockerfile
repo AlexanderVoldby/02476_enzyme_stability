@@ -15,6 +15,5 @@ WORKDIR /
 RUN pip install -r requirements.txt --no-cache-dir
 RUN pip install -r requirements_dev.txt --no-cache-dir
 RUN pip install . --no-deps --no-cache-dir
-RUN python mlops_enzyme_stability/data/download_BERT.py
 
 ENTRYPOINT ["python", "-u", "mlops_enzyme_stability/train_model.py"]

@@ -5,7 +5,7 @@ import os
 import torch
 from transformers import BertTokenizer, BertModel 
 from torch.utils.data import DataLoader
-from models.MLP import MyNeuralNet
+from mlops_enzyme_stability.models.MLP import MyNeuralNet
 from pytorch_lightning import Trainer
 from omegaconf import OmegaConf
 from datetime import datetime
