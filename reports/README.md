@@ -323,7 +323,11 @@ In this example the learning rate and epochs as well as the name of the run are 
 >
 > Answer:
 
---- question 15 fill here ---
+--- In our project we developed docker images for the training of our model and for making predictions with our model. For example, for training the model one could  run the docker image with the following command, specifying the learning rate and the path to the data.
+$ docker run --name experiment1 trainer:latest lr=0.005 data_path:="gs://protein_embeddings/data/processed"
+Later on docker images where mostly build and run in gcloud as part of our continuous integration pipeline.
+Link to docker file: 
+ ---
 
 ### Question 16
 
@@ -338,7 +342,9 @@ In this example the learning rate and epochs as well as the name of the run are 
 >
 > Answer:
 
---- question 16 fill here ---
+--- For debugging, we gave each team member the freedom to choose their tools of choose. Most of the time this was the debugging functionality in VS Code. In addition to that, error were looked up with Stack Overflow. With more difficult cases, ChatGPT could also be helpful to get more ideas of what could be the underlying issue.
+Regarding profiling, our model was rather small, so training did not take much resource. In addition to that we tried to make our could lean using Pytorch Lightning. For these reasons was profiling not on of our priorities, as we thought that building a robust pipeline for training and predictions in the cloud was more important.
+ ---
 
 ## Working in the cloud
 
@@ -355,11 +361,12 @@ In this example the learning rate and epochs as well as the name of the run are 
 >
 > Answer:
 
+--- 
 We used the following services:
 - Cloud Storage: We defined and used a bucket to store the training data for our project as well as the model checkpoint, which is retrieved via Data Version Control operations. Cloud storage is a platform that allows to store and retrieve data in a structured way. It organizes the data into buckets, which could be interpreted as folders. Data Version Control was implemented via dvc.
 - Cloud Engine: Two virtual machines (VM) were used to run the Dcoker containers to train and host the project API. Running our application on a Docker container hosted in a Google Cloud Engine VM brings the VM benefits (high level of isolation, adjusted resources configuration) and Docker benefits (reproducibility by defining the dependencies, and scalability).
 - Vertex AI platform: TBD. #CHECK
-
+--- 
 ### Question 18
 
 > **The backbone of GCP is the Compute engine. Explained how you made use of this service and what type of VMs**
@@ -373,6 +380,7 @@ We used the following services:
 >
 > Answer:
 
+--- 
 We used the compute engine virtual machines to host the training and predicting Docker containers. 
 The training and predictions VMs had the following hardware: 
  - Machine type: n1-highmem-2
@@ -429,7 +437,7 @@ EXPOSE 8080
 
 CMD ["uvicorn", "predict_api:app", "--host", "0.0.0.0", "--port", "8080"]
 ```
-
+---
 
 
 ### Question 19
@@ -438,7 +446,7 @@ CMD ["uvicorn", "predict_api:app", "--host", "0.0.0.0", "--port", "8080"]
 > **You can take inspiration from [this figure](figures/bucket.png).**
 >
 > Answer:
-![Local Image](./figures/bucket_registry.png)
+--- ![Local Image](figures/bucket_registry.png) --- 
 
 
 ### Question 20
@@ -448,7 +456,7 @@ CMD ["uvicorn", "predict_api:app", "--host", "0.0.0.0", "--port", "8080"]
 >
 > Answer:
 
-![Local Image](./figures/bucket_registry.png)
+--- ![Local Image](figures/bucket_registry.png) ---
 
 
 ### Question 21
@@ -458,7 +466,7 @@ CMD ["uvicorn", "predict_api:app", "--host", "0.0.0.0", "--port", "8080"]
 >
 > Answer:
 
-![Local Image](./figures/cloudbuild_screenshot.png)
+--- ![Local Image](./figures/cloudbuild_screenshot.png) ---
 
 ### Question 22
 
@@ -473,9 +481,10 @@ CMD ["uvicorn", "predict_api:app", "--host", "0.0.0.0", "--port", "8080"]
 > *`curl -X POST -F "file=@file.json"<weburl>`*
 >
 > Answer:
-
-To deploy our model, we wrapped our model into an API using FastAPI. The API allows uploading either a pytorch tensor object ´.pt´ containing the protein sequence embeddings, or the actual aminoacid sequences, and generate the protein stability predictions.  We initially deployed the model locally, which worked. Subsequently, we build a Docker container hosted by a VM in Google Cloud Engine. The implementation in the cloud .... # CHECK
+---
+To deploy our model, we wrapped our model into an API using FastAPI. The API allows uploading either a pytorch tensor object ´.pt´ containing the protein sequence embeddings, or the actual aminoacid sequences, and generate the protein stability predictions. We initially deployed the model locally, which worked. Subsequently, we build a Docker container hosted by a VM in Google Cloud Engine. The implementation in the cloud .... # CHECK
 The API is invoked through the docker container.
+---
 ### Question 23
 
 > **Did you manage to implement monitoring of your deployed model? If yes, explain how it works. If not, explain how**
@@ -489,7 +498,7 @@ The API is invoked through the docker container.
 >
 > Answer:
 
---- question 23 fill here ---
+--- So far we have not implemented monitoring. In short, monitoring would prevent the degradation of our application. In our case, a main thread for our application's performance would be data drifting, when for example, better protBert version is released, which make our application less competitive, or if a greater amount of training sequences becomes available, which would upgrade our application generalization potential. We would like to monitor the performance of our model over the protein sequences available. ---
 
 ### Question 24
 
@@ -502,11 +511,12 @@ The API is invoked through the docker container.
 > *costing the most was ... due to ...*
 >
 > Answer:
-
-Alexander Voldby used  credits.
-Jesper Dybkær Lauridsen used  credits.
-Max Klein used  credits.
-Pau Piera Lindez used  credits.
+---
+Alexander Voldby used __ credits.
+Jesper Dybkær Lauridsen used __ credits.
+Max Klein used __ credits.
+Pau Piera Lindez used __ credits.
+---
 
 CONTINUE WITH Coding environment
 
