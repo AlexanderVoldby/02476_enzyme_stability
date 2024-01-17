@@ -52,7 +52,7 @@ def save_predictions(predictions, sequences):
         predictions = predictions.numpy()
 
     # Create the directory if it doesn't exist
-    output_dir = '../reports/predictions'
+    output_dir = 'reports/predictions'
     os.makedirs(output_dir, exist_ok=True)
 
     # Define the CSV file path with timestamp
