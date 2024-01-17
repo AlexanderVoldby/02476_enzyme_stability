@@ -13,6 +13,7 @@ COPY data/ data/
 WORKDIR /
 RUN pip install -r requirements.txt --no-cache-dir
 RUN pip install . --no-deps --no-cache-dir
+RUN python mlops_enzyme_stability/data/download_BERT.py
 
 WORKDIR /mlops_enzyme_stability/
 
