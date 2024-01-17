@@ -18,4 +18,4 @@ RUN pip install . --no-deps --no-cache-dir
 
 EXPOSE 8080
 
-CMD ["uvicorn", "mlops_enzyme_stability/predict_sequence:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["uvicorn", "mlops_enzyme_stability.predict_sequence:app", "--host", "0.0.0.0", "--port", "8080"]
