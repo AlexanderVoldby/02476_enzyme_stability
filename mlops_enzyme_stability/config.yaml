@@ -1,9 +1,9 @@
 hyperparameters:
   lr: 0.001
-  batch_size: 16
+  batch_size: 50
   epochs: 1
-  hidden1: 512
-  hidden2: 256
+  hidden1: 1024
+  hidden2: 1024
   num_workers: 3
 seed: 42
 data_path: "gs://protein_embeddings/data/processed"
