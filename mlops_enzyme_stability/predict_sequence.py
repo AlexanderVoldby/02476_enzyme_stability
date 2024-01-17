@@ -23,6 +23,13 @@ class PredictionResponse(BaseModel):
 
 background_tasks = BackgroundTasks()
 
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+tokenizer = BertTokenizer.from_pretrained("Rostlab/prot_bert", do_lower_case=False)
+model = BertModel.from_pretrained("Rostlab/prot_bert")
+model = model.to(device)
+model.eval()
+
+
 def predict(cfg, tensors, modelpath):
 
     model = load_model(cfg, modelpath)
@@ -68,11 +75,6 @@ def add_spaces(x):
     return " ".join(list(x))
 
 def encode_sequences(sequences):
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    tokenizer = BertTokenizer.from_pretrained("../models/protBERT/tokenizer", do_lower_case=False)
-    model = BertModel.from_pretrained("../models/protBERT/model")
-    model = model.to(device)
-    model.eval()
 
     embeddings = []
     for seq in tqdm(sequences, desc="Encoding sequences", total=len(sequences)):
@@ -85,20 +87,20 @@ def encode_sequences(sequences):
 
 @app.post("/predict/", response_model=PredictionResponse)
 async def make_prediction(request: PredictionRequest, background_tasks: BackgroundTasks):
-    try:
-        cfg = OmegaConf.load("config.yaml")
-        with open(request.data_path, "r") as f:
-            amino_acid_sequences = [line.strip() for line in f]
+    # try:
+    cfg = OmegaConf.load("config.yaml")
+    with open(request.data_path, "r") as f:
+        amino_acid_sequences = [line.strip() for line in f]
 
-        encoded_sequences = encode_sequences(amino_acid_sequences)
-        
-        modelpath = request.checkpoint_path
-        predictions = predict(cfg, encoded_sequences, modelpath)
-        save_predictions_background(predictions, amino_acid_sequences, background_tasks)
-        return {"predictions": predictions}
+    encoded_sequences = encode_sequences(amino_acid_sequences)
+    
+    modelpath = request.checkpoint_path
+    predictions = predict(cfg, encoded_sequences, modelpath)
+    save_predictions_background(predictions, amino_acid_sequences, background_tasks)
+    return {"predictions": predictions}
 
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    # except Exception as e:
+        # raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
     import uvicorn
