@@ -9,5 +9,5 @@ seed: 42
 data_path: "gs://protein_embeddings/data/processed"
 criterion: "MSELoss"
 optimizer: "Adam"
-runname: "test1"
-checkpoint_path: "C:/Users/Anders/OneDrive - Danmarks Tekniske Universitet/DTU/5. Semester - UCSD/02476 - Machine Learning Operations/02476_enzyme_stability/models/"
+runname: "test3"
+checkpoint_path: "mlops_enzyme_stability/models/checkpoints/"
