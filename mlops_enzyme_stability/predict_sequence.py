@@ -5,8 +5,9 @@ import os
 import torch
 from transformers import BertTokenizer, BertModel 
 from torch.utils.data import DataLoader
-from mlops_enzyme_stability.models.MLP import MyNeuralNet
+from models.MLP import MyNeuralNet
 from pytorch_lightning import Trainer
+import hydra
 from omegaconf import OmegaConf
 from datetime import datetime
 from tqdm import tqdm
@@ -17,9 +18,6 @@ app = FastAPI()
 class PredictionRequest(BaseModel):
     data: list[str]
 
-class PredictionResponse(BaseModel):
-    predictions: List[float]
-
 background_tasks = BackgroundTasks()
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -28,19 +26,18 @@ model = BertModel.from_pretrained("Rostlab/prot_bert")
 model = model.to(device)
 model.eval()
 
-
-def predict(cfg, tensors, modelpath):
-
-    model = load_model(cfg, modelpath)
+def predict(cfg, tensors):
+    checkpoint_path = f"{cfg.checkpoint_path}/{cfg.best_model_name}.ckpt"
+    model = load_model(checkpoint_path)
     dataloader = DataLoader(tensors, batch_size=cfg.hyperparameters.batch_size, shuffle=False)
 
     trainer = Trainer()
     predictions = trainer.predict(model, dataloader)
     predictions_vector = torch.cat(predictions, dim=0)
+    print(predictions_vector)
     return predictions_vector.numpy().tolist()
 
-def load_model(cfg, path):
-    model = MyNeuralNet(cfg)
+def load_model(path):
     model = MyNeuralNet.load_from_checkpoint(path)
     model.eval()
     return model
@@ -85,17 +82,17 @@ def encode_sequences(sequences):
     return torch.stack(embeddings)
 
 
-@app.post("/predict/", response_model=PredictionResponse)
+@app.post("/predict/")
 async def make_prediction(request: PredictionRequest, background_tasks: BackgroundTasks):
     # try:
-    cfg = OmegaConf.load("config.yaml")
     amino_acid_sequences = request.data
+    global encoded_sequences
     encoded_sequences = encode_sequences(amino_acid_sequences)
-    
-    checkpoint_path = f"{cfg.checkpoint_path}/{cfg.best_model_name}.ckpt"
-    predictions = predict(cfg, encoded_sequences, checkpoint_path)
+    cfg = OmegaConf.load("config.yaml")
+
+    predictions = predict(cfg, encoded_sequences)
     save_predictions_background(predictions, amino_acid_sequences, background_tasks)
-    return {"predictions": predictions}
+    return predictions
 
     # except Exception as e:
         # raise HTTPException(status_code=500, detail=str(e))
