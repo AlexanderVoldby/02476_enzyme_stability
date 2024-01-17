@@ -18,7 +18,8 @@ class MyNeuralNet(LightningModule):
 
     def __init__(self, config) -> None:
         super().__init__()
-        self.bucket_name = config.data_path.replace("gs://", "").split("/")[0]
+        self.bucket_name = config.gs_bucket_name
+        self.project_name = config.gs_project_name
 
         self.batch_size = config.hyperparameters.batch_size
         self.lr = config.hyperparameters.lr
@@ -83,7 +84,7 @@ class MyNeuralNet(LightningModule):
 
     def train_dataloader(self):
         # print(f"CWD: {os.getcwd()}") # TODO: Remove when done debugging
-        storage_client = storage.Client(project="enzyme-stability-02476")
+        storage_client = storage.Client(project=self.project_name)
         bucket = storage_client.bucket(self.bucket_name)
 
         blob_target = bucket.blob("data/processed/train_target.pt")
@@ -109,19 +110,13 @@ class MyNeuralNet(LightningModule):
     #     return DataLoader(...)
 
     def predict_dataloader(self):
-        storage_client = storage.Client(project="enzyme-stability-02476")
+        storage_client = storage.Client(project=self.project_name)
         bucket = storage_client.bucket(self.bucket_name)
-
-        # blob_target = bucket.blob("data/processed/test_target.pt")
-        # test_target_blob = blob_target.download_as_bytes()
-        # test_target_tensor = torch.load(io.BytesIO(test_target_blob))
 
         blob_tensors = bucket.blob("data/processed/test_tensors.pt")
         test_tensors_blob = blob_tensors.download_as_bytes()
         test_tensors_tensor = torch.load(io.BytesIO(test_tensors_blob))
 
-        # testset = TensorDataset(test_tensors_tensor, test_target_tensor)
-        # return DataLoader(testset, shuffle=False, batch_size=self.batch_size)
         return DataLoader(
             test_tensors_tensor, shuffle=False, batch_size=self.batch_size
         )

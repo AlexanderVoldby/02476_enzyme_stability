@@ -6,7 +6,7 @@ from pytorch_lightning.callbacks import ModelCheckpoint
 from omegaconf import OmegaConf
 import wandb
 import hydra
-import os
+from google.cloud import storage
 
 # Wandb login YOLO
 try:
@@ -22,6 +22,7 @@ def main(config):
     print(config)
     seed_everything(config.seed)
     wandb_logger = WandbLogger(log_model="all")
+
     checkpoint_callback = ModelCheckpoint(
         monitor="train_loss",
         mode="min",
@@ -37,6 +38,18 @@ def main(config):
         max_epochs=config.hyperparameters.epochs,
     )
     trainer.fit(model)
+
+    # save model into te¨he GCS bucket
+    storage_client = storage.Client(project=config.gs_project_name)
+
+    model_name = config.runname + ".ckpt"
+    gcs_model_path = "models/MLP/%s" % model_name
+    local_model_path = config.checkpoint_path + config.runname + ".ckpt"
+
+    bucket_name = config.gs_bucket_name
+    bucket = storage_client.bucket(bucket_name)
+    blob_model_dir = bucket.blob(gcs_model_path)
+    blob_model_dir.upload_from_filename(local_model_path)
 
     return
 
