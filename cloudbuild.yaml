@@ -8,3 +8,14 @@ steps:
     args: ['build', '-t', 'gcr.io/enzyme-stability-02476/predict_model', "-f", "dockerfiles/predict.dockerfile", '.']
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/enzyme-stability-02476/predict_model']
+# Deploy prediction API to cloud run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+    - 'run'
+    - 'deploy'
+    - 'predict_model'
+    - '--image'
+    - 'gcr.io/enzyme-stability-02476/predict_model:latest'
+    - '--region'
+    - 'eureope-west1'

@@ -18,4 +18,4 @@ WORKDIR /mlops_enzyme_stability/
 
 EXPOSE 8080
 
-CMD ["uvicorn", "predict_api:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["uvicorn", "predict_sequence:app", "--host", "0.0.0.0", "--port", "8080"]

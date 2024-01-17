@@ -3,10 +3,14 @@ import re
 # Download the pretrained transformed model and initialize the tokenizer (encoder) and the decoder
 
 class BertEncoder:
-    def __init__(self):
-        
-        self.tokenizer = BertTokenizer.from_pretrained("Rostlab/prot_bert", do_lower_case=False )
-        self.model = BertModel.from_pretrained("Rostlab/prot_bert")
+    def __init__(self, config):
+        try:
+            self.tokenizer = BertTokenizer.from_pretrained(config.BERT_path + "pretrained_tokenizer.pt", do_lower_case=False )
+            self.model = BertModel.from_pretrained(config.BERT_path + "pretrained_model.pt")
+        except:
+            print("Downloading pretrained model")
+            self.tokenizer = BertTokenizer.from_pretrained("Rostlab/prot_bert", do_lower_case=False )
+            self.model = BertModel.from_pretrained("Rostlab/prot_bert")
 
     def tokenize(self, sequence, only_encoding=True):
 
