@@ -1,3 +1,5 @@
+import io
+
 import torch
 from torch.utils.data import DataLoader, TensorDataset
 from mlops_enzyme_stability.models.MLP import MyNeuralNet
@@ -6,7 +8,6 @@ import hydra
 import os
 import csv
 from google.cloud import storage
-import io
 
 
 @hydra.main(version_base="1.3", config_name="config.yaml", config_path="./")
@@ -26,18 +27,7 @@ def main(cfg):
 
 
 def predict(cfg):
-    # define checkpoint path and load model
-    storage_client = storage.Client(cfg.gs_project_name)
-    bucket = storage_client.bucket(cfg.gs_bucket_name)
-
-    blob_tensors = bucket.blob("models/MLP/%s.ckpt" % cfg.runname)
-    st_dict_tensors_blob = blob_tensors.download_as_bytes()
-    st_dict_tensors_tensor = torch.load(io.BytesIO(st_dict_tensors_blob))
-    print(type(st_dict_tensors_tensor))
-    # checkpoint_file = f"{cfg.runname}.ckpt"
-    # checkpoint_path = os.path.join(cfg.checkpoint_path, checkpoint_file)
-
-    model = load_model(cfg, st_dict_tensors_tensor)  # checkpoint_path)
+    model = load_model(cfg)
 
     trainer = Trainer()
     # predictions = trainer.predict(model, dataloader)
@@ -46,11 +36,17 @@ def predict(cfg):
     return predictions_vector
 
 
-def load_model(cfg, st_dict):
+def load_model(cfg):
+    # define checkpoint path and load model
+    storage_client = storage.Client(project=cfg.gs_project_name)
+    bucket = storage_client.bucket(cfg.gs_bucket_name)
+
+    blob = bucket.blob("models/MLP/checkpoints/%s/%s.ckpt" % (cfg.runname, cfg.runname))
+    blob_bin = blob.download_as_bytes()
+    model_state_dict = torch.load(io.BytesIO(blob_bin))["state_dict"]
+
     model = MyNeuralNet(cfg)
-    model.load_state_dict(
-        state_dict=st_dict["state_dict"]
-    )  # .load_from_checkpoint(path)
+    model.load_state_dict(state_dict=model_state_dict)
     model.eval()
     return model
 
