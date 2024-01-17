@@ -16,7 +16,6 @@ app = FastAPI()
 
 class PredictionRequest(BaseModel):
     data: list[str]
-    checkpoint_path: str
 
 class PredictionResponse(BaseModel):
     predictions: List[float]
@@ -93,8 +92,8 @@ async def make_prediction(request: PredictionRequest, background_tasks: Backgrou
     amino_acid_sequences = request.data
     encoded_sequences = encode_sequences(amino_acid_sequences)
     
-    modelpath = request.checkpoint_path
-    predictions = predict(cfg, encoded_sequences, modelpath)
+    checkpoint_path = f"{cfg.checkpoint_path}/{cfg.best_model_name}.ckpt"
+    predictions = predict(cfg, encoded_sequences, checkpoint_path)
     save_predictions_background(predictions, amino_acid_sequences, background_tasks)
     return {"predictions": predictions}
 
