@@ -186,6 +186,8 @@ cython_debug/
 *.zip
 *.pdb
 *.pt
+pretrained_model/
+pretrained_tokenizer/
 
 # Logs
 lightning_logs/*

@@ -18,7 +18,7 @@ class MyNeuralNet(LightningModule):
 
     def __init__(self, config) -> None:
         super().__init__()
-        self.bucket_name = config.data_path.replace("gs://", "").split("/")[0]
+        self.bucket_name = config.bucket_name
 
         self.batch_size = config.hyperparameters.batch_size
         self.lr = config.hyperparameters.lr
