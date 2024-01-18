@@ -9,6 +9,7 @@ COPY requirements.txt requirements.txt
 COPY pyproject.toml pyproject.toml
 COPY mlops_enzyme_stability/ mlops_enzyme_stability/
 COPY data/ data/
+COPY config.yaml config.yaml
 
 WORKDIR /
 RUN pip install -r requirements.txt --no-cache-dir
