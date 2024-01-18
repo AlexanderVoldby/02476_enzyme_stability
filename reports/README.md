@@ -159,8 +159,6 @@ conda create --name enzyme_stability python=3.11
 conda activate enzyme_stability
 pip install -r requirements.txt
 pip install -r requirements_dev.txt
-dvc pull
-# TODO: Needs to be tested
 
 ### Question 5
 
