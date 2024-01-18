@@ -18,8 +18,8 @@ class MyNeuralNet(LightningModule):
 
     def __init__(self, config) -> None:
         super().__init__()
-        self.bucket_name = config.gs_bucket_name
-        self.project_name = config.gs_project_name
+        self.bucket_name = config.bucket_name
+        # "dtu-mlops-storage" = co"dtu-mlops-storage"
 
         self.batch_size = config.hyperparameters.batch_size
         self.lr = config.hyperparameters.lr
@@ -84,7 +84,7 @@ class MyNeuralNet(LightningModule):
 
     def train_dataloader(self):
         # print(f"CWD: {os.getcwd()}") # TODO: Remove when done debugging
-        storage_client = storage.Client(project=self.project_name)
+        storage_client = storage.Client(project="dtu-mlops-storage")
         bucket = storage_client.bucket(self.bucket_name)
 
         blob_target = bucket.blob("data/processed/train_target.pt")
@@ -110,7 +110,7 @@ class MyNeuralNet(LightningModule):
     #     return DataLoader(...)
 
     def predict_dataloader(self):
-        storage_client = storage.Client(project=self.project_name)
+        storage_client = storage.Client(project="enzyme-stability-02476")
         bucket = storage_client.bucket(self.bucket_name)
 
         blob_tensors = bucket.blob("data/processed/test_tensors.pt")

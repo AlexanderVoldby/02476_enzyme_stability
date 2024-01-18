@@ -9,10 +9,10 @@ seed: 42
 data_path: "gs://protein_embeddings/data/processed"
 criterion: "MSELoss"
 optimizer: "Adam"
-runname: "test3"
-checkpoint_path: "gs://dtu-mlops-storage/models/MLP/checkpoints"
+runname: "test_170124"
+checkpoint_path: "gs://dtu-mlops-storage/models/MLP/checkpoints/"
 BERT_path: "mlops_enzyme_stability/models/protBERT/"
 project_name: "lightning_logs"
 bucket_name: "dtu-mlops-storage"
-wandb_api_key: None
-best_model_name: "model_170224"
+wandb_api_key: 7739e5ac7ba13684763d4284b6c4080944145f2f
+best_model_name: "test3"

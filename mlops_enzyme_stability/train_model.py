@@ -8,7 +8,7 @@ import wandb
 import hydra
 
 
-@hydra.main(version_base="1.3", config_name="config.yaml", config_path=".../")
+@hydra.main(version_base="1.3", config_name="config.yaml", config_path="../")
 def main(config):
     # print(config)
 
@@ -27,7 +27,7 @@ def main(config):
         mode="min",
         filename=config.runname,
         dirpath="gs://%s/%s"
-        % (config.gs_bucket_name, "models/MLP/checkpoints/%s/" % config.runname),
+        % (config.bucket_name, "models/MLP/checkpoints/%s" % config.runname),
         save_top_k=1,
     )
     model = MyNeuralNet(config)
