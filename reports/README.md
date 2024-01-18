@@ -384,7 +384,7 @@ We used the following services:
 - Cloud Run: We used Cloud Run to make our Cloud Build API accessible without any server. Cloud Run is a serverless computer platform that allows running containerized applications and make them accessible through HTTP requests. In addition, Cloud Run is integrated with Cloud Build as part of the continuous integration pipeline. However we did not manage to automatize the integreation between Cloud run and Cloud Build, so we manually selected the image from the Artifact Registry with Cloud Run to make the API accessible.
 - Vertex AI: We used Vertex AI to build and manage the development of our model, for example we used to explore the right hyperparameters. Vertex AI is machine learning tailored platform for development and management of a machine learning workflow at all steps.
 --- 
-### Question 18
+### Question 18 CHECK 
 
 > **The backbone of GCP is the Compute engine. Explained how you made use of this service and what type of VMs**
 > **you used?**
