@@ -14,7 +14,7 @@ steps:
     args:
     - 'run'
     - 'deploy'
-    - 'predict-service'
+    - 'predict-model'
     - '--image'
     - 'gcr.io/enzyme-stability-02476/predict_model:latest'
     - '--region'
