@@ -105,7 +105,7 @@ end of the project.
 >
 > Answer:
 
---- question 1 fill here ---
+40
 
 ### Question 2
 > **Enter the study number for each member in the group**
@@ -116,7 +116,7 @@ end of the project.
 >
 > Answer:
 
---- question 2 fill here ---
+s214591, s222856, s216708, s214633
 
 ### Question 3
 > **What framework did you choose to work with and did it help you complete the project?**
@@ -129,7 +129,10 @@ end of the project.
 >
 > Answer:
 
---- question 3 fill here ---
+We used the Transformers framework to easily run a pre-trained BERT-based protein model for tokenizing and embedding our data. Initially, we download the model and tokenizer from Huggingface. We then save it locally, to more quickly load it for inference. 
+
+We used Pytorch-Lightning to simplify training, prediction, and saving/loading of checkpoints. 
+Weights and Biases was used for logging together with Pytorch-Lightning. Therefore, we were able to save checkpoints in a Google Bucket as well as through the Huggingface workspace. 
 
 ## Coding environment
 
@@ -148,7 +151,16 @@ end of the project.
 >
 > Answer:
 
---- question 4 fill here ---
+To handle Python dependencies, we specified two requirements files. They were manually created throughout the project. 
+To recreate the environment, one would clone the repository, create a conda environment with the correct python version, install the requirements with pip and pull the data with dvc.
+For example:
+git clone https://github.com/AlexanderVoldby/02476_enzyme_stability.git
+conda create --name enzyme_stability python=3.11
+conda activate enzyme_stability
+pip install -r requirements.txt
+pip install -r requirements_dev.txt
+dvc pull
+# TODO: Needs to be tested
 
 ### Question 5
 
@@ -174,7 +186,8 @@ end of the project.
 >
 > Answer:
 
---- question 6 fill here ---
+# TODO: Implement format rules??
+A consistent coding format matters a lot in larger projects because you will be dependent on understanding the code, someone else wrote, and vice versa. This is particularly the case for debugging purposes, when functions and classes interoperate. 
 
 ## Version control
 
