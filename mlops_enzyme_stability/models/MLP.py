@@ -82,20 +82,21 @@ class MyNeuralNet(LightningModule):
 
     def train_dataloader(self):
         # print(f"CWD: {os.getcwd()}") # TODO: Remove when done debugging
-        storage_client = storage.Client(project="enzyme-stability-02476")
-        bucket = storage_client.bucket(self.bucket_name)
+        # storage_client = storage.Client(project="enzyme-stability-02476")
+        # bucket = storage_client.bucket(self.bucket_name)
 
-        blob_target = bucket.blob("data/processed/train_target.pt")
-        train_target_blob = blob_target.download_as_bytes()
-        train_target_tensor = torch.load(io.BytesIO(train_target_blob))
+        # blob_target = bucket.blob("data/processed/train_target.pt")
+        # train_target_blob = blob_target.download_as_bytes()
+        # train_target_tensor = torch.load(io.BytesIO(train_target_blob))
 
-        blob_tensors = bucket.blob("data/processed/train_tensors.pt")
-        train_tensors_blob = blob_tensors.download_as_bytes()
-        train_tensors_tensor = torch.load(io.BytesIO(train_tensors_blob))
+        # blob_tensors = bucket.blob("data/processed/train_tensors.pt")
+        # train_tensors_blob = blob_tensors.download_as_bytes()
+        # train_tensors_tensor = torch.load(io.BytesIO(train_tensors_blob))
 
-        # TODO: UserWarning: Using a target size (torch.Size([16])) that is different to the input size (torch.Size([16, 1, 1])).
-        # This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
-        trainset = TensorDataset(train_tensors_tensor, train_target_tensor)
+        train_tensors = torch.load("data/processed/train_tensors.pt")
+        train_target = torch.load("data/processed/train_target.pt")
+        trainset = TensorDataset(train_tensors, train_target)
+        # trainset = TensorDataset(train_tensors_tensor, train_target_tensor)
         return DataLoader(
             trainset,
             shuffle=True,
@@ -103,9 +104,6 @@ class MyNeuralNet(LightningModule):
             num_workers=self.num_workers,
             persistent_workers=True,
         )
-
-    # def val_dataloader(self): #TODO: implement validation dataloader
-    #     return DataLoader(...)
 
     def predict_dataloader(self):
         storage_client = storage.Client(project="enzyme-stability-02476")
