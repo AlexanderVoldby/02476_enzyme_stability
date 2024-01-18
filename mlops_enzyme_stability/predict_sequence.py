@@ -105,7 +105,6 @@ async def make_prediction(request: PredictionRequest, background_tasks: Backgrou
         amino_acid_sequences = request.data
         global encoded_sequences
         encoded_sequences = encode_sequences(amino_acid_sequences)
-
         predictions = predict(encoded_sequences)
         save_predictions_background(predictions, amino_acid_sequences, background_tasks)
         return predictions
