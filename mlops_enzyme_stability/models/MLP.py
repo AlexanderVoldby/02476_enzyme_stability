@@ -80,23 +80,19 @@ class MyNeuralNet(LightningModule):
     def configure_criterion(self):
         return torch.nn.MSELoss()
 
-    def train_dataloader(self):
-        # print(f"CWD: {os.getcwd()}") # TODO: Remove when done debugging
-        # storage_client = storage.Client(project="enzyme-stability-02476")
-        # bucket = storage_client.bucket(self.bucket_name)
+    def train_dataloader(self) -> DataLoader:
+        storage_client = storage.Client(project="enzyme-stability-02476")
+        bucket = storage_client.bucket(self.bucket_name)
 
-        # blob_target = bucket.blob("data/processed/train_target.pt")
-        # train_target_blob = blob_target.download_as_bytes()
-        # train_target_tensor = torch.load(io.BytesIO(train_target_blob))
+        blob_target = bucket.blob("data/processed/train_target.pt")
+        train_target_blob = blob_target.download_as_bytes()
+        train_target_tensor = torch.load(io.BytesIO(train_target_blob))
 
-        # blob_tensors = bucket.blob("data/processed/train_tensors.pt")
-        # train_tensors_blob = blob_tensors.download_as_bytes()
-        # train_tensors_tensor = torch.load(io.BytesIO(train_tensors_blob))
+        blob_tensors = bucket.blob("data/processed/train_tensors.pt")
+        train_tensors_blob = blob_tensors.download_as_bytes()
+        train_tensors_tensor = torch.load(io.BytesIO(train_tensors_blob))
 
-        train_tensors = torch.load("data/processed/train_tensors.pt")
-        train_target = torch.load("data/processed/train_target.pt")
-        trainset = TensorDataset(train_tensors, train_target)
-        # trainset = TensorDataset(train_tensors_tensor, train_target_tensor)
+        trainset = TensorDataset(train_tensors_tensor, train_target_tensor)
         return DataLoader(
             trainset,
             shuffle=True,
@@ -105,7 +101,7 @@ class MyNeuralNet(LightningModule):
             persistent_workers=True,
         )
 
-    def predict_dataloader(self):
+    def predict_dataloader(self) -> DataLoader:
         storage_client = storage.Client(project="enzyme-stability-02476")
         bucket = storage_client.bucket(self.bucket_name)
 

@@ -16,6 +16,5 @@ WORKDIR /
 RUN pip install -r requirements.txt --no-cache-dir
 RUN pip install -r requirements_dev.txt --no-cache-dir
 RUN pip install . --no-deps --no-cache-dir
-RUN dvc pull
 
 ENTRYPOINT ["python", "-u", "mlops_enzyme_stability/train_model.py"]
