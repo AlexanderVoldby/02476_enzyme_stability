@@ -1,0 +1,28 @@
+# This file is used to run a Vertex AI job from the command line:
+# Set your Weights and Biases API key in the shell like this: 
+# WANDB_API_KEY=<your-key>
+# Then pass the key when you submit the job like this:
+
+# gcloud ai custom-jobs create \
+    # --region=europe-west1 \
+    # --display-name=test-run \
+    # --config=cloud_config_train.yaml \
+    # --args=hyperparameters.epochs=5,wandb_api_key=$WANDB_API_KEY
+
+# CPU version
+workerPoolSpecs:
+    machineSpec:
+        machineType: n1-highmem-2
+    replicaCount: 1
+    containerSpec:
+        imageUri: gcr.io/enzyme-stability-02476/train_model
+
+# GPU version
+# workerPoolSpecs:
+#     machineSpec:
+#         machineType: n1-standard-8
+#         acceleratorType: NVIDIA_TESLA_P4 
+#         acceleratorCount: 1
+#     replicaCount: 1
+#     containerSpec:
+#         imageUri: gcr.io/enzyme-stability-02476/train_model

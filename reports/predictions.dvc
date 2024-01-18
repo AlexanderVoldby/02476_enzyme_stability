@@ -1,0 +1,11 @@
+outs:
+- hash: md5
+  path: predictions
+  files:
+  - relpath: predictions.csv
+    md5: 7ad53497fc8eba13dc24d9aec184df50
+    size: 110999
+    cloud:
+      remote_storage:
+        etag: 0881d1db86c7e183031001
+        version_id: '1705395967420545'

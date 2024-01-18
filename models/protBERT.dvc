@@ -1,0 +1,39 @@
+outs:
+- hash: md5
+  path: protBERT
+  files:
+  - relpath: model/config.json
+    md5: 0d59dc782ef0042f7b8dc706b57b4904
+    size: 648
+    cloud:
+      remote_storage:
+        etag: 08b3f1eeb286e283031001
+        version_id: '1705412971444403'
+  - relpath: model/pytorch_model.bin
+    md5: f4570209bdb284d55c6acaf694074404
+    size: 684711936
+    cloud:
+      remote_storage:
+        etag: 0883edcefa86e283031001
+        version_id: '1705413121914499'
+  - relpath: tokenizer/special_tokens_map.json
+    md5: 4725a11f0c217363800cfbc4a6c49a1e
+    size: 132
+    cloud:
+      remote_storage:
+        etag: 08ac8edeb286e283031001
+        version_id: '1705412971169580'
+  - relpath: tokenizer/tokenizer_config.json
+    md5: 0c704304dfb5b6b13822b388aa2da912
+    size: 442
+    cloud:
+      remote_storage:
+        etag: 08cbd0eeb286e283031001
+        version_id: '1705412971440203'
+  - relpath: tokenizer/vocab.txt
+    md5: f7a3850a32faaace9cc1c06299ebbdc1
+    size: 111
+    cloud:
+      remote_storage:
+        etag: 08e586e9b286e283031001
+        version_id: '1705412971348837'
