@@ -19,25 +19,55 @@ class PredictionRequest(BaseModel):
 
 background_tasks = BackgroundTasks()
 
+# tokenizer = BertTokenizer.from_pretrained("Rostlab/prot_bert", do_lower_case=False)
+# model = BertModel.from_pretrained("Rostlab/prot_bert")
+# model = model.to(device)
+# model.eval()
+
+# Hyperparameters
+config = OmegaConf.load("config.yaml")
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-tokenizer = BertTokenizer.from_pretrained("Rostlab/prot_bert", do_lower_case=False)
-model = BertModel.from_pretrained("Rostlab/prot_bert")
-model = model.to(device)
-model.eval()
 
-def predict(cfg, tensors):
-    checkpoint_path = f"{cfg.checkpoint_path}/{cfg.best_model_name}.ckpt"
-    model = load_model(checkpoint_path)
-    dataloader = DataLoader(tensors, batch_size=cfg.hyperparameters.batch_size, shuffle=False)
+def get_bert_model_and_tokenizer():
+    # Model is set to eval mode by default
+    try:
+        tokenizer = BertTokenizer.from_pretrained(config.BERT_path + "pretrained_tokenizer", do_lower_case=False )
+        model = BertModel.from_pretrained(config.BERT_path + "pretrained_model")
+    except:
+        print("Downloading pretrained model")
+        tokenizer = BertTokenizer.from_pretrained("Rostlab/prot_bert", do_lower_case=False )
+        model = BertModel.from_pretrained("Rostlab/prot_bert")
+    return model, tokenizer
 
+def add_spaces(x):
+    return " ".join(list(x))
+
+def encode_sequences(sequences):
+    model, tokenizer = get_bert_model_and_tokenizer()
+    embeddings = []
+    for seq in tqdm(sequences, desc="Encoding sequences", total=len(sequences)):
+        assert type(seq) is str, "Sequences must be strings"
+        token = tokenizer(add_spaces(seq), return_tensors='pt')
+        output = model(**token.to(device))
+        embeddings.append(output[1].detach().cpu())
+    
+    return torch.stack(embeddings)
+
+def predict(tensors):
+    
+    mlp_model = load_mlp()
+    dataloader = DataLoader(tensors, batch_size=config.hyperparameters.batch_size, shuffle=False)
     trainer = Trainer()
-    predictions = trainer.predict(model, dataloader)
+    
+    predictions = trainer.predict(mlp_model, dataloader)
     predictions_vector = torch.cat(predictions, dim=0)
+    
     print(predictions_vector)
     return predictions_vector.numpy().tolist()
 
-def load_model(path):
-    model = MyNeuralNet.load_from_checkpoint(path)
+def load_mlp():
+    checkpoint_path = f"{config.checkpoint_path}/{config.best_model_name}.ckpt"
+    model = MyNeuralNet.load_from_checkpoint(checkpoint_path)
     model.eval()
     return model
 
@@ -66,20 +96,6 @@ def save_predictions_background(predictions, sequences, background_tasks: Backgr
     # Run the save_predictions function in the background
     background_tasks.add_task(save_predictions, predictions, sequences)
 
-def add_spaces(x):
-    return " ".join(list(x))
-
-def encode_sequences(sequences):
-
-    embeddings = []
-    for seq in tqdm(sequences, desc="Encoding sequences", total=len(sequences)):
-        assert type(seq) is str, "Sequences must be strings"
-        token = tokenizer(add_spaces(seq), return_tensors='pt')
-        output = model(**token.to(device))
-        embeddings.append(output[1].detach().cpu())
-    
-    return torch.stack(embeddings)
-
 
 @app.post("/predict/")
 async def make_prediction(request: PredictionRequest, background_tasks: BackgroundTasks):
@@ -90,7 +106,7 @@ async def make_prediction(request: PredictionRequest, background_tasks: Backgrou
         config_file_path = os.path.join(os.getcwd(), "config.yaml")
         cfg = OmegaConf.load(config_file_path)
 
-        predictions = predict(cfg, encoded_sequences)
+        predictions = predict(encoded_sequences)
         save_predictions_background(predictions, amino_acid_sequences, background_tasks)
         return predictions
 
