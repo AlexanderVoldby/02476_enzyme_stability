@@ -5,9 +5,8 @@ import os
 import torch
 from transformers import BertTokenizer, BertModel 
 from torch.utils.data import DataLoader
-from models.MLP import MyNeuralNet
+from mlops_enzyme_stability.models.MLP import MyNeuralNet
 from pytorch_lightning import Trainer
-import hydra
 from omegaconf import OmegaConf
 from datetime import datetime
 from tqdm import tqdm
@@ -100,18 +99,18 @@ def save_predictions_background(predictions, sequences, background_tasks: Backgr
 
 @app.post("/predict/")
 async def make_prediction(request: PredictionRequest, background_tasks: BackgroundTasks):
-    # try:
-    amino_acid_sequences = request.data
-    global encoded_sequences
-    encoded_sequences = encode_sequences(amino_acid_sequences)
-    # cfg = OmegaConf.load("config.yaml")
+    try:
+        amino_acid_sequences = request.data
+        global encoded_sequences
+        encoded_sequences = encode_sequences(amino_acid_sequences)
+        cfg = OmegaConf.load("config.yaml")
 
-    predictions = predict(encoded_sequences)
-    save_predictions_background(predictions, amino_acid_sequences, background_tasks)
-    return predictions
+        predictions = predict(encoded_sequences)
+        save_predictions_background(predictions, amino_acid_sequences, background_tasks)
+        return predictions
 
-    # except Exception as e:
-        # raise HTTPException(status_code=500, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
     import uvicorn
