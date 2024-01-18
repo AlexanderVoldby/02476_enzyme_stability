@@ -25,7 +25,8 @@ background_tasks = BackgroundTasks()
 # model.eval()
 
 # Hyperparameters
-config = OmegaConf.load("config.yaml")
+config_file_path = os.path.join(os.getcwd(), "config.yaml")
+config = OmegaConf.load(config_file_path)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 def get_bert_model_and_tokenizer():
@@ -103,8 +104,6 @@ async def make_prediction(request: PredictionRequest, background_tasks: Backgrou
         amino_acid_sequences = request.data
         global encoded_sequences
         encoded_sequences = encode_sequences(amino_acid_sequences)
-        config_file_path = os.path.join(os.getcwd(), "config.yaml")
-        cfg = OmegaConf.load(config_file_path)
 
         predictions = predict(encoded_sequences)
         save_predictions_background(predictions, amino_acid_sequences, background_tasks)
