@@ -87,7 +87,8 @@ async def make_prediction(request: PredictionRequest, background_tasks: Backgrou
         amino_acid_sequences = request.data
         global encoded_sequences
         encoded_sequences = encode_sequences(amino_acid_sequences)
-        cfg = OmegaConf.load("../config.yaml")
+        config_file_path = os.path.join(os.getcwd(), "config.yaml")
+        cfg = OmegaConf.load(config_file_path)
 
         predictions = predict(cfg, encoded_sequences)
         save_predictions_background(predictions, amino_acid_sequences, background_tasks)
