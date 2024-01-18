@@ -495,8 +495,7 @@ CMD ["uvicorn", "predict_api:app", "--host", "0.0.0.0", "--port", "8080"]
 >
 > Answer:
 ---
-To deploy our model, we wrapped our model into an API using FastAPI. The API allows uploading either a pytorch tensor object ´.pt´ containing the protein sequence embeddings, or the actual aminoacid sequences, and generate the protein stability predictions. We initially deployed the model locally, which worked. Subsequently, we build a Docker container hosted by a VM in Google Cloud Engine. The implementation in the cloud .... # CHECK
-The API is invoked through the docker container.
+To deploy our model, we wrapped our model into an API using FastAPI. The API allows the user to input a list of amino acid sequences, which are then embedded by the protBERT model and then the embeddings are used to mkae predictions of the thermal stability. We initially deployed the model locally, which worked. Subsequently, we started using cloud run to deploy the containers that were created with cloud build, and managed to deploy a functioning model
 ---
 ### Question 23
 
@@ -566,7 +565,8 @@ CONTINUE WITH Coding environment
 >
 > Answer:
 
---- question 26 fill here ---
+A lot of problems arose from the path structure in our project, such as accessing the appropriate configuration files during both training and inference. This simply took a lot of debugging to overcome. We also faced some challenge with authentication of Google Cloud and Wandb when running Docker containers. This was solved partly by using private keys and by making our GCS budkets public. Docker was also a challenge initially as weinitially weren't accustomed to it and spent a lot of time waiting for Docker images to be built in order to run them.
+
 
 ### Question 27
 
