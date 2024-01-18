@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from typing import List
 import os
 import torch
+import gcsfs
 from transformers import BertTokenizer, BertModel 
 from torch.utils.data import DataLoader
 from mlops_enzyme_stability.models.MLP import MyNeuralNet
