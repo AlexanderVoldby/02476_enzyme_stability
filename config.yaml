@@ -13,5 +13,6 @@ runname: "test3"
 checkpoint_path: "gs://dtu-mlops-storage/models/MLP/checkpoints"
 BERT_path: "mlops_enzyme_stability/models/protBERT/"
 project_name: "lightning_logs"
+bucket_name: "dtu-mlops-storage"
 wandb_api_key: None
 best_model_name: "test3"
