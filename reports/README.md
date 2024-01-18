@@ -321,7 +321,9 @@ In this example the learning rate and epochs as well as the name of the run are 
 >
 > Answer:
 
---- question 14 fill here ---
+--- ![Local Image](figures/table_wandb.png) ![Local Image](figures/graphs_wandb.png)
+The main metric we tracked for all of our experiments was the training loss. Besides that the number of epochs are tracked as well as all the hyperparameters from the config.yaml file. The training loss was tracked, because it is the first metric to use when evaluating if the model is actually learning the data set. After doing a set of grid-based experiments (changing the batch size and number of nodes for each layer) it could be seen that the model fundamentally struggled learning the training data set. Since this could not be solved by adjust hyperparameters as the learning rate or the batch, we suspect that there could be a problem in embedding our data that leads to a suboptimal training set. As we focused more on building a robust cloud based pipeline for our model we did not use more time optimizing the data preprocessing. If the project would go on more time could be allocated to resolving the issues with the preprocessing. After implementing this it would also be of interest to track the testing error to evaluate if the model is overfitting or not generalizing enough. As the embedded data set is rather small training the model is not computationally extensive. Therefore, using sweeps a large number of experiments could be run to find the optimal configuration of hyperparameters.
+ ---
 
 ### Question 15
 
