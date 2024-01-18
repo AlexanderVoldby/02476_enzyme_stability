@@ -206,7 +206,7 @@ A consistent coding format matters a lot in larger projects because you will be 
 >
 > Answer:
 
---- question 7 fill here ---
+We implemented two test functions that each run 2-3 tests. One function tests that our model output has the right format and that the model uses the correct loss function. The data testing function asserts that preprocessed data points have the correct format and that tensors are stored in an accessible path.
 
 ### Question 8
 
