@@ -268,7 +268,7 @@ executed when running the tests. However, it does not cover all possible scenari
 >
 > Answer:
 
---- We relied on unittesting in the form of pytest for our  continuous integration setup. It is organized into three different test scripts, on focusing on data preprocessing, on focusing on the model itself and on focusing on making predictions using the model. As we are mostly working on Windows and Linux did the testing include the latest ubuntu and windows distribution. We utilized the caching option in GitHub to reduce the time it takes to run every workflow, since GitHub restricts the amount of time run for workflows. An example of a workflow can be found here: https://github.com/AlexanderVoldby/02476_enzyme_stability/actions/runs/7540382637 ---
+--- We relied on unittesting in the form of pytest for our  continuous integration setup. It is organized into three different test scripts, on focusing on data preprocessing, on focusing on the model itself and on focusing on making predictions using the model. As we are mostly working on Windows and Linux did the testing include the latest ubuntu and windows distribution. The workflow for testing is triggered every time someone pushes to master or main and does a pull-request to these two branches. We utilized the caching option in GitHub to reduce the time it takes to run every workflow, since GitHub restricts the amount of time run for workflows. An example of a workflow can be found here: https://github.com/AlexanderVoldby/02476_enzyme_stability/actions/runs/7540382637 ---
 
 ## Running code and tracking experiments
 
