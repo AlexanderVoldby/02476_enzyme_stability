@@ -128,8 +128,8 @@ end of the project.
 > *package to do ... and ... in our project*.
 >
 > Answer:
----
-We used the Transformers framework to easily run a pre-trained BERT-based protein model for tokenizing and embedding our data. Initially, we download the model and tokenizer from Huggingface. We then save it locally, to more quickly load it for inference.  We used Pytorch-Lightning to simplify training, prediction, and saving/loading of checkpoints. Weights and Biases was used for logging together with Pytorch-Lightning. Therefore, we were able to save checkpoints in a Google Bucket as well as through the Huggingface workspace. ---
+
+--- We used the Transformers framework to easily run a pre-trained BERT-based protein model for tokenizing and embedding our data. Initially, we download the model and tokenizer from Huggingface. We then save it locally, to more quickly load it for inference.  We used Pytorch-Lightning to simplify training, prediction, and saving/loading of checkpoints. Weights and Biases was used for logging together with Pytorch-Lightning. Therefore, we were able to save checkpoints in a Google Bucket as well as through the Huggingface workspace. ---
 
 ## Coding environment
 
