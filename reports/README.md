@@ -502,7 +502,7 @@ CMD ["uvicorn", "mlops_enzyme_stability.predict_sequence:app", "--host", "0.0.0.
 >
 > Answer:
 ---
-To deploy our model, we wrapped our model into an API using FastAPI in a Docker contaier. The API allows inserting the sequence of aminoacids and generate the protein stability predictions. We initially deployed the model locally, which worked. Subsequently, we deployed our model in the cloud using Cloud Build to build the docker container and deployed it with Cloud Run. To invoke it an user would call `curl -X POST -F "file=@file.json"<weburl>` (might be deleted). The input to the model is a list of amino acid sequences in string format. The response is a list of predicted stability values.
+To deploy our model, we wrapped our model into an API using FastAPI in a Docker contaier. The API allows inserting the sequence of aminoacids and generate the protein stability predictions. We initially deployed the model locally, which worked. Subsequently, we deployed our model in the cloud using Cloud Build to build the docker container and deployed it with Cloud Run. To invoke it an user would call `curl -X POST -F "file=@file.json" https://predict-model-nvnqcfzrxa-ew.a.run.app/predict/` (might be deleted). The input to the model is a list of amino acid sequences in string format. The response is a list of predicted stability values.
 
 
 ---
