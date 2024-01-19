@@ -519,7 +519,10 @@ To deploy our model, we wrapped our model into an API using FastAPI in a Docker 
 >
 > Answer:
 
---- So far we have not implemented monitoring. In short, monitoring would prevent the degradation of our application. In our case, a main thread for our application's performance would be data drifting, when for example, better protBert version is released, which make our application less competitive, or if a greater amount of training sequences becomes available, which would upgrade our application generalization potential. We would like to monitor the performance of our model over the protein sequences available. ---
+--- 
+So far we have not implemented monitoring. In short, monitoring would prevent the degradation of our application. In our case, a main thread for our application's performance would be data drifting, when for example, better protBert version is released, which make our application less competitive, or if a greater amount of training sequences becomes available, which would upgrade our application generalization potential. We would like to monitor the performance of our model over the protein sequences available. 
+
+---
 
 ### Question 24
 
