@@ -427,9 +427,9 @@ RUN pip install . --no-deps --no-cache-dir
 
 ENTRYPOINT ["python", "-u", "mlops_enzyme_stability/train_model.py"]```
 ```
-```
 The API predictions Docker container specifications:
 
+```
 FROM python:3.11-slim
 
 RUN apt update && \
