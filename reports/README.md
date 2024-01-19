@@ -531,7 +531,7 @@ To deploy our model, we wrapped our model into an API using FastAPI in a Docker 
 >
 > Answer:
 ---
-In total, 223.81 kr was spend on the project. About 95 % of the cost was due to cloud storage. This was probably due to the amount of container images and data stored in the cloud. Training the model via Vertex AI just cost around 8 kr. The cost for the compute engine was neglectable. 
+In total, 223.81 kr were spend on the project. About 95 % of the cost was due to cloud storage. This was probably due to the amount of container images and data stored in the cloud. Training the model via Vertex AI just cost around 8 kr. The cost for the compute engine was neglectable. 
 ---
 
 CONTINUE WITH Coding environment
@@ -555,11 +555,7 @@ CONTINUE WITH Coding environment
 >
 > Answer:
 
---- To explain the overall architecture of our project, we can do it from three stages: the data retrieval, the project development and the user perspective:
-- Data and model retrieval: Starting from the bottom left diagram, our project started by retrieving the raw Datafiles from Kaggle, preproces and store them in a Google Cloud Storage Bucket, we then downloaded the pretrained protBERT model from Huggingface. 
-- Project development: Once the model was implemented, executable, and the best model was stored as checkpoint in the Google Cloud Storage Bucket, we implemented a set of GitHub actions so every time we pushed changes to master, unit tests where executed. Pushing changes to the master branch also triggered Google Cloud Cloud Build to build two Docker images that included the last changes, an image that executed the training of the model, and an image that hosted the API to generate predictions. Both containers were registered in the Google Cloud Artifact Registry. Google Cloud Run was then used to serve the API hosted by the prediction Docker container, whereas we used Vertex AI to explore and optimize the training performance, in both cases the Docker images were retrieved from the Artifact Registry. We used Weights and Biases to track the training metrics when running models on Vertex AI, and checkpoint were automatically saved on the Bucket. 
-- User perspective: Once the 
----
+--- question 25 fill here ---
 
 ### Question 26
 
@@ -590,4 +586,6 @@ CONTINUE WITH Coding environment
 >
 > Answer:
 
---- question 27 fill here ---
+--- 
+Student s22856 was in charge of continous integration including unittesting and GitHub Actions, doing training runs varying the hyperparameters in a grid-based manner and contributing to the code base for the data, training and prediction.
+ ---
