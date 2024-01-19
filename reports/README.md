@@ -72,7 +72,7 @@ end of the project.
 
 ### Week 2
 
-* [ ] Write unit tests related to the data part of your code
+* [x] Write unit tests related to the data part of your code
 * [x] Write unit tests related to model construction and or model training
 * [x] Calculate the coverage.
 * [x] Get some continuous integration running on the github repository
@@ -81,7 +81,7 @@ end of the project.
 * [x] Get your model training in GCP using either the Engine or Vertex AI
 * [x] Create a FastAPI application that can do inference using your model
 * [ ] If applicable, consider deploying the model locally using torchserve
-* [ ] Deploy your model in GCP using either Functions or Run as the backend
+* [x] Deploy your model in GCP using either Functions or Run as the backend
 
 ### Week 3
 
@@ -96,7 +96,7 @@ end of the project.
 
 * [ ] Revisit your initial project description. Did the project turn out as you wanted?
 * [ ] Make sure all group members have a understanding about all parts of the project
-* [ ] Uploaded all your code to github
+* [x] Uploaded all your code to github
 
 ## Group information
 
@@ -212,8 +212,7 @@ We did not implement a concrete set of rules for code quality and format, since 
 >
 > Answer:
 ---
-We implemented two test functions that each run 2-3 tests. One function tests that our model output has the right format and that the model uses the correct loss function. The data testing function asserts that preprocessed data points have the correct format and that tensors are stored in an accessible path.
-
+We implemented two test functions that each run 2-3 tests. One function tests that our model output has the right format and that the model uses the correct loss function. The data testing function asserts that preprocessed data points have the correct format and that tensors are stored in an accessible path.  The tests were implemented with pytest so we could generate a report of the test results. This was later linked to Github actions for automatic testing, when we pushed to the master branch.
 ---
 
 ### Question 8
@@ -366,9 +365,11 @@ The main metric we tracked for all of our experiments was the training loss. Bes
 
 --- In our project we developed docker images for the training of our model and for making predictions with our model. For example, for training the model one could run the docker image with the following command, specifying the learning rate and the path to the data.
 ``$ docker run --name experiment1 trainer:latest lr=0.005 data_path:="gs://protein_embeddings/data/processed"``
-Later on docker images were build and run in gcloud as part of our continuous integration pipeline with Cloud Build as each time a push or pull request was made a new container image for training and prediction was build in the cloud.
-
----
+To run the Docker image containing our prediction API locally we would laso specify a port to host it locally:
+"$ docker run -p 8000:8000 prediction:latest"
+Later on docker images where mostly build and run in gcloud as part of our continuous integration pipeline.
+Link to docker file: 
+ ---
 
 ### Question 16
 
@@ -605,7 +606,8 @@ To explain the overall architecture of our project, we can do it from three pers
 >
 > Answer:
 
---- question 26 fill here ---
+A lot of problems arose from the path structure in our project, such as accessing the appropriate configuration files during both training and inference. This simply took a lot of debugging to overcome. We also faced some challenge with authentication of Google Cloud and Wandb when running Docker containers. This was solved partly by using private keys and by making our GCS budkets public. Docker was also a challenge initially as weinitially weren't accustomed to it and spent a lot of time waiting for Docker images to be built in order to run them.
+
 
 ### Question 27
 
@@ -624,4 +626,6 @@ To explain the overall architecture of our project, we can do it from three pers
 
 --- 
 Student s22856 was in charge of continous integration including unittesting and GitHub Actions, doing training runs varying the hyperparameters in a grid-based manner and contributing to the code base for the data, training and prediction.
+
+Student s214591 was primarily in charge of coding the prediction API, setting up automatic building and pushing of containers to the cloud, and deploying the prediction API in Cloud Run. Apart from this he set up the initial Cookicutter project and worked on setting up the training script and applying the pre-trained model for data processing.
  ---
