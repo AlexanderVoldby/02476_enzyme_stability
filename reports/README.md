@@ -105,7 +105,7 @@ end of the project.
 >
 > Answer:
 
-40
+--- 40 ---
 
 ### Question 2
 > **Enter the study number for each member in the group**
@@ -115,9 +115,9 @@ end of the project.
 > *sXXXXXX, sXXXXXX, sXXXXXX*
 >
 > Answer:
----
-s214591, s222856, s216708, s214633
----
+
+--- s214591, s222856, s216708, s214633 ---
+
 ### Question 3
 > **What framework did you choose to work with and did it help you complete the project?**
 >
@@ -128,7 +128,8 @@ s214591, s222856, s216708, s214633
 > *package to do ... and ... in our project*.
 >
 > Answer:
-``` --- We used the Transformers framework to easily run a pre-trained BERT-based protein model for tokenizing and embedding our data. Initially, we download the model and tokenizer from Huggingface. We then save it locally, to more quickly load it for inference.  We used Pytorch-Lightning to simplify training, prediction, and saving/loading of checkpoints. Weights and Biases was used for logging together with Pytorch-Lightning. Therefore, we were able to save checkpoints in a Google Bucket as well as through the Huggingface workspace. --- ```
+---
+We used the Transformers framework to easily run a pre-trained BERT-based protein model for tokenizing and embedding our data. Initially, we download the model and tokenizer from Huggingface. We then save it locally, to more quickly load it for inference.  We used Pytorch-Lightning to simplify training, prediction, and saving/loading of checkpoints. Weights and Biases was used for logging together with Pytorch-Lightning. Therefore, we were able to save checkpoints in a Google Bucket as well as through the Huggingface workspace. ---
 
 ## Coding environment
 
@@ -146,20 +147,18 @@ s214591, s222856, s216708, s214633
 > *complete copy of our development environment, one would have to run the following commands*
 >
 > Answer:
----
 
-To handle Python dependencies, we specified two requirements files. They were manually created throughout the project. 
-To recreate the environment, one would clone the repository, create a conda environment with the correct python version, install the requirements with pip and pull the data with dvc.
+
+--- To handle Python dependencies, we specified two requirements files. They were manually created throughout the project. 
+To recreate the environment, one would clone the repository, create a conda environment with the correct python version and install the requirements with pip.
 For example:
-```
-git clone https://github.com/AlexanderVoldby/02476_enzyme_stability.git
-conda create --name enzyme_stability python=3.11
-conda activate enzyme_stability
-pip install -r requirements.txt
-pip install -r requirements_dev.txt
-```
+- git clone https://github.com/AlexanderVoldby/02476_enzyme_stability.git
+- conda create --name enzyme_stability python=3.11
+- conda activate enzyme_stability
+- pip install -r requirements.txt
+- pip install -r requirements_dev.txt ---
 
----
+
 ### Question 5
 
 > **We expect that you initialized your project using the cookiecutter template. Explain the overall structure of your**
@@ -174,9 +173,7 @@ pip install -r requirements_dev.txt
 > Answer:
 
 --- 
-From the cookiecutter template we have filled out the data, models, reports, mlops_enzyme_stability (source code), mlops_enzyme_stability/data and mlops_enzyme_stability/models/ folders. In addition to that we also used the folder for the dockerfiles for both our train and predict dockerfiles. We created a folder called "tests" for our unittesting. We removed the notebooks, docs and mlops_enzyme_stability/visualizations since we did not use them. The different config files were placed in the root directory of the project. 
-
----
+From the cookiecutter template we have filled out the data, models, reports, mlops_enzyme_stability (source code), mlops_enzyme_stability/data and mlops_enzyme_stability/models/ folders. In addition to that we also used the folder for the dockerfiles for both our train and predict dockerfiles. We created a folder called "tests" for our unittesting. We removed the notebooks, docs and mlops_enzyme_stability/visualizations since we did not use them. The different config files were placed in the root directory of the project. ---
 
 ### Question 6
 
@@ -187,10 +184,8 @@ From the cookiecutter template we have filled out the data, models, reports, mlo
 >
 > Answer:
 
----
-We did not implement a concrete set of rules for code quality and format, since the lifespan of the project was rather short and we were able to explain the code to each other in person. A consistent coding format matters a lot in larger projects because you will be dependent on understanding the code, someone else wrote, and vice versa. This is particularly the case for debugging purposes, when functions and classes interoperate. 
+--- We did not implement a concrete set of rules for code quality and format, since the lifespan of the project was rather short and we were able to explain the code to each other in person. But a consistent coding format matters a lot in larger projects because you will be dependent on understanding the code, someone else wrote, and vice versa. This is particularly the case for debugging purposes, when functions and classes interoperate. ---
 
----
 
 ## Version control
 
@@ -208,10 +203,9 @@ We did not implement a concrete set of rules for code quality and format, since 
 > *application but also ... .*
 >
 > Answer:
----
-We implemented two test functions that each run 2-3 tests. One function tests that our model output has the right format and that the model uses the correct loss function. The data testing function asserts that preprocessed data points have the correct format and that tensors are stored in an accessible path.  The tests were implemented with pytest so we could generate a report of the test results. This was later linked to Github actions for automatic testing, when we pushed to the master branch.
 
----
+--- We implemented two test functions that each run 2-3 tests. One function tests that our model output has the right format and that the model uses the correct loss function. The data testing function asserts that preprocessed data points have the correct format and that tensors are stored in an accessible path. ---
+
 
 ### Question 8
 
@@ -245,10 +239,7 @@ executed when running the tests. However, it does not cover all possible scenari
 >
 > Answer:
 
---- 
-Branches were an important part of our workflow. Whenever someone worked on part of the codebase, a branch was created from the master branch. Later on when the work on this feature was done, this branch was merged again with the master branch using a pull request. Since this was done quite frequently was there no branch protection on the master branch, so we relied on everyone to go through their own pull request with care. Later on when working on the continuous integration and the automatic cloud deployment we used the main branch for deployment. In that way could the master branch be used for development, and each time we would like to deploy the current state of the codebase a pull request from the master to the main branch was created. This pull request then had to be reviewed by at least 2 people to include more safety before deployment. 
-
----
+--- Branches were an important part of our workflow. Everyone working on the codebase, had their own branch. Later on these branches would be merged again with the master branch using pull requests. Since this was done quite frequently was there no branch protection on the master branch, so we relied on everyone to go through their own pull request with care. Later on when working on the continuous integration and the automatic cloud deployment we used the main branch for deployment. In that way could the master branch be used for development, and each time we would like to deploy the current state of the codebase a pull request from the master to the main branch was created. This pull request then had to be reviewed by at least 2 people to include more safety before deployment. ---
 
 ### Question 10
 
@@ -263,10 +254,7 @@ Branches were an important part of our workflow. Whenever someone worked on part
 >
 > Answer:
 
---- 
-In our project we did use DVC for managing our data. Unlike in most other project, training our model was not the computationally most intense part of the pipeline. It was in fact the preprocessing in the form of embedding the amino acid sequences. DVC helped us to make sure, that the already pre-processed data could easily be pulled using DVC. This also ensured that everyone was working with the same state of pre-processed data. If at any point we would have changed our pre-processing pipeline the data could be updated with DVC. 
-
----
+--- In our project we did use DVC for managing our data. Unlike in most other project, training our model was not the computationally most intense part of the pipeline. It was in fact the preprocessing in the form of embedding the amino acid sequences. DVC helped us to make sure, that the already pre-processed data could easily be pulled using DVC. This also ensured that everyone was working with the same state of pre-processed data. If at any point we would have changed our pre-processing pipeline the data could be updated with DVC. Later on, we stopped relying on DVC and instead pulled data directly from Google Buckets. ---
 
 ### Question 11
 
@@ -307,9 +295,7 @@ We relied on unittesting in the form of pytest for our  continuous integration s
 --- 
 Our approach for configuring experiments and keeping track of past configurations was a `config.yaml` file with hydra. The config files contains various hyperparameters of the model, but also other options as the name of the run. In that way a the model can be run in the terminal as:
 ``$ python mlops_enzyme_stability/train_model.py hyperparameters.lr=0.002 hyperparameters.epochs=10 runname=”Run_1”``
-In this example the learning rate and epochs as well as the name of the run are specified explicitly.
-
----
+In this example the learning rate and epochs as well as the name of the run are specified explicitly. ---
 
 ### Question 13
 
@@ -341,12 +327,8 @@ In this example the learning rate and epochs as well as the name of the run are 
 >
 > Answer:
 
---- 
-![Local Image](figures/table_wandb.png) ![Local Image](figures/graphs_wandb.png)
-
-The main metric we tracked for all of our experiments was the training loss. Besides that the number of epochs are tracked as well as all the hyperparameters from the config.yaml file. The training loss was tracked, because it is the first metric to use when evaluating if the model is actually learning the data set. After doing a set of grid-based experiments (changing the batch size and number of nodes for each layer) it could be seen that the model fundamentally struggled learning the training data set. Since this could not be solved by adjust hyperparameters as the learning rate or the batch, we suspect that there could be a problem in embedding our data that leads to a suboptimal training set. As we focused more on building a robust cloud based pipeline for our model we did not use more time optimizing the data preprocessing. If the project would go on more time could be allocated to resolving the issues with the preprocessing. After implementing this it would also be of interest to track the testing error to evaluate if the model is overfitting or not generalizing enough. As the embedded data set is rather small training the model is not computationally extensive. Therefore, using sweeps a large number of experiments could be run to find the optimal configuration of hyperparameters.
-
----
+--- ![Local Image](figures/table_wandb.png) ![Local Image](figures/graphs_wandb.png)
+The main metric we tracked for all of our experiments was the training loss. Besides that the number of epochs are tracked as well as all the hyperparameters from the config.yaml file. The training loss was tracked, because it is the first metric to use when evaluating if the model is actually learning the data set. After doing a set of grid-based experiments (changing the batch size and number of nodes for each layer) it could be seen that the model fundamentally struggled learning the training data set. Since this could not be solved by adjust hyperparameters as the learning rate or the batch, we suspect that there could be a problem in embedding our data that leads to a suboptimal training set. As we focused more on building a robust cloud based pipeline for our model we did not use more time optimizing the data preprocessing. If the project would go on more time could be allocated to resolving the issues with the preprocessing. After implementing this it would also be of interest to track the testing error to evaluate if the model is overfitting or not generalizing enough. As the embedded data set is rather small training the model is not computationally extensive. Therefore, using sweeps a large number of experiments could be run to find the optimal configuration of hyperparameters. ---
 
 ### Question 15
 
@@ -366,9 +348,7 @@ The main metric we tracked for all of our experiments was the training loss. Bes
 To run the Docker image containing our prediction API locally we would laso specify a port to host it locally:
 "$ docker run -p 8000:8000 prediction:latest"
 Later on docker images where mostly build and run in gcloud as part of our continuous integration pipeline.
-Link to docker file: 
-
----
+Link to docker file: ---
 
 ### Question 16
 
@@ -384,9 +364,7 @@ Link to docker file:
 > Answer:
 
 --- For debugging, we gave each team member the freedom to choose their tools of choose. Most of the time this was the debugging functionality in VS Code. In addition to that, error were looked up with Stack Overflow. With more difficult cases, ChatGPT could also be helpful to get more ideas of what could be the underlying issue.
-Regarding profiling, our model was rather small, so training did not take much resource. In addition to that we tried to make our could lean using Pytorch Lightning. For these reasons was profiling not on of our priorities, as we thought that building a robust pipeline for training and predictions in the cloud was more important.
-
----
+Regarding profiling, our model was rather small, so training did not take much resource. In addition to that we tried to make our could lean using Pytorch Lightning. For these reasons was profiling not on of our priorities, as we thought that building a robust pipeline for training and predictions in the cloud was more important. ---
 
 ## Working in the cloud
 
@@ -403,13 +381,12 @@ Regarding profiling, our model was rather small, so training did not take much r
 >
 > Answer:
 
---- 
-We used the following services:
+--- We used the following services:
 - Cloud Storage: We defined and used a bucket to store the training data for our project as well as the model checkpoint, which is retrieved via Data Version Control operations. Cloud storage is a platform that allows to store and retrieve data in a structured way. It organizes the data into buckets, which could be interpreted as folders. Data Version Control was implemented via dvc.
 - Cloud Build: We used Cloud Build to automatically build two Docker containers upon trigger: one for training our model, and the other to generate the predictions and configure the API. Cloud Build is a continuous integration continous delivery platform that facilitates the building of applications from source code, in our case two Docker containers, and integrates with other Google Cloud servcies such as Cloud Run.
 - Cloud Run: We used Cloud Run to make our Cloud Build API accessible without any server. Cloud Run is a serverless computer platform that allows running containerized applications and make them accessible through HTTP requests. In addition, Cloud Run is integrated with Cloud Build as part of the continuous integration pipeline. However we did not manage to automatize the integreation between Cloud run and Cloud Build, so we manually selected the image from the Artifact Registry with Cloud Run to make the API accessible.
-- Vertex AI: We used Vertex AI to build and manage the development of our model, for example we used to explore the right hyperparameters. Vertex AI is machine learning tailored platform for development and management of a machine learning workflow at all steps.
---- 
+- Vertex AI: We used Vertex AI to build and manage the development of our model, for example we used to explore the right hyperparameters. Vertex AI is machine learning tailored platform for development and management of a machine learning workflow at all steps. --- 
+
 ### Question 18 CHECK 
 
 > **The backbone of GCP is the Compute engine. Explained how you made use of this service and what type of VMs**
@@ -423,8 +400,7 @@ We used the following services:
 >
 > Answer:
 
---- 
-We used the compute engine virtual machines to host the training and predicting Docker containers. 
+--- We used the compute engine virtual machines to host the training and predicting Docker containers. 
 The training and predictions VMs had the following hardware: 
  - Machine type: n1-highmem-2
  - CPU platform: Intel Haswell
@@ -479,7 +455,7 @@ RUN python mlops_enzyme_stability/data/download_BERT.py
 EXPOSE 8080
 
 CMD ["uvicorn", "mlops_enzyme_stability.predict_sequence:app", "--host", "0.0.0.0", "--port", "8080"]
-```
+``` 
 ---
 
 
@@ -491,10 +467,7 @@ CMD ["uvicorn", "mlops_enzyme_stability.predict_sequence:app", "--host", "0.0.0.
 > Answer:
 --- 
 ![Local Image](figures/buckets_registry.png)
-
-![Local Image](figures/bucket_content.png)
-
---- 
+![Local Image](figures/bucket_content.png) --- 
 
 
 ### Question 20
@@ -530,10 +503,9 @@ CMD ["uvicorn", "mlops_enzyme_stability.predict_sequence:app", "--host", "0.0.0.
 >
 > Answer:
 ---
-To deploy our model, we wrapped our model into an API using FastAPI in a Docker contaier. The API allows inserting the sequence of aminoacids and generate the protein stability predictions. We initially deployed the model locally, which worked. Subsequently, we deployed our model in the cloud using Cloud Build to build the docker container and deployed it with Cloud Run. To invoke it an user would call `curl -X POST -F "file=@file.json" https://predict-model-nvnqcfzrxa-ew.a.run.app/predict/` (might be deleted). The input to the model is a list of amino acid sequences in string format. The response is a list of predicted stability values.
+To deploy our model, we wrapped our model into an API using FastAPI in a Docker contaier. The API allows inserting the sequence of aminoacids and generate the protein stability predictions. We initially deployed the model locally, which worked. Subsequently, we deployed our model in the cloud using Cloud Build to build the docker container and deployed it with Cloud Run. To invoke it an user would call `curl -X POST -F "file=@file.json" https://predict-model-nvnqcfzrxa-ew.a.run.app/predict/` (might be deleted). The input to the model is a list of amino acid sequences in string format. The response is a list of predicted stability values. ---
 
 
----
 ### Question 23
 
 > **Did you manage to implement monitoring of your deployed model? If yes, explain how it works. If not, explain how**
@@ -561,9 +533,7 @@ To deploy our model, we wrapped our model into an API using FastAPI in a Docker 
 >
 > Answer:
 ---
-In total, 223.81 kr were spend on the project. About 95 % of the cost was due to cloud storage. This was probably due to the amount of container images and data stored in the cloud. Training the model via Vertex AI just cost around 8 kr. The cost for the compute engine was neglectable. 
-
----
+In total, 223.81 kr were spend on the project. About 95 % of the cost was due to cloud storage. This was probably due to the amount of container images and data stored in the cloud. Training the model via Vertex AI just cost around 8 kr. The cost for the compute engine was neglectable. ---
 
 CONTINUE WITH Coding environment
 
@@ -627,7 +597,6 @@ A lot of problems arose from the path structure in our project, such as accessin
 > Answer:
 
 --- 
-Student s22856 was in charge of continous integration including unittesting and GitHub Actions, doing training runs varying the hyperparameters in a grid-based manner and contributing to the code base for the data, training and prediction.
-
-Student s214591 was primarily in charge of coding the prediction API, setting up automatic building and pushing of containers to the cloud, and deploying the prediction API in Cloud Run. Apart from this he set up the initial Cookicutter project and worked on setting up the training script and applying the pre-trained model for data processing.
- ---
+- Student s228562 was in charge of continous integration including unittesting and GitHub Actions, doing training runs varying the hyperparameters in a grid-based manner and contributing to the code base for the data, training and prediction.
+- Student s214591 was primarily in charge of coding the prediction API, setting up automatic building and pushing of containers to the cloud, and deploying the prediction API in Cloud Run. Apart from this he set up the initial Cookicutter project and worked on setting up the training script and applying the pre-trained model for data processing.
+- Student s214633 setup logging with Weights and Biases, handling of API keys with Hydra arguments for security, implemented Pytorch Lightning, performed the preprocessing of the raw data on DTU's HPC and helped setup training on GCP. ---
