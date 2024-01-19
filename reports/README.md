@@ -128,7 +128,7 @@ s214591, s222856, s216708, s214633
 > *package to do ... and ... in our project*.
 >
 > Answer:
-``` --- We used the Transformers framework to easily run a pre-trained BERT-based protein model for tokenizing and embedding our data. Initially, we download the model and tokenizer from Huggingface. We then save it locally, to more quickly load it for inference.  We used Pytorch-Lightning to simplify training, prediction, and saving/loading of checkpoints. Weights and Biases was used for logging together with Pytorch-Lightning. Therefore, we were able to save checkpoints in a Google Bucket as well as through the Huggingface workspace. --- ```
+--- We used the Transformers framework to easily run a pre-trained BERT-based protein model for tokenizing and embedding our data. Initially, we download the model and tokenizer from Huggingface. We then save it locally, to more quickly load it for inference.  We used Pytorch-Lightning to simplify training, prediction, and saving/loading of checkpoints. Weights and Biases was used for logging together with Pytorch-Lightning. Therefore, we were able to save checkpoints in a Google Bucket as well as through the Huggingface workspace. ---
 
 ## Coding environment
 
@@ -146,9 +146,7 @@ s214591, s222856, s216708, s214633
 > *complete copy of our development environment, one would have to run the following commands*
 >
 > Answer:
----
-
-To handle Python dependencies, we specified two requirements files. They were manually created throughout the project. 
+--- To handle Python dependencies, we specified two requirements files. They were manually created throughout the project. 
 To recreate the environment, one would clone the repository, create a conda environment with the correct python version, install the requirements with pip and pull the data with dvc.
 For example:
 ```
@@ -157,9 +155,7 @@ conda create --name enzyme_stability python=3.11
 conda activate enzyme_stability
 pip install -r requirements.txt
 pip install -r requirements_dev.txt
-```
-
----
+``` ---
 ### Question 5
 
 > **We expect that you initialized your project using the cookiecutter template. Explain the overall structure of your**
@@ -173,10 +169,7 @@ pip install -r requirements_dev.txt
 > *experiments.*
 > Answer:
 
---- 
-From the cookiecutter template we have filled out the data, models, reports, mlops_enzyme_stability (source code), mlops_enzyme_stability/data and mlops_enzyme_stability/models/ folders. In addition to that we also used the folder for the dockerfiles for both our train and predict dockerfiles. We created a folder called "tests" for our unittesting. We removed the notebooks, docs and mlops_enzyme_stability/visualizations since we did not use them. The different config files were placed in the root directory of the project. 
-
----
+--- From the cookiecutter template we have filled out the data, models, reports, mlops_enzyme_stability (source code), mlops_enzyme_stability/data and mlops_enzyme_stability/models/ folders. In addition to that we also used the folder for the dockerfiles for both our train and predict dockerfiles. We created a folder called "tests" for our unittesting. We removed the notebooks, docs and mlops_enzyme_stability/visualizations since we did not use them. The different config files were placed in the root directory of the project. ---
 
 ### Question 6
 
@@ -187,10 +180,7 @@ From the cookiecutter template we have filled out the data, models, reports, mlo
 >
 > Answer:
 
----
-We did not implement a concrete set of rules for code quality and format, since the lifespan of the project was rather short and we were able to explain the code to each other in person. A consistent coding format matters a lot in larger projects because you will be dependent on understanding the code, someone else wrote, and vice versa. This is particularly the case for debugging purposes, when functions and classes interoperate. 
-
----
+--- We did not implement a concrete set of rules for code quality and format, since the lifespan of the project was rather short and we were able to explain the code to each other in person. A consistent coding format matters a lot in larger projects because you will be dependent on understanding the code, someone else wrote, and vice versa. This is particularly the case for debugging purposes, when functions and classes interoperate. ---
 
 ## Version control
 
