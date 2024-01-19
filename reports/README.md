@@ -553,7 +553,7 @@ CONTINUE WITH Coding environment
 >
 > Answer:
 
---- question 25 fill here ---
+--- ![Local Image](figures/Architecture_Enzyme_Stability.jpg) ---
 
 ### Question 26
 
