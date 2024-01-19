@@ -192,6 +192,7 @@ From the cookiecutter template we have filled out the data, models, reports, mlo
 
 ---
 We did not implement a concrete set of rules for code quality and format, since the lifespan of the project was rather short and we were able to explain the code to each other in person. A consistent coding format matters a lot in larger projects because you will be dependent on understanding the code, someone else wrote, and vice versa. This is particularly the case for debugging purposes, when functions and classes interoperate. 
+
 ---
 
 ## Version control
@@ -231,6 +232,7 @@ We implemented two test functions that each run 2-3 tests. One function tests th
 --- 
 Our code coverage is of 63%. Even if we had a code coverage of 100%, we still could expect finding some errors. Code coverage only shows how much of our code is 
 executed when running the tests. However, it does not cover all possible scenarios our code could be run, for example in terms of the diversity of our inputs, we will always be limited by the exhaustive component of our tests. 
+
 ---
 
 ### Question 9
@@ -248,6 +250,7 @@ executed when running the tests. However, it does not cover all possible scenari
 
 --- 
 Branches were an important part of our workflow. Whenever someone worked on part of the codebase, a branch was created from the master branch. Later on when the work on this feature was done, this branch was merged again with the master branch using a pull request. Since this was done quite frequently was there no branch protection on the master branch, so we relied on everyone to go through their own pull request with care. Later on when working on the continuous integration and the automatic cloud deployment we used the main branch for deployment. In that way could the master branch be used for development, and each time we would like to deploy the current state of the codebase a pull request from the master to the main branch was created. This pull request then had to be reviewed by at least 2 people to include more safety before deployment. 
+
 ---
 
 ### Question 10
@@ -265,6 +268,7 @@ Branches were an important part of our workflow. Whenever someone worked on part
 
 --- 
 In our project we did use DVC for managing our data. Unlike in most other project, training our model was not the computationally most intense part of the pipeline. It was in fact the preprocessing in the form of embedding the amino acid sequences. DVC helped us to make sure, that the already pre-processed data could easily be pulled using DVC. This also ensured that everyone was working with the same state of pre-processed data. If at any point we would have changed our pre-processing pipeline the data could be updated with DVC. 
+
 ---
 
 ### Question 11
@@ -283,6 +287,7 @@ In our project we did use DVC for managing our data. Unlike in most other projec
 
 --- 
 We relied on unittesting in the form of pytest for our  continuous integration setup. It is organized into three different test scripts, on focusing on data preprocessing, on focusing on the model itself and on focusing on making predictions using the model. As we are mostly working on Windows and Linux did the testing include the latest ubuntu and windows distribution. The workflow for testing is triggered every time someone pushes to master or main and does a pull-request to these two branches. We utilized the caching option in GitHub to reduce the time it takes to run every workflow, since GitHub restricts the amount of time run for workflows. An example of a workflow can be found here: https://github.com/AlexanderVoldby/02476_enzyme_stability/actions/runs/7540382637 
+
 ---
 
 ## Running code and tracking experiments
@@ -302,10 +307,12 @@ We relied on unittesting in the form of pytest for our  continuous integration s
 >
 > Answer:
 
---- Our approach for configuring experiments and keeping track of past configurations was a config.yaml file with hydra. The config files contains various hyperparameters of the model, but also other options as the name of the run. In that way a the model can be run in the terminal as:
+--- 
+Our approach for configuring experiments and keeping track of past configurations was a config.yaml file with hydra. The config files contains various hyperparameters of the model, but also other options as the name of the run. In that way a the model can be run in the terminal as:
 ``$ python mlops_enzyme_stability/train_model.py hyperparameters.lr=0.002 hyperparameters.epochs=10 runname=”Run_1”``
 In this example the learning rate and epochs as well as the name of the run are specified explicitly.
- ---
+
+---
 
 ### Question 13
 
