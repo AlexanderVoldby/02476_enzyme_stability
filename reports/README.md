@@ -526,10 +526,7 @@ The API is invoked through the docker container.
 >
 > Answer:
 ---
-Alexander Voldby used __ credits.
-Jesper Dybkær Lauridsen used __ credits.
-Max Klein used __ credits.
-Pau Piera Lindez used __ credits.
+In total, 223.81 kr was spend on the project. About 95 % of the cost was due to cloud storage. This was probably due to the amount of container images and data stored in the cloud. Training the model via Vertex AI just cost around 8 kr. The cost for the compute engine was neglectable. 
 ---
 
 CONTINUE WITH Coding environment
