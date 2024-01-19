@@ -286,7 +286,7 @@ executed when running the tests. However, it does not cover all possible scenari
 > Answer:
 
 --- Our approach for configuring experiments and keeping track of past configurations was a config.yaml file with hydra. The config files contains various hyperparameters of the model, but also other options as the name of the run. In that way a the model can be run in the terminal as:
-$ python mlops_enzyme_stability/train_model.py hyperparameters.lr=0.002 hyperparameters.epochs=10 runname=”Run_1”
+``$ python mlops_enzyme_stability/train_model.py hyperparameters.lr=0.002 hyperparameters.epochs=10 runname=”Run_1”``
 In this example the learning rate and epochs as well as the name of the run are specified explicitly.
  ---
 
@@ -338,7 +338,7 @@ The main metric we tracked for all of our experiments was the training loss. Bes
 > Answer:
 
 --- In our project we developed docker images for the training of our model and for making predictions with our model. For example, for training the model one could  run the docker image with the following command, specifying the learning rate and the path to the data.
-$ docker run --name experiment1 trainer:latest lr=0.005 data_path:="gs://protein_embeddings/data/processed"
+``$ docker run --name experiment1 trainer:latest lr=0.005 data_path:="gs://protein_embeddings/data/processed"``
 Later on docker images where mostly build and run in gcloud as part of our continuous integration pipeline.
 Link to docker file: 
  ---
@@ -420,14 +420,14 @@ COPY requirements_dev.txt requirements_dev.txt
 COPY pyproject.toml pyproject.toml
 COPY mlops_enzyme_stability/ mlops_enzyme_stability/
 COPY data/ data/
+COPY config.yaml config.yaml
 
 WORKDIR /
 RUN pip install -r requirements.txt --no-cache-dir
 RUN pip install -r requirements_dev.txt --no-cache-dir
 RUN pip install . --no-deps --no-cache-dir
 
-ENTRYPOINT ["python", "-u", "mlops_enzyme_stability/train_model.py"]
-```
+ENTRYPOINT ["python", "-u", "mlops_enzyme_stability/train_model.py"]```
 The API predictions Docker container specifications:
 ```
 # Base image
@@ -441,16 +441,18 @@ COPY requirements.txt requirements.txt
 COPY pyproject.toml pyproject.toml
 COPY mlops_enzyme_stability/ mlops_enzyme_stability/
 COPY data/ data/
+COPY config.yaml config.yaml
 
 WORKDIR /
 RUN pip install -r requirements.txt --no-cache-dir
 RUN pip install . --no-deps --no-cache-dir
+RUN python mlops_enzyme_stability/data/download_BERT.py
 
-WORKDIR /mlops_enzyme_stability/
+# WORKDIR /mlops_enzyme_stability/
 
 EXPOSE 8080
 
-CMD ["uvicorn", "predict_api:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["uvicorn", "mlops_enzyme_stability.predict_sequence:app", "--host", "0.0.0.0", "--port", "8080"]
 ```
 ---
 
@@ -461,7 +463,10 @@ CMD ["uvicorn", "predict_api:app", "--host", "0.0.0.0", "--port", "8080"]
 > **You can take inspiration from [this figure](figures/bucket.png).**
 >
 > Answer:
---- ![Local Image](figures/bucket_registry.png) --- 
+--- 
+![Local Image](figures/buckets_registry.png)
+![Local Image](figures/bucket_content.png)
+--- 
 
 
 ### Question 20
@@ -471,7 +476,7 @@ CMD ["uvicorn", "predict_api:app", "--host", "0.0.0.0", "--port", "8080"]
 >
 > Answer:
 
---- ![Local Image](figures/bucket_registry.png) ---
+--- ![Local Image](figures/container_registry.png) ---
 
 
 ### Question 21
@@ -481,7 +486,7 @@ CMD ["uvicorn", "predict_api:app", "--host", "0.0.0.0", "--port", "8080"]
 >
 > Answer:
 
---- ![Local Image](./figures/cloudbuild_screenshot.png) ---
+--- ![Local Image](figures/cloud_build_history.png) ---
 
 ### Question 22
 
@@ -497,8 +502,8 @@ CMD ["uvicorn", "predict_api:app", "--host", "0.0.0.0", "--port", "8080"]
 >
 > Answer:
 ---
-To deploy our model, we wrapped our model into an API using FastAPI. The API allows uploading either a pytorch tensor object ´.pt´ containing the protein sequence embeddings, or the actual aminoacid sequences, and generate the protein stability predictions. We initially deployed the model locally, which worked. Subsequently, we build a Docker container hosted by a VM in Google Cloud Engine. The implementation in the cloud .... # CHECK
-The API is invoked through the docker container.
+To deploy our model, we wrapped our model into an API using FastAPI in a Docker contaier. The API allows inserting the sequence of aminoacids and generate the protein stability predictions. We initially deployed the model locally, which worked. Subsequently, we deployed our model in the cloud using Cloud Build to build the docker container and deployed it with Cloud Run. 
+
 ---
 ### Question 23
 
