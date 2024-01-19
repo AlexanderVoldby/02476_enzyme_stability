@@ -538,7 +538,6 @@ So far we have not implemented monitoring. In short, monitoring would prevent th
 ---
 In total, 223.81 kr were spend on the project. About 95 % of the cost was due to cloud storage. This was probably due to the amount of container images and data stored in the cloud. Training the model via Vertex AI just cost around 8 kr. The cost for the compute engine was neglectable. ---
 
-CONTINUE WITH Coding environment
 
 ## Overall discussion of project
 
