@@ -598,10 +598,9 @@ A lot of problems arose from the path structure in our project, such as accessin
 > Answer:
 
 --- 
-- 
-Student s228562 was in charge of continous integration including unittesting and GitHub Actions, doing training runs varying the hyperparameters in a grid-based manner and contributing to the code base for the data, training and prediction.
+- Student s228562 was in charge of continous integration including unittesting and GitHub Actions, doing training runs varying the hyperparameters in a grid-based manner and contributing to the code base for the data, training and prediction.
 - Student s214591 was primarily in charge of coding the prediction API, setting up automatic building and pushing of containers to the cloud, and deploying the prediction API in Cloud Run. Apart from this he set up the initial Cookicutter project and worked on setting up the training script and applying the pre-trained model for data processing.
 - Student s214633 setup logging with Weights and Biases, handling of API keys with Hydra arguments for security, implemented Pytorch Lightning, performed the preprocessing of the raw data on DTU's HPC and helped setup training on GCP.
-- Student s216708 contributed on setting up the data version control, the Google Cloud project creation and accessibility, set up the Google Cloud Bucket and the data/models saving and retrival from it. He also helped on the overall project design. 
+- Student s216708 contributed on setting up the data version control, the Google Cloud project creation and accessibility, set up the Google Cloud Bucket and the data/models saving and retrival from it. 
 
 ---
