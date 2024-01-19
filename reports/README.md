@@ -155,7 +155,8 @@ conda create --name enzyme_stability python=3.11
 conda activate enzyme_stability
 pip install -r requirements.txt
 pip install -r requirements_dev.txt
-``` ---
+``` 
+---
 ### Question 5
 
 > **We expect that you initialized your project using the cookiecutter template. Explain the overall structure of your**
