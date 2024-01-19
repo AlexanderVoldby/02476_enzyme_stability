@@ -161,6 +161,7 @@ conda activate enzyme_stability
 pip install -r requirements.txt
 pip install -r requirements_dev.txt
 ```
+
 ---
 ### Question 5
 
@@ -177,6 +178,7 @@ pip install -r requirements_dev.txt
 
 --- 
 From the cookiecutter template we have filled out the data, models, reports, mlops_enzyme_stability (source code), mlops_enzyme_stability/data and mlops_enzyme_stability/models/ folders. In addition to that we also used the folder for the dockerfiles for both our train and predict dockerfiles. We created a folder called "tests" for our unittesting. We removed the notebooks, docs and mlops_enzyme_stability/visualizations since we did not use them. The different config files were placed in the root directory of the project. 
+
 ---
 
 ### Question 6
@@ -210,7 +212,9 @@ We did not implement a concrete set of rules for code quality and format, since 
 > Answer:
 ---
 We implemented two test functions that each run 2-3 tests. One function tests that our model output has the right format and that the model uses the correct loss function. The data testing function asserts that preprocessed data points have the correct format and that tensors are stored in an accessible path.
+
 ---
+
 ### Question 8
 
 > **What is the total code coverage (in percentage) of your code? If you code had an code coverage of 100% (or close**
