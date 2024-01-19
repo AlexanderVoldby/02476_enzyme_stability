@@ -213,6 +213,7 @@ We did not implement a concrete set of rules for code quality and format, since 
 > Answer:
 ---
 We implemented two test functions that each run 2-3 tests. One function tests that our model output has the right format and that the model uses the correct loss function. The data testing function asserts that preprocessed data points have the correct format and that tensors are stored in an accessible path.  The tests were implemented with pytest so we could generate a report of the test results. This was later linked to Github actions for automatic testing, when we pushed to the master branch.
+
 ---
 
 ### Question 8
@@ -369,7 +370,8 @@ To run the Docker image containing our prediction API locally we would laso spec
 "$ docker run -p 8000:8000 prediction:latest"
 Later on docker images where mostly build and run in gcloud as part of our continuous integration pipeline.
 Link to docker file: 
- ---
+
+---
 
 ### Question 16
 
@@ -386,7 +388,8 @@ Link to docker file:
 
 --- For debugging, we gave each team member the freedom to choose their tools of choose. Most of the time this was the debugging functionality in VS Code. In addition to that, error were looked up with Stack Overflow. With more difficult cases, ChatGPT could also be helpful to get more ideas of what could be the underlying issue.
 Regarding profiling, our model was rather small, so training did not take much resource. In addition to that we tried to make our could lean using Pytorch Lightning. For these reasons was profiling not on of our priorities, as we thought that building a robust pipeline for training and predictions in the cloud was more important.
- ---
+
+---
 
 ## Working in the cloud
 
@@ -561,7 +564,9 @@ To deploy our model, we wrapped our model into an API using FastAPI in a Docker 
 >
 > Answer:
 ---
-In total, 223.81 kr were spend on the project. About 95 % of the cost was due to cloud storage. This was probably due to the amount of container images and data stored in the cloud. Training the model via Vertex AI just cost around 8 kr. The cost for the compute engine was neglectable. ---
+In total, 223.81 kr were spend on the project. About 95 % of the cost was due to cloud storage. This was probably due to the amount of container images and data stored in the cloud. Training the model via Vertex AI just cost around 8 kr. The cost for the compute engine was neglectable. 
+
+---
 
 CONTINUE WITH Coding environment
 
