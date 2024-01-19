@@ -12,50 +12,43 @@ from omegaconf import OmegaConf
 from datetime import datetime
 from tqdm import tqdm
 import csv
+import uvicorn
 
+# API config
 app = FastAPI()
+background_tasks = BackgroundTasks()
 
 class PredictionRequest(BaseModel):
     data: list[str]
-
-background_tasks = BackgroundTasks()
-
-# tokenizer = BertTokenizer.from_pretrained("Rostlab/prot_bert", do_lower_case=False)
-# model = BertModel.from_pretrained("Rostlab/prot_bert")
-# model = model.to(device)
-# model.eval()
 
 # Hyperparameters
 config_file_path = os.path.join(os.getcwd(), "config.yaml")
 config = OmegaConf.load(config_file_path)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-def get_bert_model_and_tokenizer():
-    # Model is set to eval mode by default
-    try:
-        tokenizer = BertTokenizer.from_pretrained(config.BERT_path + "pretrained_tokenizer", do_lower_case=False )
-        model = BertModel.from_pretrained(config.BERT_path + "pretrained_model")
-    except:
-        print("Downloading pretrained model")
-        tokenizer = BertTokenizer.from_pretrained("Rostlab/prot_bert", do_lower_case=False )
-        model = BertModel.from_pretrained("Rostlab/prot_bert")
-    return model, tokenizer
+# Load the pretrained BERT model
+try:
+    bert_tokenizer = BertTokenizer.from_pretrained(config.BERT_path + "pretrained_tokenizer", do_lower_case=False )
+    bert_model = BertModel.from_pretrained(config.BERT_path + "pretrained_model")
+except:
+    print("Downloading pretrained model")
+    bert_tokenizer = BertTokenizer.from_pretrained("Rostlab/prot_bert", do_lower_case=False )
+    bert_model = BertModel.from_pretrained("Rostlab/prot_bert")
 
 def add_spaces(x):
     return " ".join(list(x))
 
-def encode_sequences(sequences):
-    model, tokenizer = get_bert_model_and_tokenizer()
+def encode_sequences(sequences) -> torch.Tensor:
     embeddings = []
     for seq in tqdm(sequences, desc="Encoding sequences", total=len(sequences)):
         assert type(seq) is str, "Sequences must be strings"
-        token = tokenizer(add_spaces(seq), return_tensors='pt')
-        output = model(**token.to(device))
+        token = bert_tokenizer(add_spaces(seq), return_tensors='pt')
+        output = bert_model(**token.to(device))
         embeddings.append(output[1].detach().cpu())
     
     return torch.stack(embeddings)
 
-def predict(tensors):
+def predict(tensors) -> List[float]:
     
     mlp_model = load_mlp()
     dataloader = DataLoader(tensors, batch_size=config.hyperparameters.batch_size, shuffle=False)
@@ -67,7 +60,7 @@ def predict(tensors):
     print(predictions_vector)
     return predictions_vector.numpy().tolist()
 
-def load_mlp():
+def load_mlp() -> MyNeuralNet:
     checkpoint_path = f"{config.checkpoint_path}/{config.best_model_name}.ckpt"
     model = MyNeuralNet.load_from_checkpoint(checkpoint_path)
     model.eval()
@@ -113,5 +106,4 @@ async def make_prediction(request: PredictionRequest, background_tasks: Backgrou
         raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
-    import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=8000)

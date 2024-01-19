@@ -80,8 +80,7 @@ class MyNeuralNet(LightningModule):
     def configure_criterion(self):
         return torch.nn.MSELoss()
 
-    def train_dataloader(self):
-        # print(f"CWD: {os.getcwd()}") # TODO: Remove when done debugging
+    def train_dataloader(self) -> DataLoader:
         storage_client = storage.Client(project="enzyme-stability-02476")
         bucket = storage_client.bucket(self.bucket_name)
 
@@ -93,8 +92,6 @@ class MyNeuralNet(LightningModule):
         train_tensors_blob = blob_tensors.download_as_bytes()
         train_tensors_tensor = torch.load(io.BytesIO(train_tensors_blob))
 
-        # TODO: UserWarning: Using a target size (torch.Size([16])) that is different to the input size (torch.Size([16, 1, 1])).
-        # This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
         trainset = TensorDataset(train_tensors_tensor, train_target_tensor)
         return DataLoader(
             trainset,
@@ -104,10 +101,7 @@ class MyNeuralNet(LightningModule):
             persistent_workers=True,
         )
 
-    # def val_dataloader(self): #TODO: implement validation dataloader
-    #     return DataLoader(...)
-
-    def predict_dataloader(self):
+    def predict_dataloader(self) -> DataLoader:
         storage_client = storage.Client(project="enzyme-stability-02476")
         bucket = storage_client.bucket(self.bucket_name)
 

@@ -50,36 +50,36 @@ end of the project.
 
 ### Week 1
 
-* [ ] Create a git repository
-* [ ] Make sure that all team members have write access to the github repository
-* [ ] Create a dedicated environment for you project to keep track of your packages
-* [ ] Create the initial file structure using cookiecutter
-* [ ] Fill out the `make_dataset.py` file such that it downloads whatever data you need and
-* [ ] Add a model file and a training script and get that running
-* [ ] Remember to fill out the `requirements.txt` file with whatever dependencies that you are using
-* [ ] Remember to comply with good coding practices (`pep8`) while doing the project
+* [x] Create a git repository
+* [x] Make sure that all team members have write access to the github repository
+* [x] Create a dedicated environment for you project to keep track of your packages *
+* [x] Create the initial file structure using cookiecutter
+* [x] Fill out the `make_dataset.py` file such that it downloads whatever data you need and
+* [x] Add a model file and a training script and get that running
+* [x] Remember to fill out the `requirements.txt` file with whatever dependencies that you are using
+* [x] Remember to comply with good coding practices (`pep8`) while doing the project
 * [ ] Do a bit of code typing and remember to document essential parts of your code
-* [ ] Setup version control for your data or part of your data
-* [ ] Construct one or multiple docker files for your code
-* [ ] Build the docker files locally and make sure they work as intended
-* [ ] Write one or multiple configurations files for your experiments
-* [ ] Used Hydra to load the configurations and manage your hyperparameters
+* [x] Setup version control for your data or part of your data
+* [x] Construct one or multiple docker files for your code
+* [x] Build the docker files locally and make sure they work as intended
+* [x] Write one or multiple configurations files for your experiments
+* [x] Used Hydra to load the configurations and manage your hyperparameters
 * [ ] When you have something that works somewhat, remember at some point to to some profiling and see if
       you can optimize your code
-* [ ] Use Weights & Biases to log training progress and other important metrics/artifacts in your code. Additionally,
+* [x] Use Weights & Biases to log training progress and other important metrics/artifacts in your code. Additionally,
       consider running a hyperparameter optimization sweep.
-* [ ] Use Pytorch-lightning (if applicable) to reduce the amount of boilerplate in your code
+* [x] Use Pytorch-lightning (if applicable) to reduce the amount of boilerplate in your code
 
 ### Week 2
 
 * [ ] Write unit tests related to the data part of your code
-* [ ] Write unit tests related to model construction and or model training
-* [ ] Calculate the coverage.
-* [ ] Get some continuous integration running on the github repository
-* [ ] Create a data storage in GCP Bucket for you data and preferable link this with your data version control setup
-* [ ] Create a trigger workflow for automatically building your docker images
-* [ ] Get your model training in GCP using either the Engine or Vertex AI
-* [ ] Create a FastAPI application that can do inference using your model
+* [x] Write unit tests related to model construction and or model training
+* [x] Calculate the coverage.
+* [x] Get some continuous integration running on the github repository
+* [x] Create a data storage in GCP Bucket for you data and preferable link this with your data version control setup
+* [x] Create a trigger workflow for automatically building your docker images
+* [x] Get your model training in GCP using either the Engine or Vertex AI
+* [x] Create a FastAPI application that can do inference using your model
 * [ ] If applicable, consider deploying the model locally using torchserve
 * [ ] Deploy your model in GCP using either Functions or Run as the backend
 
@@ -159,8 +159,6 @@ conda create --name enzyme_stability python=3.11
 conda activate enzyme_stability
 pip install -r requirements.txt
 pip install -r requirements_dev.txt
-dvc pull
-# TODO: Needs to be tested
 
 ### Question 5
 
@@ -175,7 +173,7 @@ dvc pull
 > *experiments.*
 > Answer:
 
---- question 5 fill here ---
+--- From the cookiecutter template we have filled out the data, models, reports, mlops_enzyme_stability (source code), mlops_enzyme_stability/data and mlops_enzyme_stability/models/ folders. We removed the notebooks, docs and mlops_enzyme_stability/visualizations since we did not use them.  ---
 
 ### Question 6
 
@@ -221,7 +219,8 @@ We implemented two test functions that each run 2-3 tests. One function tests th
 >
 > Answer:
 
---- question 8 fill here ---
+--- Our code coverage is of 63%. Even if we had a code coverage of 100%, we still could expect finding some errors. Code coverage only shows how much of our code is 
+executed when running the tests. However, it does not cover all possible scenarios our code could be run, for example in terms of the diversity of our inputs, we will always be limited by the exhaustive component of our tests. ---
 
 ### Question 9
 
@@ -267,7 +266,7 @@ We implemented two test functions that each run 2-3 tests. One function tests th
 >
 > Answer:
 
---- We relied on unittesting in the form of pytest for our  continuous integration setup. It is organized into three different test scripts, on focusing on data preprocessing, on focusing on the model itself and on focusing on making predictions using the model. As we are mostly working on Windows and Linux did the testing include the latest ubuntu and windows distribution. We utilized the caching option in GitHub to reduce the time it takes to run every workflow, since GitHub restricts the amount of time run for workflows. An example of a workflow can be found here: https://github.com/AlexanderVoldby/02476_enzyme_stability/actions/runs/7540382637 ---
+--- We relied on unittesting in the form of pytest for our  continuous integration setup. It is organized into three different test scripts, on focusing on data preprocessing, on focusing on the model itself and on focusing on making predictions using the model. As we are mostly working on Windows and Linux did the testing include the latest ubuntu and windows distribution. The workflow for testing is triggered every time someone pushes to master or main and does a pull-request to these two branches. We utilized the caching option in GitHub to reduce the time it takes to run every workflow, since GitHub restricts the amount of time run for workflows. An example of a workflow can be found here: https://github.com/AlexanderVoldby/02476_enzyme_stability/actions/runs/7540382637 ---
 
 ## Running code and tracking experiments
 
@@ -321,7 +320,9 @@ In this example the learning rate and epochs as well as the name of the run are 
 >
 > Answer:
 
---- question 14 fill here ---
+--- ![Local Image](figures/table_wandb.png) ![Local Image](figures/graphs_wandb.png)
+The main metric we tracked for all of our experiments was the training loss. Besides that the number of epochs are tracked as well as all the hyperparameters from the config.yaml file. The training loss was tracked, because it is the first metric to use when evaluating if the model is actually learning the data set. After doing a set of grid-based experiments (changing the batch size and number of nodes for each layer) it could be seen that the model fundamentally struggled learning the training data set. Since this could not be solved by adjust hyperparameters as the learning rate or the batch, we suspect that there could be a problem in embedding our data that leads to a suboptimal training set. As we focused more on building a robust cloud based pipeline for our model we did not use more time optimizing the data preprocessing. If the project would go on more time could be allocated to resolving the issues with the preprocessing. After implementing this it would also be of interest to track the testing error to evaluate if the model is overfitting or not generalizing enough. As the embedded data set is rather small training the model is not computationally extensive. Therefore, using sweeps a large number of experiments could be run to find the optimal configuration of hyperparameters.
+ ---
 
 ### Question 15
 
@@ -377,10 +378,11 @@ Regarding profiling, our model was rather small, so training did not take much r
 --- 
 We used the following services:
 - Cloud Storage: We defined and used a bucket to store the training data for our project as well as the model checkpoint, which is retrieved via Data Version Control operations. Cloud storage is a platform that allows to store and retrieve data in a structured way. It organizes the data into buckets, which could be interpreted as folders. Data Version Control was implemented via dvc.
-- Cloud Engine: Two virtual machines (VM) were used to run the Dcoker containers to train and host the project API. Running our application on a Docker container hosted in a Google Cloud Engine VM brings the VM benefits (high level of isolation, adjusted resources configuration) and Docker benefits (reproducibility by defining the dependencies, and scalability).
-- Vertex AI platform: TBD. #CHECK
+- Cloud Build: We used Cloud Build to automatically build two Docker containers upon trigger: one for training our model, and the other to generate the predictions and configure the API. Cloud Build is a continuous integration continous delivery platform that facilitates the building of applications from source code, in our case two Docker containers, and integrates with other Google Cloud servcies such as Cloud Run.
+- Cloud Run: We used Cloud Run to make our Cloud Build API accessible without any server. Cloud Run is a serverless computer platform that allows running containerized applications and make them accessible through HTTP requests. In addition, Cloud Run is integrated with Cloud Build as part of the continuous integration pipeline. However we did not manage to automatize the integreation between Cloud run and Cloud Build, so we manually selected the image from the Artifact Registry with Cloud Run to make the API accessible.
+- Vertex AI: We used Vertex AI to build and manage the development of our model, for example we used to explore the right hyperparameters. Vertex AI is machine learning tailored platform for development and management of a machine learning workflow at all steps.
 --- 
-### Question 18
+### Question 18 CHECK 
 
 > **The backbone of GCP is the Compute engine. Explained how you made use of this service and what type of VMs**
 > **you used?**
