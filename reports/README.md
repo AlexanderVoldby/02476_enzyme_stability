@@ -530,7 +530,8 @@ CMD ["uvicorn", "mlops_enzyme_stability.predict_sequence:app", "--host", "0.0.0.
 >
 > Answer:
 ---
-To deploy our model, we wrapped our model into an API using FastAPI in a Docker contaier. The API allows inserting the sequence of aminoacids and generate the protein stability predictions. We initially deployed the model locally, which worked. Subsequently, we deployed our model in the cloud using Cloud Build to build the docker container and deployed it with Cloud Run. 
+To deploy our model, we wrapped our model into an API using FastAPI in a Docker contaier. The API allows inserting the sequence of aminoacids and generate the protein stability predictions. We initially deployed the model locally, which worked. Subsequently, we deployed our model in the cloud using Cloud Build to build the docker container and deployed it with Cloud Run. To invoke it an user would call `curl -X POST -F "file=@file.json" https://predict-model-nvnqcfzrxa-ew.a.run.app/predict/` (might be deleted). The input to the model is a list of amino acid sequences in string format. The response is a list of predicted stability values.
+
 
 ---
 ### Question 23
@@ -605,9 +606,9 @@ To explain the overall architecture of our project, we can do it from three pers
 > *The biggest challenges in the project was using ... tool to do ... . The reason for this was ...*
 >
 > Answer:
-
+---
 A lot of problems arose from the path structure in our project, such as accessing the appropriate configuration files during both training and inference. This simply took a lot of debugging to overcome. We also faced some challenge with authentication of Google Cloud and Wandb when running Docker containers. This was solved partly by using private keys and by making our GCS budkets public. Docker was also a challenge initially as weinitially weren't accustomed to it and spent a lot of time waiting for Docker images to be built in order to run them.
-
+---
 
 ### Question 27
 
