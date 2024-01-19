@@ -429,7 +429,7 @@ RUN pip install . --no-deps --no-cache-dir
 ENTRYPOINT ["python", "-u", "mlops_enzyme_stability/train_model.py"]```
 The API predictions Docker container specifications:
 ```
-# Base image
+
 FROM python:3.11-slim
 
 RUN apt update && \
@@ -446,8 +446,6 @@ WORKDIR /
 RUN pip install -r requirements.txt --no-cache-dir
 RUN pip install . --no-deps --no-cache-dir
 RUN python mlops_enzyme_stability/data/download_BERT.py
-
-# WORKDIR /mlops_enzyme_stability/
 
 EXPOSE 8080
 
