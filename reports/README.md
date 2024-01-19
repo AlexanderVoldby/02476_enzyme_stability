@@ -128,11 +128,12 @@ s214591, s222856, s216708, s214633
 > *package to do ... and ... in our project*.
 >
 > Answer:
-
+---
 We used the Transformers framework to easily run a pre-trained BERT-based protein model for tokenizing and embedding our data. Initially, we download the model and tokenizer from Huggingface. We then save it locally, to more quickly load it for inference. 
 
 We used Pytorch-Lightning to simplify training, prediction, and saving/loading of checkpoints. 
 Weights and Biases was used for logging together with Pytorch-Lightning. Therefore, we were able to save checkpoints in a Google Bucket as well as through the Huggingface workspace. 
+---
 
 ## Coding environment
 
@@ -150,16 +151,19 @@ Weights and Biases was used for logging together with Pytorch-Lightning. Therefo
 > *complete copy of our development environment, one would have to run the following commands*
 >
 > Answer:
+---
 
 To handle Python dependencies, we specified two requirements files. They were manually created throughout the project. 
 To recreate the environment, one would clone the repository, create a conda environment with the correct python version, install the requirements with pip and pull the data with dvc.
 For example:
+```
 git clone https://github.com/AlexanderVoldby/02476_enzyme_stability.git
 conda create --name enzyme_stability python=3.11
 conda activate enzyme_stability
 pip install -r requirements.txt
 pip install -r requirements_dev.txt
-
+```
+---
 ### Question 5
 
 > **We expect that you initialized your project using the cookiecutter template. Explain the overall structure of your**
@@ -173,7 +177,9 @@ pip install -r requirements_dev.txt
 > *experiments.*
 > Answer:
 
---- From the cookiecutter template we have filled out the data, models, reports, mlops_enzyme_stability (source code), mlops_enzyme_stability/data and mlops_enzyme_stability/models/ folders. In addition to that we also used the folder for the dockerfiles for both our train and predict dockerfiles. We created a folder called "tests" for our unittesting. We removed the notebooks, docs and mlops_enzyme_stability/visualizations since we did not use them. The different config files were placed in the root directory of the project. ---
+--- 
+From the cookiecutter template we have filled out the data, models, reports, mlops_enzyme_stability (source code), mlops_enzyme_stability/data and mlops_enzyme_stability/models/ folders. In addition to that we also used the folder for the dockerfiles for both our train and predict dockerfiles. We created a folder called "tests" for our unittesting. We removed the notebooks, docs and mlops_enzyme_stability/visualizations since we did not use them. The different config files were placed in the root directory of the project. 
+---
 
 ### Question 6
 
@@ -184,7 +190,9 @@ pip install -r requirements_dev.txt
 >
 > Answer:
 
+---
 We did not implement a concrete set of rules for code quality and format, since the lifespan of the project was rather short and we were able to explain the code to each other in person. A consistent coding format matters a lot in larger projects because you will be dependent on understanding the code, someone else wrote, and vice versa. This is particularly the case for debugging purposes, when functions and classes interoperate. 
+---
 
 ## Version control
 
@@ -202,9 +210,9 @@ We did not implement a concrete set of rules for code quality and format, since 
 > *application but also ... .*
 >
 > Answer:
-
+---
 We implemented two test functions that each run 2-3 tests. One function tests that our model output has the right format and that the model uses the correct loss function. The data testing function asserts that preprocessed data points have the correct format and that tensors are stored in an accessible path.
-
+---
 ### Question 8
 
 > **What is the total code coverage (in percentage) of your code? If you code had an code coverage of 100% (or close**
@@ -218,8 +226,10 @@ We implemented two test functions that each run 2-3 tests. One function tests th
 >
 > Answer:
 
---- Our code coverage is of 63%. Even if we had a code coverage of 100%, we still could expect finding some errors. Code coverage only shows how much of our code is 
-executed when running the tests. However, it does not cover all possible scenarios our code could be run, for example in terms of the diversity of our inputs, we will always be limited by the exhaustive component of our tests. ---
+--- 
+Our code coverage is of 63%. Even if we had a code coverage of 100%, we still could expect finding some errors. Code coverage only shows how much of our code is 
+executed when running the tests. However, it does not cover all possible scenarios our code could be run, for example in terms of the diversity of our inputs, we will always be limited by the exhaustive component of our tests. 
+---
 
 ### Question 9
 
@@ -234,7 +244,9 @@ executed when running the tests. However, it does not cover all possible scenari
 >
 > Answer:
 
---- Branches were an important part of our workflow. Whenever someone worked on part of the codebase, a branch was created from the master branch. Later on when the work on this feature was done, this branch was merged again with the master branch using a pull request. Since this was done quite frequently was there no branch protection on the master branch, so we relied on everyone to go through their own pull request with care. Later on when working on the continuous integration and the automatic cloud deployment we used the main branch for deployment. In that way could the master branch be used for development, and each time we would like to deploy the current state of the codebase a pull request from the master to the main branch was created. This pull request then had to be reviewed by at least 2 people to include more safety before deployment. ---
+--- 
+Branches were an important part of our workflow. Whenever someone worked on part of the codebase, a branch was created from the master branch. Later on when the work on this feature was done, this branch was merged again with the master branch using a pull request. Since this was done quite frequently was there no branch protection on the master branch, so we relied on everyone to go through their own pull request with care. Later on when working on the continuous integration and the automatic cloud deployment we used the main branch for deployment. In that way could the master branch be used for development, and each time we would like to deploy the current state of the codebase a pull request from the master to the main branch was created. This pull request then had to be reviewed by at least 2 people to include more safety before deployment. 
+---
 
 ### Question 10
 
@@ -249,7 +261,9 @@ executed when running the tests. However, it does not cover all possible scenari
 >
 > Answer:
 
---- In our project we did use DVC for managing our data. Unlike in most other project, training our model was not the computationally most intense part of the pipeline. It was in fact the preprocessing in the form of embedding the amino acid sequences. DVC helped us to make sure, that the already pre-processed data could easily be pulled using DVC. This also ensured that everyone was working with the same state of pre-processed data. If at any point we would have changed our pre-processing pipeline the data could be updated with DVC. ---
+--- 
+In our project we did use DVC for managing our data. Unlike in most other project, training our model was not the computationally most intense part of the pipeline. It was in fact the preprocessing in the form of embedding the amino acid sequences. DVC helped us to make sure, that the already pre-processed data could easily be pulled using DVC. This also ensured that everyone was working with the same state of pre-processed data. If at any point we would have changed our pre-processing pipeline the data could be updated with DVC. 
+---
 
 ### Question 11
 
@@ -265,7 +279,9 @@ executed when running the tests. However, it does not cover all possible scenari
 >
 > Answer:
 
---- We relied on unittesting in the form of pytest for our  continuous integration setup. It is organized into three different test scripts, on focusing on data preprocessing, on focusing on the model itself and on focusing on making predictions using the model. As we are mostly working on Windows and Linux did the testing include the latest ubuntu and windows distribution. The workflow for testing is triggered every time someone pushes to master or main and does a pull-request to these two branches. We utilized the caching option in GitHub to reduce the time it takes to run every workflow, since GitHub restricts the amount of time run for workflows. An example of a workflow can be found here: https://github.com/AlexanderVoldby/02476_enzyme_stability/actions/runs/7540382637 ---
+--- 
+We relied on unittesting in the form of pytest for our  continuous integration setup. It is organized into three different test scripts, on focusing on data preprocessing, on focusing on the model itself and on focusing on making predictions using the model. As we are mostly working on Windows and Linux did the testing include the latest ubuntu and windows distribution. The workflow for testing is triggered every time someone pushes to master or main and does a pull-request to these two branches. We utilized the caching option in GitHub to reduce the time it takes to run every workflow, since GitHub restricts the amount of time run for workflows. An example of a workflow can be found here: https://github.com/AlexanderVoldby/02476_enzyme_stability/actions/runs/7540382637 
+---
 
 ## Running code and tracking experiments
 
