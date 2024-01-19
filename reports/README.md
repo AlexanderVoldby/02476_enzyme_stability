@@ -173,7 +173,7 @@ pip install -r requirements_dev.txt
 > *experiments.*
 > Answer:
 
---- From the cookiecutter template we have filled out the data, models, reports, mlops_enzyme_stability (source code), mlops_enzyme_stability/data and mlops_enzyme_stability/models/ folders. We removed the notebooks, docs and mlops_enzyme_stability/visualizations since we did not use them.  ---
+--- From the cookiecutter template we have filled out the data, models, reports, mlops_enzyme_stability (source code), mlops_enzyme_stability/data and mlops_enzyme_stability/models/ folders. In addition to that we also used the folder for the dockerfiles for both our train and predict dockerfiles. We created a folder called "tests" for our unittesting. We removed the notebooks, docs and mlops_enzyme_stability/visualizations since we did not use them. The different config files were placed in the root directory of the project. ---
 
 ### Question 6
 
@@ -184,8 +184,7 @@ pip install -r requirements_dev.txt
 >
 > Answer:
 
-# TODO: Implement format rules??
-A consistent coding format matters a lot in larger projects because you will be dependent on understanding the code, someone else wrote, and vice versa. This is particularly the case for debugging purposes, when functions and classes interoperate. 
+We did not implement a concrete set of rules for code quality and format, since the lifespan of the project was rather short and we were able to explain the code to each other in person. A consistent coding format matters a lot in larger projects because you will be dependent on understanding the code, someone else wrote, and vice versa. This is particularly the case for debugging purposes, when functions and classes interoperate. 
 
 ## Version control
 
@@ -532,10 +531,7 @@ To deploy our model, we wrapped our model into an API using FastAPI in a Docker 
 >
 > Answer:
 ---
-Alexander Voldby used __ credits.
-Jesper Dybkær Lauridsen used __ credits.
-Max Klein used __ credits.
-Pau Piera Lindez used __ credits.
+In total, 223.81 kr was spend on the project. About 95 % of the cost was due to cloud storage. This was probably due to the amount of container images and data stored in the cloud. Training the model via Vertex AI just cost around 8 kr. The cost for the compute engine was neglectable. 
 ---
 
 CONTINUE WITH Coding environment
