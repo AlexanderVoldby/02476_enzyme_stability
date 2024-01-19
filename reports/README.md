@@ -185,7 +185,7 @@ pip install -r requirements_dev.txt
 > Answer:
 
 # TODO: Implement format rules??
-A consistent coding format matters a lot in larger projects because you will be dependent on understanding the code, someone else wrote, and vice versa. This is particularly the case for debugging purposes, when functions and classes interoperate. 
+A consistent coding format matters a lot in larger projects because you will be dependent on understanding the code, someone else wrote, and vice versa. This is particularly the case for debugging purposes, when functions and classes interoperate. We did not implement any rules or guidelines for the code format.
 
 ## Version control
 
@@ -204,7 +204,8 @@ A consistent coding format matters a lot in larger projects because you will be 
 >
 > Answer:
 
-We implemented two test functions that each run 2-3 tests. One function tests that our model output has the right format and that the model uses the correct loss function. The data testing function asserts that preprocessed data points have the correct format and that tensors are stored in an accessible path.
+We implemented two test functions that each run 2-3 tests. One function tests that our model output has the right format and that the model uses the correct loss function. The data testing function asserts that preprocessed data points have the correct format and that tensors are stored in an accessible path. The tests were implemented with pytest so we could generate a report of the test results. This was later linked to Github actions for automatic testing, when we pushed to the master branch.
+
 
 ### Question 8
 
@@ -526,7 +527,7 @@ To deploy our model, we wrapped our model into an API using FastAPI. The API all
 >
 > Answer:
 ---
-Alexander Voldby used __ credits.
+Alexander Voldby used 224 credits (kr).
 Jesper Dybkær Lauridsen used __ credits.
 Max Klein used __ credits.
 Pau Piera Lindez used __ credits.
