@@ -407,7 +407,6 @@ The training and predictions VMs had the following hardware:
 
 The training Docker container specifications:
 ```
-# Base image
 FROM python:3.11-slim
 
 RUN apt update && \
@@ -427,8 +426,9 @@ RUN pip install -r requirements_dev.txt --no-cache-dir
 RUN pip install . --no-deps --no-cache-dir
 
 ENTRYPOINT ["python", "-u", "mlops_enzyme_stability/train_model.py"]```
-The API predictions Docker container specifications:
 ```
+```
+The API predictions Docker container specifications:
 
 FROM python:3.11-slim
 
