@@ -590,4 +590,6 @@ A lot of problems arose from the path structure in our project, such as accessin
 
 --- 
 Student s22856 was in charge of continous integration including unittesting and GitHub Actions, doing training runs varying the hyperparameters in a grid-based manner and contributing to the code base for the data, training and prediction.
+
+Student s214591 was primarily in charge of coding the prediction API, setting up automatic building and pushing of containers to the cloud, and deploying the prediction API in Cloud Run. Apart from this he worked on setting up the training script and applying the pre-trained model for data processing.
  ---
