@@ -364,8 +364,7 @@ The main metric we tracked for all of our experiments was the training loss. Bes
 
 --- In our project we developed docker images for the training of our model and for making predictions with our model. For example, for training the model one could run the docker image with the following command, specifying the learning rate and the path to the data.
 ``$ docker run --name experiment1 trainer:latest lr=0.005 data_path:="gs://protein_embeddings/data/processed"``
-Later on docker images where mostly build and run in gcloud as part of our continuous integration pipeline with Cloud Build.
-Link to docker file: 
+Later on docker images were build and run in gcloud as part of our continuous integration pipeline with Cloud Build as each time a push or pull request was made a new container image for training and prediction was build in the cloud.
 
 ---
 
