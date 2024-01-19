@@ -346,7 +346,9 @@ In this example the learning rate and epochs as well as the name of the run are 
 
 --- 
 ![Local Image](figures/table_wandb.png) ![Local Image](figures/graphs_wandb.png)
+
 The main metric we tracked for all of our experiments was the training loss. Besides that the number of epochs are tracked as well as all the hyperparameters from the config.yaml file. The training loss was tracked, because it is the first metric to use when evaluating if the model is actually learning the data set. After doing a set of grid-based experiments (changing the batch size and number of nodes for each layer) it could be seen that the model fundamentally struggled learning the training data set. Since this could not be solved by adjust hyperparameters as the learning rate or the batch, we suspect that there could be a problem in embedding our data that leads to a suboptimal training set. As we focused more on building a robust cloud based pipeline for our model we did not use more time optimizing the data preprocessing. If the project would go on more time could be allocated to resolving the issues with the preprocessing. After implementing this it would also be of interest to track the testing error to evaluate if the model is overfitting or not generalizing enough. As the embedded data set is rather small training the model is not computationally extensive. Therefore, using sweeps a large number of experiments could be run to find the optimal configuration of hyperparameters.
+
 ---
 
 ### Question 15
@@ -581,7 +583,8 @@ CONTINUE WITH Coding environment
 >
 > Answer:
 
---- To explain the overall architecture of our project, we can do it from three perspectives: the data and model retrieval, the project development and the user perspective:
+--- 
+To explain the overall architecture of our project, we can do it from three perspectives: the data and model retrieval, the project development and the user perspective:
 - Data and model retrieval: Starting from the bottom left diagram, our project started by retrieving the raw Datafiles from Kaggle containinf the protein embeddings, preproces and store them in a Google Cloud Storage Bucket, we then downloaded the pretrained protBERT model from Huggingface, which would be used at the inference time to generate embeddings from new protein sequences.
 - Project development: Once the model was implemented, executable, and the best model was stored as checkpoint in the Google Cloud Storage Bucket, we implemented a set of GitHub actions so every time we pushed changes to master, unit tests where executed. Pushing changes to the master branch also triggered Google Cloud Build to build two Docker images that included the last changes, one image executed the training of the model, and the other image hosted the API to generate predictions. Both containers were registered in the Google Cloud Artifact Registry. Google Cloud Run was then used to serve the API hosted by the prediction Docker container, whereas we used Vertex AI to explore and optimize the training performance, in both cases the Docker images were retrieved from the Artifact Registry. We used Weights and Biases to track the training metrics when running models on Vertex AI, and checkpoint were automatically saved on the Bucket. 
 - User perspective: Once the API served by Cloud run and accessible, the protein stability can be predicted from the aminoacid sequence inserted.
