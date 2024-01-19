@@ -308,7 +308,7 @@ We relied on unittesting in the form of pytest for our  continuous integration s
 > Answer:
 
 --- 
-Our approach for configuring experiments and keeping track of past configurations was a config.yaml file with hydra. The config files contains various hyperparameters of the model, but also other options as the name of the run. In that way a the model can be run in the terminal as:
+Our approach for configuring experiments and keeping track of past configurations was a `config.yaml` file with hydra. The config files contains various hyperparameters of the model, but also other options as the name of the run. In that way a the model can be run in the terminal as:
 ``$ python mlops_enzyme_stability/train_model.py hyperparameters.lr=0.002 hyperparameters.epochs=10 runname=”Run_1”``
 In this example the learning rate and epochs as well as the name of the run are specified explicitly.
 
@@ -344,9 +344,10 @@ In this example the learning rate and epochs as well as the name of the run are 
 >
 > Answer:
 
---- ![Local Image](figures/table_wandb.png) ![Local Image](figures/graphs_wandb.png)
+--- 
+![Local Image](figures/table_wandb.png) ![Local Image](figures/graphs_wandb.png)
 The main metric we tracked for all of our experiments was the training loss. Besides that the number of epochs are tracked as well as all the hyperparameters from the config.yaml file. The training loss was tracked, because it is the first metric to use when evaluating if the model is actually learning the data set. After doing a set of grid-based experiments (changing the batch size and number of nodes for each layer) it could be seen that the model fundamentally struggled learning the training data set. Since this could not be solved by adjust hyperparameters as the learning rate or the batch, we suspect that there could be a problem in embedding our data that leads to a suboptimal training set. As we focused more on building a robust cloud based pipeline for our model we did not use more time optimizing the data preprocessing. If the project would go on more time could be allocated to resolving the issues with the preprocessing. After implementing this it would also be of interest to track the testing error to evaluate if the model is overfitting or not generalizing enough. As the embedded data set is rather small training the model is not computationally extensive. Therefore, using sweeps a large number of experiments could be run to find the optimal configuration of hyperparameters.
- ---
+---
 
 ### Question 15
 
@@ -361,11 +362,12 @@ The main metric we tracked for all of our experiments was the training loss. Bes
 >
 > Answer:
 
---- In our project we developed docker images for the training of our model and for making predictions with our model. For example, for training the model one could  run the docker image with the following command, specifying the learning rate and the path to the data.
+--- In our project we developed docker images for the training of our model and for making predictions with our model. For example, for training the model one could run the docker image with the following command, specifying the learning rate and the path to the data.
 ``$ docker run --name experiment1 trainer:latest lr=0.005 data_path:="gs://protein_embeddings/data/processed"``
-Later on docker images where mostly build and run in gcloud as part of our continuous integration pipeline.
+Later on docker images where mostly build and run in gcloud as part of our continuous integration pipeline with Cloud Build.
 Link to docker file: 
- ---
+
+---
 
 ### Question 16
 
