@@ -173,7 +173,7 @@ pip install -r requirements_dev.txt
 > *experiments.*
 > Answer:
 
---- From the cookiecutter template we have filled out the data, models, reports, mlops_enzyme_stability (source code), mlops_enzyme_stability/data and mlops_enzyme_stability/models/ folders. We removed the notebooks, docs and mlops_enzyme_stability/visualizations since we did not use them.  ---
+--- From the cookiecutter template we have filled out the data, models, reports, mlops_enzyme_stability (source code), mlops_enzyme_stability/data and mlops_enzyme_stability/models/ folders. In addition to that we also used the folder for the dockerfiles for both our train and predict dockerfiles. We created a folder called "tests" for our unittesting. We removed the notebooks, docs and mlops_enzyme_stability/visualizations since we did not use them. The different config files were placed in the root directory of the project. ---
 
 ### Question 6
 
@@ -184,8 +184,7 @@ pip install -r requirements_dev.txt
 >
 > Answer:
 
-# TODO: Implement format rules??
-A consistent coding format matters a lot in larger projects because you will be dependent on understanding the code, someone else wrote, and vice versa. This is particularly the case for debugging purposes, when functions and classes interoperate. We did not implement any rules or guidelines for the code format.
+We did not implement a concrete set of rules for code quality and format, since the lifespan of the project was rather short and we were able to explain the code to each other in person. A consistent coding format matters a lot in larger projects because you will be dependent on understanding the code, someone else wrote, and vice versa. This is particularly the case for debugging purposes, when functions and classes interoperate. 
 
 ## Version control
 
@@ -287,7 +286,7 @@ executed when running the tests. However, it does not cover all possible scenari
 > Answer:
 
 --- Our approach for configuring experiments and keeping track of past configurations was a config.yaml file with hydra. The config files contains various hyperparameters of the model, but also other options as the name of the run. In that way a the model can be run in the terminal as:
-$ python mlops_enzyme_stability/train_model.py hyperparameters.lr=0.002 hyperparameters.epochs=10 runname=”Run_1”
+``$ python mlops_enzyme_stability/train_model.py hyperparameters.lr=0.002 hyperparameters.epochs=10 runname=”Run_1”``
 In this example the learning rate and epochs as well as the name of the run are specified explicitly.
  ---
 
@@ -339,7 +338,7 @@ The main metric we tracked for all of our experiments was the training loss. Bes
 > Answer:
 
 --- In our project we developed docker images for the training of our model and for making predictions with our model. For example, for training the model one could  run the docker image with the following command, specifying the learning rate and the path to the data.
-$ docker run --name experiment1 trainer:latest lr=0.005 data_path:="gs://protein_embeddings/data/processed"
+``$ docker run --name experiment1 trainer:latest lr=0.005 data_path:="gs://protein_embeddings/data/processed"``
 Later on docker images where mostly build and run in gcloud as part of our continuous integration pipeline.
 Link to docker file: 
  ---
@@ -409,7 +408,6 @@ The training and predictions VMs had the following hardware:
 
 The training Docker container specifications:
 ```
-# Base image
 FROM python:3.11-slim
 
 RUN apt update && \
@@ -421,17 +419,18 @@ COPY requirements_dev.txt requirements_dev.txt
 COPY pyproject.toml pyproject.toml
 COPY mlops_enzyme_stability/ mlops_enzyme_stability/
 COPY data/ data/
+COPY config.yaml config.yaml
 
 WORKDIR /
 RUN pip install -r requirements.txt --no-cache-dir
 RUN pip install -r requirements_dev.txt --no-cache-dir
 RUN pip install . --no-deps --no-cache-dir
 
-ENTRYPOINT ["python", "-u", "mlops_enzyme_stability/train_model.py"]
+ENTRYPOINT ["python", "-u", "mlops_enzyme_stability/train_model.py"]```
 ```
 The API predictions Docker container specifications:
+
 ```
-# Base image
 FROM python:3.11-slim
 
 RUN apt update && \
@@ -442,16 +441,16 @@ COPY requirements.txt requirements.txt
 COPY pyproject.toml pyproject.toml
 COPY mlops_enzyme_stability/ mlops_enzyme_stability/
 COPY data/ data/
+COPY config.yaml config.yaml
 
 WORKDIR /
 RUN pip install -r requirements.txt --no-cache-dir
 RUN pip install . --no-deps --no-cache-dir
-
-WORKDIR /mlops_enzyme_stability/
+RUN python mlops_enzyme_stability/data/download_BERT.py
 
 EXPOSE 8080
 
-CMD ["uvicorn", "predict_api:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["uvicorn", "mlops_enzyme_stability.predict_sequence:app", "--host", "0.0.0.0", "--port", "8080"]
 ```
 ---
 
@@ -462,7 +461,10 @@ CMD ["uvicorn", "predict_api:app", "--host", "0.0.0.0", "--port", "8080"]
 > **You can take inspiration from [this figure](figures/bucket.png).**
 >
 > Answer:
---- ![Local Image](figures/bucket_registry.png) --- 
+--- 
+![Local Image](figures/buckets_registry.png)
+![Local Image](figures/bucket_content.png)
+--- 
 
 
 ### Question 20
@@ -472,7 +474,7 @@ CMD ["uvicorn", "predict_api:app", "--host", "0.0.0.0", "--port", "8080"]
 >
 > Answer:
 
---- ![Local Image](figures/bucket_registry.png) ---
+--- ![Local Image](figures/container_registry.png) ---
 
 
 ### Question 21
@@ -482,7 +484,7 @@ CMD ["uvicorn", "predict_api:app", "--host", "0.0.0.0", "--port", "8080"]
 >
 > Answer:
 
---- ![Local Image](./figures/cloudbuild_screenshot.png) ---
+--- ![Local Image](figures/cloud_build_history.png) ---
 
 ### Question 22
 
@@ -498,7 +500,8 @@ CMD ["uvicorn", "predict_api:app", "--host", "0.0.0.0", "--port", "8080"]
 >
 > Answer:
 ---
-To deploy our model, we wrapped our model into an API using FastAPI. The API allows the user to input a list of amino acid sequences, which are then embedded by the protBERT model and then the embeddings are used to mkae predictions of the thermal stability. We initially deployed the model locally, which worked. Subsequently, we started using cloud run to deploy the containers that were created with cloud build, and managed to deploy a functioning model
+To deploy our model, we wrapped our model into an API using FastAPI in a Docker contaier. The API allows inserting the sequence of aminoacids and generate the protein stability predictions. We initially deployed the model locally, which worked. Subsequently, we deployed our model in the cloud using Cloud Build to build the docker container and deployed it with Cloud Run. 
+
 ---
 ### Question 23
 
@@ -527,10 +530,7 @@ To deploy our model, we wrapped our model into an API using FastAPI. The API all
 >
 > Answer:
 ---
-Alexander Voldby used 224 credits (kr).
-Jesper Dybkær Lauridsen used __ credits.
-Max Klein used __ credits.
-Pau Piera Lindez used __ credits.
+In total, 223.81 kr was spend on the project. About 95 % of the cost was due to cloud storage. This was probably due to the amount of container images and data stored in the cloud. Training the model via Vertex AI just cost around 8 kr. The cost for the compute engine was neglectable. 
 ---
 
 CONTINUE WITH Coding environment
