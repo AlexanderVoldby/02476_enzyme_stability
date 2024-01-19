@@ -72,7 +72,7 @@ end of the project.
 
 ### Week 2
 
-* [ ] Write unit tests related to the data part of your code
+* [x] Write unit tests related to the data part of your code
 * [x] Write unit tests related to model construction and or model training
 * [x] Calculate the coverage.
 * [x] Get some continuous integration running on the github repository
@@ -81,7 +81,7 @@ end of the project.
 * [x] Get your model training in GCP using either the Engine or Vertex AI
 * [x] Create a FastAPI application that can do inference using your model
 * [ ] If applicable, consider deploying the model locally using torchserve
-* [ ] Deploy your model in GCP using either Functions or Run as the backend
+* [x] Deploy your model in GCP using either Functions or Run as the backend
 
 ### Week 3
 
@@ -96,7 +96,7 @@ end of the project.
 
 * [ ] Revisit your initial project description. Did the project turn out as you wanted?
 * [ ] Make sure all group members have a understanding about all parts of the project
-* [ ] Uploaded all your code to github
+* [x] Uploaded all your code to github
 
 ## Group information
 
@@ -339,6 +339,8 @@ The main metric we tracked for all of our experiments was the training loss. Bes
 
 --- In our project we developed docker images for the training of our model and for making predictions with our model. For example, for training the model one could  run the docker image with the following command, specifying the learning rate and the path to the data.
 ``$ docker run --name experiment1 trainer:latest lr=0.005 data_path:="gs://protein_embeddings/data/processed"``
+To run the Docker image containing our prediction API locally we would laso specify a port to host it locally:
+"$ docker run -p 8000:8000 prediction:latest"
 Later on docker images where mostly build and run in gcloud as part of our continuous integration pipeline.
 Link to docker file: 
  ---
