@@ -185,7 +185,7 @@ pip install -r requirements_dev.txt
 > Answer:
 
 # TODO: Implement format rules??
-A consistent coding format matters a lot in larger projects because you will be dependent on understanding the code, someone else wrote, and vice versa. This is particularly the case for debugging purposes, when functions and classes interoperate. 
+We did not implement a concrete set of rules for code quality and format, since the lifespan of the project was rather short and we were able to explain the code to each other in person. A consistent coding format matters a lot in larger projects because you will be dependent on understanding the code, someone else wrote, and vice versa. This is particularly the case for debugging purposes, when functions and classes interoperate. 
 
 ## Version control
 
